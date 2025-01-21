@@ -60,13 +60,13 @@ uint16_t uart_rxdma_read(uint8_t* rxcmd_buf, uint16_t len)
 
 void uart_txdma_write(uint8_t* txcmd_buf, uint16_t len)
 {
-    while(huart1.gState != HAL_UART_STATE_READY)
+    while(UART_HANDLE.gState != HAL_UART_STATE_READY)
     {
         // WAITING FOR AVAILABLE
         __NOP();
     }
     memcpy(txdma_buf, txcmd_buf, len);
-    while (HAL_UART_Transmit_DMA(&huart1, txdma_buf, len) != HAL_OK)
+    while (HAL_UART_Transmit_DMA(&UART_HANDLE, txdma_buf, len) != HAL_OK)
     {
         // ERROR
         __NOP();

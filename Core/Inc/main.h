@@ -57,7 +57,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define huart4 huart4
 
 /* USER CODE BEGIN Private defines */
 
