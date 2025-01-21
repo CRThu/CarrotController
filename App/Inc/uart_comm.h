@@ -18,7 +18,7 @@ extern "C"
 #include "main.h"
 #include "usart.h"
 
-#define UART_HANDLE         huart4
+#define UART2PC_HANDLE      huart4
 #define RXDMA_BUFSIZE       2048
 #define TXDMA_BUFSIZE       2048
 
@@ -27,7 +27,7 @@ extern "C"
 extern uint8_t rxdma_buf[RXDMA_BUFSIZE];
 extern uint8_t txdma_buf[TXDMA_BUFSIZE];
 
-#define RXDMA_BUF_GET_AVAILABLE_LEN()   (RXDMA_BUFSIZE - __HAL_DMA_GET_COUNTER(UART_HANDLE.hdmarx))
+#define RXDMA_BUF_GET_AVAILABLE_LEN()   (RXDMA_BUFSIZE - __HAL_DMA_GET_COUNTER(UART2PC_HANDLE.hdmarx))
 #define RXCMD_READ_AVAILABLE()          (rxcmd_src_len != 0)
 #define CIRCUIR_ARRAY_INDEX(idx, size)  ((idx) < (size) ? (idx) : ((idx) - (size)))
 #define RXDMA_AT(idx)                   (rxdma_buf[CIRCUIR_ARRAY_INDEX((idx), (RXDMA_BUFSIZE))])

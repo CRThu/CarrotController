@@ -7,7 +7,7 @@ uint16_t rxcmd_src_head, rxcmd_src_len;
 
 void uart_rxdma_init()
 {
-    HAL_UART_Receive_DMA(&UART_HANDLE, rxdma_buf, RXDMA_BUFSIZE);
+    HAL_UART_Receive_DMA(&UART2PC_HANDLE, rxdma_buf, RXDMA_BUFSIZE);
     rxdma_pos_wr = 0;
     rxdma_pos_rd = 0;
     rxcmd_src_head = 0;
@@ -60,13 +60,13 @@ uint16_t uart_rxdma_read(uint8_t* rxcmd_buf, uint16_t len)
 
 void uart_txdma_write(uint8_t* txcmd_buf, uint16_t len)
 {
-    while(UART_HANDLE.gState != HAL_UART_STATE_READY)
+    while(UART2PC_HANDLE.gState != HAL_UART_STATE_READY)
     {
         // WAITING FOR AVAILABLE
         __NOP();
     }
     memcpy(txdma_buf, txcmd_buf, len);
-    while (HAL_UART_Transmit_DMA(&UART_HANDLE, txdma_buf, len) != HAL_OK)
+    while (HAL_UART_Transmit_DMA(&UART2PC_HANDLE, txdma_buf, len) != HAL_OK)
     {
         // ERROR
         __NOP();
