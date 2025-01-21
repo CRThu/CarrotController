@@ -2,8 +2,14 @@
 
 uint8_t rxdma_buf[RXDMA_BUFSIZE];
 uint8_t txdma_buf[TXDMA_BUFSIZE];
-uint16_t rxdma_pos_wr, rxdma_pos_rd;
-uint16_t rxcmd_src_head, rxcmd_src_len;
+volatile uint16_t rxdma_pos_wr, rxdma_pos_rd;
+volatile uint16_t rxcmd_src_head, rxcmd_src_len;
+
+void uart_comm_start()
+{
+    uart_rxdma_init();
+}
+
 
 void uart_rxdma_init()
 {

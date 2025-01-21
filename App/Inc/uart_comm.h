@@ -11,12 +11,33 @@
 extern "C"
 {
 #endif
-#define UART_COMM_VERSION "2.0.1"
+#define UART_COMM_VERSION "2.1.0"
 
 #include <stdint.h>
 #include <string.h>
 #include "main.h"
 #include "usart.h"
+
+/*
+    USAGE:
+    SETUP UARTx:
+    ENABLE UARTx GLOBAL INTERRUPT
+    SETUP DMA:
+    TXDMA:              HIGH PRIORITY, MEM2PER, MEM(SRC) ADDR INCR
+    RXDMA: CIRCULAR,    HIGH PRIORITY, PER2MEM, MEM(DEST) ADDR INCR
+    SETUP TIMx:
+    ENABLE TIMx GLOBAL INTERRUPT
+    PSC = 25000-1       (fCLK=250MHz, fTIM=10KHz)
+    ARR = 10-1          (fTIM=10KHz, fINT=1KHz)
+    SETUP NVIC:
+    NVIC Interrupt Table    Preemption Priority
+    RXDMA/TXDMA             1
+    UARTx GLOBAL INT        2
+    TIMx GLOBAL INT         14
+
+    INITIAL:
+    
+ */
 
 #define UART2PC_HANDLE      huart4
 #define RXDMA_BUFSIZE       2048
@@ -42,11 +63,24 @@ extern uint8_t txdma_buf[TXDMA_BUFSIZE];
         }                                                                               \
     } while (0)                                                                         \
 
-void uart_rxdma_init();
-void uart_rxdma_update_pos_wr();
-void uart_rxdma_parse();
-uint16_t uart_rxdma_read(uint8_t* rxcmd_buf, uint16_t len);
-void uart_txdma_write(uint8_t* txcmd_buf, uint16_t len);
+
+    typedef uint8_t uart_comm_error_t;
+    typedef struct {
+        uint8_t rxdma_buf[RXDMA_BUFSIZE];
+        uint8_t txdma_buf[TXDMA_BUFSIZE];
+        uint16_t rxdma_pos_wr, rxdma_pos_rd;
+        uint16_t rxcmd_src_head, rxcmd_src_len;
+        uart_comm_error_t error_status;
+    }uart_comm_t;
+
+
+    void uart_comm_start();
+
+    void uart_rxdma_init();
+    void uart_rxdma_update_pos_wr();
+    void uart_rxdma_parse();
+    uint16_t uart_rxdma_read(uint8_t* rxcmd_buf, uint16_t len);
+    void uart_txdma_write(uint8_t* txcmd_buf, uint16_t len);
 
 
 
