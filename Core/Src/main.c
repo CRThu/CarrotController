@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "gpdma.h"
+#include "i2c.h"
 #include "icache.h"
 #include "memorymap.h"
 #include "tim.h"
@@ -105,6 +106,7 @@ int main(void)
   MX_UART4_Init();
   MX_TIM6_Init();
   MX_ICACHE_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
     uart_rxdma_init();
