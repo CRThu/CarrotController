@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "uart_comm.h": "c"
+        "uart_comm.h": "c",
+        "bsp_inc.h": "c"
     }
 }

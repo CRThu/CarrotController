@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H563xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;../App/Inc</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;..\App\BSP\Inc;..\App\FW\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -917,9 +917,89 @@
           <GroupName>App/BSP</GroupName>
           <Files>
             <File>
+              <FileName>bsp_ee.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_ee.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_esp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_esp.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_ft.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_ft.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_iic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_iic.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_io.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_io.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_map.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_map.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_mux.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_mux.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_pll.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_pll.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_psram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_psram.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>App/FW</GroupName>
+          <Files>
+            <File>
+              <FileName>cevent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\FW\Src\cevent.c</FilePath>
+            </File>
+            <File>
+              <FileName>clog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\FW\Src\clog.c</FilePath>
+            </File>
+            <File>
               <FileName>uart_comm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\App\Src\uart_comm.c</FilePath>
+              <FilePath>..\App\FW\Src\uart_comm.c</FilePath>
+            </File>
+            <File>
+              <FileName>cdelay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\FW\Src\cdelay.c</FilePath>
             </File>
           </Files>
         </Group>
