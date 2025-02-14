@@ -1,18 +1,28 @@
 #include "uart_comm.h"
 
-uint8_t rxdma_buf[RXDMA_BUFSIZE];
-uint8_t txdma_buf[TXDMA_BUFSIZE];
-volatile uint16_t rxdma_pos_wr, rxdma_pos_rd;
-volatile uint16_t rxcmd_src_head, rxcmd_src_len;
-
-void uart_comm_start()
+void uart_comm_start(uart_comm_t* comm)
 {
     uart_rxdma_init();
+    UART_RXDMA_START(comm);
 }
 
+    /*
+    typedef struct uart_comm_t{
+        uart_t* Instance;                       // uart perh instance
+        uint8_t* rxdma_buf;                     // uart rxdma buffer
+        uint8_t* txdma_buf;                     // uart txdma buffer
+        uint8_t* rxcmd_buf;                     // uart rxcmd buffer
+        uint16_t dmabuf_len, cmdbuf_len;        // buffer length
+        uint16_t rxdma_pos_wr, rxdma_pos_rd;    // rxdma buffer read and write cursor
+        uint16_t rxdma_cmd_head, rxdma_cmd_len; // rxdma buffer cmd head and length
+        uart_comm_error_t error;
+    }uart_comm_t;
+
+    */
 
 void uart_rxdma_init()
 {
+    
     HAL_UART_Receive_DMA(&UART2PC_HANDLE, rxdma_buf, RXDMA_BUFSIZE);
     rxdma_pos_wr = 0;
     rxdma_pos_rd = 0;
