@@ -47,7 +47,21 @@ extern "C"
         TIMx GLOBAL INT         14
 
         INITIAL:
+        uart_comm_t* comm_pc = NULL;
+        comm_pc = uart_comm_create(&huart4, 2048);
 
+        START SERVICE:
+        uart_comm_start(comm_pc);
+
+        LOOP TEST:
+        uint8_t recv_bytes[256];
+        uint16_t recv_len = 0;
+
+        recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
+        if (recv_len != 0)
+        {
+            uart_comm_write(comm_pc, recv_bytes, recv_len);
+        }
      */
 
     #define UART_COMM_NO_ERR        (0)

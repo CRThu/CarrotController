@@ -84,8 +84,7 @@ uint16_t uart_comm_read(uart_comm_t* comm, uint8_t* buf, uint16_t size)
     // wr       01234567012
     comm->rxdma_pos_wr = UART_GET_RXDMA_POS(comm);
 
-    uint16_t check_len = LEN_RINGBUF(comm->dmabuf_len, comm->rxdma_pos_wr, comm->rxdma_pos_parse);
-    for (uint16_t i = 0; i < check_len; i++)
+    for (uint16_t i = 0; i < LEN_RINGBUF(comm->dmabuf_len, comm->rxdma_pos_wr, comm->rxdma_pos_parse); i++)
     {
         if ((comm->rxdma_buf[IDX_RINGBUF(comm->rxdma_pos_parse, comm->dmabuf_len)]) == '\n')
         {
