@@ -38,54 +38,52 @@ extern "C"
 
      */
 
-    #define UART2PC_HANDLE      huart4
-    #define RXDMA_BUFSIZE       2048
-    #define TXDMA_BUFSIZE       2048
+    #define UART_COMM_NO_ERR        (0U)
+    #define UART_COMM_READ_BUF_OVF  (-1U)
 
-    #define UART_COMM_NO_ERR    0
+     // RINGBUF IMPL
+    #define IDX_RINGBUF(__IDX__, __SIZE__)                          ((__IDX__) < (__SIZE__) ? (__IDX__) : ((__IDX__) - (__SIZE__)))
+    #define LEN_RINGBUF(__SIZE__, __END_PTR__, __START_PTR__)       ((__START_PTR__) <= (__END_PTR__) ? (__END_PTR__) - (__START_PTR__) : (__END_PTR__) + (__SIZE__) - (__START_PTR__))
+    #define MEMCPY_RINGBUF(__DST__, __SRC__, __SRC_SIZE__, __SRC_HEAD__, __LEN__)                               \
+        do {                                                                                                    \
+            uint16_t __FIRST_CHUNK_SIZE__ = (__SRC_SIZE__) - (__SRC_HEAD__);                                    \
+            if((__LEN__) <= (__FIRST_CHUNK_SIZE__)) {                                                           \
+                memcpy((__DST__), &(__SRC__)[(__SRC_HEAD__)], (__LEN__));                                       \
+            } else {                                                                                            \
+                memcpy((__DST__), &(__SRC__)[(__SRC_HEAD__)], (__FIRST_CHUNK_SIZE__));                          \
+                memcpy((__DST__) + (__FIRST_CHUNK_SIZE__), &(__SRC__)[0], (__LEN__) - (__FIRST_CHUNK_SIZE__));  \
+            }                                                                                                   \
+        } while (0)                                                                         
 
-    #define RXDMA_POS_END       (RXDMA_BUFSIZE - 1)
-
-
-
-    #define CIRCUIR_ARRAY_INDEX(idx, size)  ((idx) < (size) ? (idx) : ((idx) - (size)))
-    #define MEMCPY_FROM_RINGBUF(dst, src, src_size, src_head, len)                          \
-        do {                                                                                \
-            size_t first_chunk_size = (src_size) - (src_head);                              \
-            if((len) <= (first_chunk_size)) {                                               \
-                memcpy((dst), &(src)[(src_head)], (len));                                   \
-            } else {                                                                        \
-                memcpy((dst), &(src)[(src_head)], (first_chunk_size));                      \
-                memcpy((dst) + (first_chunk_size), &(src)[0], (len) - (first_chunk_size));  \
-            }                                                                               \
-        } while (0)                                                                         \
-
-     // STM32
+     // STM32 IMPL
     typedef UART_HandleTypeDef uart_t;
-    #define UART_RXDMA_START(uart_comm) (HAL_UART_Receive_DMA( &((uart_comm)->instance), (uart_comm)->rxdma_buf, (uart_comm)->dmabuf_len ))
-    #define UART_RXDMA_STOP(uart_comm) (void)
+    #define UART_TXDMA_START(__HANDLE__)    (HAL_UART_Transmit_DMA(&((__HANDLE__)->instance), &((__HANDLE__)->txdma_buf)[(__HANDLE__)->txdma_cmd_head], (__HANDLE__)->txdma_cmd_len) == HAL_OK)
+    #define UART_RXDMA_START(__HANDLE__)    (HAL_UART_Receive_DMA(&((__HANDLE__)->instance), (__HANDLE__)->rxdma_buf, (__HANDLE__)->dmabuf_len) == HAL_OK)
+    #define UART_STOP(__HANDLE__)           (HAL_UART_DMAStop(&((__HANDLE__)->instance)) == HAL_OK)
+    #define UART_IS_TX_BUSY(__HANDLE__)     ((__HANDLE__)->instance->gState != HAL_UART_STATE_READY)
+    #define UART_IS_RX_BUSY(__HANDLE__)     ((__HANDLE__)->instance->RxState != HAL_UART_STATE_READY)
+    #define UART_GET_RXDMA_POS(__HANDLE__)  ((__HANDLE__)->dmabuf_len - __HAL_DMA_GET_COUNTER((__HANDLE__)->instance->hdmarx))
 
     typedef uint8_t uart_comm_error_t;
     typedef struct uart_comm_t {
         uart_t* instance;                       // uart perh instance
         uint8_t* rxdma_buf;                     // uart rxdma buffer
         uint8_t* txdma_buf;                     // uart txdma buffer
-        uint8_t* rxcmd_buf;                     // uart rxcmd buffer
-        uint16_t dmabuf_len, cmdbuf_len;        // buffer length
+        uint16_t dmabuf_len;                    // buffer length
         uint16_t rxdma_pos_wr, rxdma_pos_rd;    // rxdma buffer read and write cursor
-        uint16_t rxdma_cmd_head, rxdma_cmd_len; // rxdma buffer cmd head and length
+        uint16_t rxdma_pos_parse;               // rxdma buffer cmd parse cursor
+        uint16_t txdma_cmd_head, txdma_cmd_len; // txdma buffer cmd head and length
         uart_comm_error_t error;
     } uart_comm_t;
 
 
-    uart_comm_t* uart_comm_create(uart_t* huart, uint16_t dmabuf_len, uint16_t cmdbuf_len);
+    uart_comm_t* uart_comm_create(uart_t* huart, uint16_t dmabuf_len);
     void uart_comm_destory(uart_comm_t* comm);
     void uart_comm_print_info(const uart_comm_t* comm);
-    void uart_comm_start();
-    
-    void uart_rxdma_parse();
-    uint16_t uart_rxdma_read(uint8_t* rxcmd_buf, uint16_t len);
-    void uart_txdma_write(uint8_t* txcmd_buf, uint16_t len);
+    void uart_comm_start(uart_comm_t* comm);
+    void uart_comm_stop(uart_comm_t* comm);
+    void uart_comm_write(uart_comm_t* comm, const uint8_t* txcmd, uint16_t size);
+    uint16_t uart_comm_read(uart_comm_t* comm, uint8_t* buf, uint16_t size);
 
 
 

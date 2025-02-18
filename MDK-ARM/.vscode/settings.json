@@ -3,6 +3,7 @@
         "uart_comm.h": "c",
         "bsp_inc.h": "c",
         "bsp_map.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "initializer_list": "c"
     }
 }
