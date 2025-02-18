@@ -63,6 +63,7 @@ void SystemClock_Config(void);
 
 void test(TIM_HandleTypeDef *htim)
 {
+	/*
     uint8_t recv_bytes[256];
     uint16_t recv_len = 0;
     recv_len = uart_rxdma_read(recv_bytes, sizeof(recv_bytes));
@@ -70,6 +71,7 @@ void test(TIM_HandleTypeDef *htim)
     {
         uart_txdma_write(recv_bytes, recv_len);
     }
+	*/
 }
 /* USER CODE END 0 */
 
@@ -109,7 +111,7 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
-    uart_rxdma_init();
+   // uart_rxdma_init();
 
     HAL_TIM_RegisterCallback(&htim6, HAL_TIM_PERIOD_ELAPSED_CB_ID, test);
     HAL_TIM_Base_Start_IT(&htim6);

@@ -11,11 +11,23 @@
 extern "C"
 {
     #endif
+
     #define UART_COMM_VERSION "2.1.0"
+
+    #define USE_PRINTF_IMPL
+    #define USE_STM32H5_HAL_IMPL
+
     #include <stdint.h>
+    #include <stdlib.h>
     #include <string.h>
-    #include "main.h"
-    #include "usart.h"
+
+    #ifdef USE_PRINTF_IMPL
+    #include <stdio.h>
+    #endif
+
+    #ifdef USE_STM32H5_HAL_IMPL
+    #include "stm32h5xx_hal.h"
+    #endif
 
     /*
         USAGE:
@@ -38,10 +50,16 @@ extern "C"
 
      */
 
-    #define UART_COMM_NO_ERR        (0U)
-    #define UART_COMM_READ_BUF_OVF  (-1U)
+    #define UART_COMM_NO_ERR        (0)
+    #define UART_COMM_READ_BUF_OVF  (-1)
 
-     // RINGBUF IMPL
+
+     // PRINTF IMPL
+    #ifdef USE_PRINTF_IMPL
+    #define PRINTF                  printf
+    #endif
+
+    // RINGBUF IMPL
     #define IDX_RINGBUF(__IDX__, __SIZE__)                          ((__IDX__) < (__SIZE__) ? (__IDX__) : ((__IDX__) - (__SIZE__)))
     #define LEN_RINGBUF(__SIZE__, __END_PTR__, __START_PTR__)       ((__START_PTR__) <= (__END_PTR__) ? (__END_PTR__) - (__START_PTR__) : (__END_PTR__) + (__SIZE__) - (__START_PTR__))
     #define MEMCPY_RINGBUF(__DST__, __SRC__, __SRC_SIZE__, __SRC_HEAD__, __LEN__)                               \
@@ -55,14 +73,16 @@ extern "C"
             }                                                                                                   \
         } while (0)                                                                         
 
-     // STM32 IMPL
+    // STM32 IMPL
+    #ifdef USE_STM32H5_HAL_IMPL
     typedef UART_HandleTypeDef uart_t;
-    #define UART_TXDMA_START(__HANDLE__)    (HAL_UART_Transmit_DMA(&((__HANDLE__)->instance), &((__HANDLE__)->txdma_buf)[(__HANDLE__)->txdma_cmd_head], (__HANDLE__)->txdma_cmd_len) == HAL_OK)
-    #define UART_RXDMA_START(__HANDLE__)    (HAL_UART_Receive_DMA(&((__HANDLE__)->instance), (__HANDLE__)->rxdma_buf, (__HANDLE__)->dmabuf_len) == HAL_OK)
-    #define UART_STOP(__HANDLE__)           (HAL_UART_DMAStop(&((__HANDLE__)->instance)) == HAL_OK)
+    #define UART_TXDMA_START(__HANDLE__)    (HAL_UART_Transmit_DMA((__HANDLE__)->instance, &((__HANDLE__)->txdma_buf)[(__HANDLE__)->txdma_cmd_head], (__HANDLE__)->txdma_cmd_len) == HAL_OK)
+    #define UART_RXDMA_START(__HANDLE__)    (HAL_UART_Receive_DMA((__HANDLE__)->instance, (__HANDLE__)->rxdma_buf, (__HANDLE__)->dmabuf_len) == HAL_OK)
+    #define UART_STOP(__HANDLE__)           (HAL_UART_DMAStop((__HANDLE__)->instance) == HAL_OK)
     #define UART_IS_TX_BUSY(__HANDLE__)     ((__HANDLE__)->instance->gState != HAL_UART_STATE_READY)
     #define UART_IS_RX_BUSY(__HANDLE__)     ((__HANDLE__)->instance->RxState != HAL_UART_STATE_READY)
     #define UART_GET_RXDMA_POS(__HANDLE__)  ((__HANDLE__)->dmabuf_len - __HAL_DMA_GET_COUNTER((__HANDLE__)->instance->hdmarx))
+    #endif
 
     typedef uint8_t uart_comm_error_t;
     typedef struct uart_comm_t {

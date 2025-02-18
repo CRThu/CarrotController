@@ -4,6 +4,11 @@
         "bsp_inc.h": "c",
         "bsp_map.h": "c",
         "main.h": "c",
-        "initializer_list": "c"
+        "initializer_list": "c",
+        "stdint.h": "c",
+        "usart.h": "c",
+        "stm32h5xx_hal.h": "c",
+        "stm32h5xx_hal_conf.h": "c",
+        "stm32h5xx_hal_usart.h": "c"
     }
 }

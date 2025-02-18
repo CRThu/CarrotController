@@ -42,7 +42,7 @@ void uart_comm_print_info(const uart_comm_t* comm)
 {
     if (comm)
     {
-        printf("\n");
+        PRINTF("\n");
     }
 }
 
@@ -53,7 +53,7 @@ void uart_comm_start(uart_comm_t* comm)
 
 void uart_comm_stop(uart_comm_t* comm)
 {
-    UART_RXDMA_STOP(comm);
+    UART_STOP(comm);
 }
 
 void uart_comm_write(uart_comm_t* comm, const uint8_t* txcmd, uint16_t size)
