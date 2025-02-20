@@ -1,7 +1,7 @@
 /****************************
  * BSP IO
  * CARROT HU
- * 2025.01.22
+ * 2025.02.19
  *****************************/
 #pragma once
 #ifndef _BSP_IO_H_
@@ -10,24 +10,143 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif
-#define BSP_IO_VERSION "1.0.0"
+    #endif
+    #define BSP_IO_VERSION "1.0.0"
 
-#include <stdint.h>
-#include <string.h>
-#include "main.h"
+    #include <stdint.h>
+    #include <stdlib.h>
+    #include <string.h>
 
-/*
-    USAGE:
+    #define USE_PRINTF_IMPL
+    #define USE_STM32H5_HAL_IMPL
 
-    INITIAL:
-    
- */
+    #ifdef USE_PRINTF_IMPL
+    #include <stdio.h>
+    #endif
+
+    #ifdef USE_STM32H5_HAL_IMPL
+    #include "stm32h5xx_hal.h"
+    #endif
+
+    /*
+        USAGE:
+
+        INITIAL:
+
+     */
+
+    #define GPIO_CONFIG_STATUS_NO_ERR   (0)
+
+     // PRINTF IMPL
+    #ifdef USE_PRINTF_IMPL
+    #define PRINTF                  printf
+    #endif
+
+    // STM32 IMPL
+    #ifdef USE_STM32H5_HAL_IMPL
+    typedef GPIO_TypeDef gpio_port_t;
+    typedef uint16_t gpio_pin_t;
+
+    static const gpio_port_t gpio_ports[] = {
+        GPIOA,
+        GPIOB,
+        GPIOC,
+        GPIOD,
+        GPIOE,
+        GPIOF,
+        GPIOG,
+        GPIOH,
+        GPIOI,
+    };
 
 
+    static const gpio_pin_t gpio_pins[] = {
+        GPIO_PIN_0 ,
+        GPIO_PIN_1 ,
+        GPIO_PIN_2 ,
+        GPIO_PIN_3 ,
+        GPIO_PIN_4 ,
+        GPIO_PIN_5 ,
+        GPIO_PIN_6 ,
+        GPIO_PIN_7 ,
+        GPIO_PIN_8 ,
+        GPIO_PIN_9 ,
+        GPIO_PIN_10,
+        GPIO_PIN_11,
+        GPIO_PIN_12,
+        GPIO_PIN_13,
+        GPIO_PIN_14,
+        GPIO_PIN_15,
+    };
+
+    #endif
+
+    typedef enum {
+        BSP_IO_FUNC_NONE,
+        BSP_SWITCH,
+        // IO
+        BSP_IO_FUNC_IN,
+        BSP_IO_FUNC_OUT,
+        BSP_IO_FUNC_INOUT,
+        // SPI
+        BSP_IO_FUNC_SPI_NSS,
+        BSP_IO_FUNC_SPI_SCK,
+        BSP_IO_FUNC_SPI_MOSI,
+        BSP_IO_FUNC_SPI_MISO,
+        // PRESERVED
+        BSP_IO_FUNC_CUSTOM_BASE = 100
+    } bsp_io_func;
+
+    typedef enum {
+        IO_STATE_LOW,
+        IO_STATE_HIGH,
+        IO_STATE_RESERVED
+    } io_state;
 
 
-#ifdef __cplusplus
+    typedef uint16_t gpio_config_status_t;
+    typedef struct btb_io_t {
+        uint16_t btb_pin;           // btb pin num
+        const char* pin_name;       // btb pin num
+
+        gpio_port_t* port;          // gpio port
+        gpio_pin_t pin;             // gpio pin
+        io_state state;             // gpio state
+
+        bsp_io_func func;           // gpio func
+        //void* perh;               // perh instance
+    } btb_io_t;
+
+    typedef uint16_t io_switch_state_t;
+    typedef struct io_switch_t
+    {
+        uint8_t id;                 // switch id
+
+        uint8_t can_sel;            // 0:short by hardware, 1: switch control by io_sel
+        btb_io_t* sw_sel;           // switch sel   (used when can_sel=1)
+        io_switch_state_t state;    // switch state (0: open, 1: short)
+
+        btb_io_t* sw_a;             // switch a
+        btb_io_t* sw_b;             // switch b (unused when not connected to io)
+    } io_switch_t;
+
+    typedef struct dut_interface_t
+    {
+        uint16_t id;                        // dut id
+        const char* name;                   // dut name
+
+        uint16_t preset_id;                 // dut preset id
+        const char* preset_name;            // dut preset name
+
+        btb_io_t pin_configs[40 + 1];         // btb pin configs
+        uint32_t switch_value;              // switch value
+
+        void* perh[8 + 1];                      // perh instances
+    } dut_interface_t;
+
+    gpio_config_status_t gpio_config(btb_io_t* gpio, gpio_port_t* port, gpio_pin_t* pin, bsp_io_func func);
+
+    #ifdef __cplusplus
 }
 #endif
 
