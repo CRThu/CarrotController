@@ -47,43 +47,18 @@ extern "C"
     typedef GPIO_TypeDef gpio_port_t;
     typedef uint16_t gpio_pin_t;
 
-    static const gpio_port_t gpio_ports[] = {
-        GPIOA,
-        GPIOB,
-        GPIOC,
-        GPIOD,
-        GPIOE,
-        GPIOF,
-        GPIOG,
-        GPIOH,
-        GPIOI,
-    };
-
-
-    static const gpio_pin_t gpio_pins[] = {
-        GPIO_PIN_0 ,
-        GPIO_PIN_1 ,
-        GPIO_PIN_2 ,
-        GPIO_PIN_3 ,
-        GPIO_PIN_4 ,
-        GPIO_PIN_5 ,
-        GPIO_PIN_6 ,
-        GPIO_PIN_7 ,
-        GPIO_PIN_8 ,
-        GPIO_PIN_9 ,
-        GPIO_PIN_10,
-        GPIO_PIN_11,
-        GPIO_PIN_12,
-        GPIO_PIN_13,
-        GPIO_PIN_14,
-        GPIO_PIN_15,
-    };
+    #define GPIO_CLOCK(X)                   __HAL_RCC_GPIO##X##_CLK_ENABLE()
+    #define GPIO_PORT(X)                    GPIO##X
+    #define GPIO_PIN(X)                     GPIO_PIN_##X
+    
+    #define GPIO_WRITE(PORT, PIN, STATE)    HAL_GPIO_WritePin((PORT),(PIN),(STATE))
 
     #endif
 
+
     typedef enum {
         BSP_IO_FUNC_NONE,
-        BSP_SWITCH,
+        BSP_IO_SWITCH_SEL,
         // IO
         BSP_IO_FUNC_IN,
         BSP_IO_FUNC_OUT,
@@ -105,7 +80,7 @@ extern "C"
 
 
     typedef uint16_t gpio_config_status_t;
-    typedef struct btb_io_t {
+    typedef struct io_t {
         uint16_t btb_pin;           // btb pin num
         const char* pin_name;       // btb pin num
 
@@ -115,20 +90,20 @@ extern "C"
 
         bsp_io_func func;           // gpio func
         //void* perh;               // perh instance
-    } btb_io_t;
+    } io_t;
 
     typedef uint16_t io_switch_state_t;
     typedef struct io_switch_t
     {
         uint8_t id;                 // switch id
 
-        uint8_t can_sel;            // 0:short by hardware, 1: switch control by io_sel
-        btb_io_t* sw_sel;           // switch sel   (used when can_sel=1)
-        io_switch_state_t state;    // switch state (0: open, 1: short)
+        io_t sw_sel;               // switch sel   (used when can_sel=1)
 
-        btb_io_t* sw_a;             // switch a
-        btb_io_t* sw_b;             // switch b (unused when not connected to io)
+        //io_t sw_a;                 // switch a
+        //io_t sw_b;                 // switch b (unused when not connected to io)
     } io_switch_t;
+
+    #define SWITCH_EN(_MUX_ID_)          ( 1 << ((_MUX_ID_) - 1))
 
     typedef struct dut_interface_t
     {
@@ -138,13 +113,13 @@ extern "C"
         uint16_t preset_id;                 // dut preset id
         const char* preset_name;            // dut preset name
 
-        btb_io_t pin_configs[40 + 1];         // btb pin configs
+        io_t** pin_configs;                  // btb pin configs
         uint32_t switch_value;              // switch value
 
-        void* perh[8 + 1];                      // perh instances
+        void* perh[8 + 1];                  // perh instances
     } dut_interface_t;
 
-    gpio_config_status_t gpio_config(btb_io_t* gpio, gpio_port_t* port, gpio_pin_t* pin, bsp_io_func func);
+    gpio_config_status_t gpio_init(io_t* gpio);
 
     #ifdef __cplusplus
 }
