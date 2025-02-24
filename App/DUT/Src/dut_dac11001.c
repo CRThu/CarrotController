@@ -29,8 +29,53 @@ dut_interface_t dac11001_profile =
                   | SWITCH_EN(6) ,
 
     .perh = {
-        &spi_instances[0],
-        &spi_instances[1],
+        &spi_instances[0],  // config from cubemx
+        &spi_instances[1],  // config from cubemx
         NULL
     }
 };
+
+uint8_t rxbuf[4];
+uint8_t txbuf[4];
+
+
+void dut_dac11001_init()
+{
+    dut_init(&dac11001_profile);
+}
+
+void dut_dac11001_set_spi(uint8_t id, spi_t* hspi)
+{
+    if (id < DUT_MAX_PERH_NUM)
+        dac11001_profile.perh[id] = hspi;
+}
+
+void dut_dac11001_reg_write(uint8_t id, uint8_t addr, uint32_t data)
+{
+	data = data << 4;
+	
+    txbuf[0] = (0x00 << 7) | (addr & 0x7F);
+    txbuf[1] = (data >> 16) & 0xFF;
+    txbuf[2] = (data >> 8) & 0xFF;
+    txbuf[3] = (data >> 0) & 0xFF;
+
+    // temp
+    io_t* csn = &dac11001_profile.pin_configs[2];
+
+    gpio_write(csn, IO_STATE_LOW);
+		for(int i=0; i<5;i++) ;
+    spi_write((spi_t*)dac11001_profile.perh[id], txbuf, 4);
+		for(int i=0; i<5;i++) ;
+    gpio_write(csn, IO_STATE_HIGH);
+}
+
+void dut_dac11001_set_code(uint8_t id, uint32_t code)
+{
+    // temp
+    io_t* ldac = &dac11001_profile.pin_configs[0];
+
+    dut_dac11001_reg_write(id, 0x01, code);
+    gpio_write(ldac, IO_STATE_LOW);
+		for(int i=0; i<5;i++) ;
+    gpio_write(ldac, IO_STATE_HIGH);
+}

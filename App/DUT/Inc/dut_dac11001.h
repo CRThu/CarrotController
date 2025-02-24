@@ -26,6 +26,13 @@ extern "C"
     extern dut_interface_t dac11001_profile;
 
 
+    void dut_dac11001_init();
+    void dut_dac11001_set_spi(uint8_t id, spi_t* hspi);
+    void dut_dac11001_reg_write(uint8_t id, uint8_t addr, uint32_t data);
+    void dut_dac11001_set_code(uint8_t id, uint32_t code);
+
+
+
     #ifdef __cplusplus
 }
 #endif

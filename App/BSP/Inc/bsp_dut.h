@@ -23,6 +23,7 @@ extern "C"
         INITIAL:
 
      */
+    #define DUT_MAX_PERH_NUM                (8)
 
     typedef struct dut_interface_t
     {
@@ -35,7 +36,7 @@ extern "C"
         io_t* pin_configs;                  // btb pin configs
         uint32_t switch_value;              // switch value
 
-        void* perh[8 + 1];                    // perh instances
+        void* perh[DUT_MAX_PERH_NUM];       // perh instances
     } dut_interface_t;
 
 
