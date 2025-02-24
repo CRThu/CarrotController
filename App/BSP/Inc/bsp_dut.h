@@ -12,7 +12,7 @@
 extern "C"
 {
     #endif
-    #define CEVENT_VERSION "1.0.0"
+    #define BSP_DUT_VERSION "1.0.0"
 
     #include "bsp_inc.h"
 
@@ -38,8 +38,6 @@ extern "C"
         void* perh[8 + 1];                    // perh instances
     } dut_interface_t;
 
-
-    extern dut_interface_t dac11001_profile;
 
     gpio_config_status_t dut_init(dut_interface_t* dut);
 

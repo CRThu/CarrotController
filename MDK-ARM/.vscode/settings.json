@@ -14,6 +14,8 @@
         "bsp_io.h": "c",
         "spi.h": "c",
         "bsp_dut.h": "c",
-        "bsp_spi.h": "c"
+        "bsp_spi.h": "c",
+        "dut_inc.h": "c",
+        "dut_dac11001.h": "c"
     }
 }

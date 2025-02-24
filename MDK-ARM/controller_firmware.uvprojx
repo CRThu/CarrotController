@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H563xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;../App/BSP/Inc;../App/FW/Inc</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;../App/BSP/Inc;../App/FW/Inc;..\App\DUT\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1168,6 +1168,16 @@
               <FileName>cdelay.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\FW\Src\cdelay.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>App/DUT</GroupName>
+          <Files>
+            <File>
+              <FileName>dut_dac11001.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\DUT\Src\dut_dac11001.c</FilePath>
             </File>
           </Files>
         </Group>
