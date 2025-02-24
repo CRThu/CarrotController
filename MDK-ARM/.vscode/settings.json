@@ -12,6 +12,8 @@
         "stm32h5xx_hal_usart.h": "c",
         "bsp_mux.h": "c",
         "bsp_io.h": "c",
-        "spi.h": "c"
+        "spi.h": "c",
+        "bsp_dut.h": "c",
+        "bsp_spi.h": "c"
     }
 }

@@ -14,20 +14,7 @@ extern "C"
 
     #define BSP_MUX_VERSION "1.0.0"
 
-    #include <stdint.h>
-    #include <stdlib.h>
-    #include <string.h>
-
-    #define USE_PRINTF_IMPL
-    #define USE_STM32H5_HAL_IMPL
-
-    #ifdef USE_PRINTF_IMPL
-    #include <stdio.h>
-    #endif
-
-    #ifdef USE_STM32H5_HAL_IMPL
-    #include "stm32h5xx_hal.h"
-    #endif
+    #include "bsp_inc.h"
 
     /*
         USAGE:
@@ -36,19 +23,27 @@ extern "C"
 
      */
 
-    // PRINTF IMPL
-    #ifdef USE_PRINTF_IMPL
-    #define PRINTF                  printf
-    #endif
+    typedef uint16_t io_switch_state_t;
+    typedef struct io_switch_t
+    {
+        uint8_t id;                 // switch id
 
-    // STM32 IMPL
-    #ifdef USE_STM32H5_HAL_IMPL
-    typedef GPIO_TypeDef gpio_t;
-    #endif
+        io_t sw_sel;               // switch sel   (used when can_sel=1)
 
-    typedef struct muxcfg_t {
-        gpio_t* mux1;                       // uart perh instance
-    } muxcfg_t;
+        //io_t sw_a;                 // switch a
+        //io_t sw_b;                 // switch b (unused when not connected to io)
+    } io_switch_t;
+
+    #define IO_SWITCH_ARR_END_ID        (uint8_t)(-1)
+
+    #define SWITCH_EN(_MUX_ID_)          ( 1 << ((_MUX_ID_) - 1))
+
+
+    extern io_switch_t switch_config[];
+
+    gpio_config_status_t switch_init(io_switch_t* switch_configs);
+    gpio_config_status_t switch_set(io_switch_t* switch_configs, uint16_t value);
+    uint32_t switch_get(io_switch_t* switch_configs);
 
     #ifdef __cplusplus
 }
