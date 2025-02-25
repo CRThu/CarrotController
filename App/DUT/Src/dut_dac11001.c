@@ -1,26 +1,38 @@
 #include "dut_inc.h"
 
+#define SHARED_LDAC
+
 dut_interface_t dac11001_profile =
 {
     .id = 0,
     .name = "DAC11001",
 
     .preset_id = 0,
-    .preset_name = "2 HARDWARE SPI COMM",
+
+    #ifdef SHARED_LDAC
+    .preset_name = "TWO SPI, SHARED LDAC",
+    #else
+    .preset_name = "TWO SPI",
+    #endif
 
     .pin_configs = (io_t[]) {
-        {.btb_pin = 11, .pin_name = "#LDAC1",    .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 12, .pin_name = "#LDAC2",    .port = GPIO_PORT(C), .pin = GPIO_PIN(2),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 17, .pin_name = "#SYNC1",    .port = GPIO_PORT(A), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 19, .pin_name = "#SYNC2",    .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 23, .pin_name = "SPIA_SCK",  .port = GPIO_PORT(B), .pin = GPIO_PIN(3),  .func = BSP_IO_FUNC_SPI_SCK,  .state = IO_STATE_RESERVED },
-        {.btb_pin = 25, .pin_name = "SPIA_MOSI", .port = GPIO_PORT(B), .pin = GPIO_PIN(5),  .func = BSP_IO_FUNC_SPI_MOSI, .state = IO_STATE_RESERVED },
-        {.btb_pin = 27, .pin_name = "SPIA_MISO", .port = GPIO_PORT(B), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_SPI_MISO, .state = IO_STATE_RESERVED },
-        {.btb_pin = 24, .pin_name = "SPIB_SCK",  .port = GPIO_PORT(C), .pin = GPIO_PIN(10), .func = BSP_IO_FUNC_SPI_SCK,  .state = IO_STATE_RESERVED },
-        {.btb_pin = 26, .pin_name = "SPIB_MOSI", .port = GPIO_PORT(C), .pin = GPIO_PIN(12), .func = BSP_IO_FUNC_SPI_MOSI, .state = IO_STATE_RESERVED },
-        {.btb_pin = 28, .pin_name = "SPIB_MISO", .port = GPIO_PORT(C), .pin = GPIO_PIN(11), .func = BSP_IO_FUNC_SPI_MISO, .state = IO_STATE_RESERVED },
-        {.btb_pin = 51, .pin_name = "#CLR1",     .port = GPIO_PORT(E), .pin = GPIO_PIN(14), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 52, .pin_name = "#CLR2",     .port = GPIO_PORT(E), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+    #ifdef SHARED_LDAC
+        {.btb_pin = 11, .pin_name = "#LDAC",       .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+    #else
+        {.btb_pin = 11, .pin_name = "#LDAC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 12, .pin_name = "#LDAC[1]",    .port = GPIO_PORT(C), .pin = GPIO_PIN(2),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+    #endif
+
+        {.btb_pin = 17, .pin_name = "#SYNC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 19, .pin_name = "#SYNC[1]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 23, .pin_name = "SPI_SCK[0]",  .port = GPIO_PORT(B), .pin = GPIO_PIN(3),  .func = BSP_IO_FUNC_SPI_SCK,  .state = IO_STATE_RESERVED },
+        {.btb_pin = 25, .pin_name = "SPI_MOSI[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(5),  .func = BSP_IO_FUNC_SPI_MOSI, .state = IO_STATE_RESERVED },
+        {.btb_pin = 27, .pin_name = "SPI_MISO[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_SPI_MISO, .state = IO_STATE_RESERVED },
+        {.btb_pin = 24, .pin_name = "SPI_SCK[1]",  .port = GPIO_PORT(C), .pin = GPIO_PIN(10), .func = BSP_IO_FUNC_SPI_SCK,  .state = IO_STATE_RESERVED },
+        {.btb_pin = 26, .pin_name = "SPI_MOSI[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(12), .func = BSP_IO_FUNC_SPI_MOSI, .state = IO_STATE_RESERVED },
+        {.btb_pin = 28, .pin_name = "SPI_MISO[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(11), .func = BSP_IO_FUNC_SPI_MISO, .state = IO_STATE_RESERVED },
+        {.btb_pin = 51, .pin_name = "#CLR[0]",     .port = GPIO_PORT(E), .pin = GPIO_PIN(14), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 52, .pin_name = "#CLR[1]",     .port = GPIO_PORT(E), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
         {.btb_pin = IO_ARR_END_ID}
     },
 
@@ -52,30 +64,32 @@ void dut_dac11001_set_spi(uint8_t id, spi_t* hspi)
 
 void dut_dac11001_reg_write(uint8_t id, uint8_t addr, uint32_t data)
 {
-	data = data << 4;
-	
+    data = data << 4;
+
     txbuf[0] = (0x00 << 7) | (addr & 0x7F);
     txbuf[1] = (data >> 16) & 0xFF;
     txbuf[2] = (data >> 8) & 0xFF;
     txbuf[3] = (data >> 0) & 0xFF;
 
-    // temp
-    io_t* csn = &dac11001_profile.pin_configs[2];
+    io_t* io_nsync = dut_get_io_id(&dac11001_profile, id, "#SYNC");
 
-    gpio_write(csn, IO_STATE_LOW);
-		for(int i=0; i<5;i++) ;
+    gpio_write(io_nsync, IO_STATE_LOW);
+    for (int i = 0; i < 5; i++);
     spi_write((spi_t*)dac11001_profile.perh[id], txbuf, 4);
-		for(int i=0; i<5;i++) ;
-    gpio_write(csn, IO_STATE_HIGH);
+    for (int i = 0; i < 5; i++);
+    gpio_write(io_nsync, IO_STATE_HIGH);
 }
 
 void dut_dac11001_set_code(uint8_t id, uint32_t code)
 {
-    // temp
-    io_t* ldac = &dac11001_profile.pin_configs[0];
+    #ifdef SHARED_LDAC
+    io_t* io_ldac = dut_get_io(&dac11001_profile, "#LDAC");
+    #else
+    io_t* io_ldac = dut_get_io_id(&dac11001_profile, id, "#LDAC");
+    #endif
 
     dut_dac11001_reg_write(id, 0x01, code);
-    gpio_write(ldac, IO_STATE_LOW);
-		for(int i=0; i<5;i++) ;
-    gpio_write(ldac, IO_STATE_HIGH);
+    gpio_write(io_ldac, IO_STATE_LOW);
+    for (int i = 0; i < 5; i++);
+    gpio_write(io_ldac, IO_STATE_HIGH);
 }

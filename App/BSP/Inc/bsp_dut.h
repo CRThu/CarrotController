@@ -41,6 +41,8 @@ extern "C"
 
 
     gpio_config_status_t dut_init(dut_interface_t* dut);
+    io_t* dut_get_io(dut_interface_t* dut, const char* name);
+    io_t* dut_get_io_id(dut_interface_t* dut, uint8_t id, const char* name);
 
     #ifdef __cplusplus
 }

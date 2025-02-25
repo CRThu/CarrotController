@@ -78,6 +78,7 @@ extern "C"
     } io_t;
 
     #define IO_ARR_END_ID           (uint16_t)(-1)
+    #define IO_PIN_NAME_MAX_LEN     (32)
 
     #define gpio_write      GPIO_WRITE
     #define gpio_read       GPIO_READ

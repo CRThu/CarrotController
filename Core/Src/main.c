@@ -129,11 +129,17 @@ int main(void)
     while (1)
     {
         HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x00000);
+        dut_dac11001_set_code(0, 0x00000); // MIN
+        dut_dac11001_set_code(1, 0xFFFFF); // MAX
         HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x7FFFF);
+        dut_dac11001_set_code(0, 0x7FFFF); // MID
+        dut_dac11001_set_code(1, 0x7FFFF); // MID
         HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0xFFFFF);
+        dut_dac11001_set_code(0, 0xFFFFF); // MAX
+        dut_dac11001_set_code(1, 0x00000); // MIN
+        HAL_Delay(1000);
+        dut_dac11001_set_code(0, 0x7FFFF); // MID
+        dut_dac11001_set_code(1, 0x7FFFF); // MID
 
 
         // GPIO INSTRUCTION FREQ=23MHz
