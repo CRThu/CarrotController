@@ -17,6 +17,8 @@
         "bsp_spi.h": "c",
         "dut_inc.h": "c",
         "dut_dac11001.h": "c",
-        "cordic.h": "c"
+        "cordic.h": "c",
+        "__config": "c",
+        "type_traits": "c"
     }
 }

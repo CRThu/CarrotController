@@ -55,6 +55,9 @@
 /* USER CODE BEGIN PV */
 uart_comm_t* comm_pc = NULL;
 
+volatile uint8_t flag = 0;
+volatile double cnt = 0;
+
 uint8_t recv_bytes[256];
 uint16_t recv_len = 0;
 /* USER CODE END PV */
@@ -74,6 +77,11 @@ void test(TIM_HandleTypeDef* htim)
     {
         uart_comm_write(comm_pc, recv_bytes, recv_len);
     }
+}
+
+void set_flag(TIM_HandleTypeDef* htim)
+{
+    flag = 1;
 }
 /* USER CODE END 0 */
 
@@ -114,6 +122,7 @@ int main(void)
   MX_SPI1_Init();
   MX_SPI3_Init();
   MX_CORDIC_Init();
+  MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
     comm_pc = uart_comm_create(&huart4, 2048);
@@ -125,41 +134,47 @@ int main(void)
 
     dut_dac11001_init();
 
+    HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, set_flag);
+    HAL_TIM_Base_Start_IT(&htim5);
+    HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
 
+    // cordic test
     HAL_CORDIC_Configure(&hcordic, &(CORDIC_ConfigTypeDef) {
         .Function = CORDIC_FUNCTION_COSINE,
             .InSize = CORDIC_INSIZE_32BITS,
             .OutSize = CORDIC_OUTSIZE_32BITS,
             .NbWrite = CORDIC_NBWRITE_2,
             .NbRead = CORDIC_NBREAD_2,
-            .Precision = CORDIC_PRECISION_6CYCLES,
+            .Precision = CORDIC_PRECISION_8CYCLES,
     });
 
-
-    // cordic test
-    /*
     int32_t inbuf[16];
     int32_t outbuf[16];
     double arg1, arg2, res1, res2;
-    uint8_t buf[256];
+    double f=999;
+		double fs=100000;
+    int32_t code;
+    //uint8_t buf[256];
 
-    arg1 = 0.1;
-    arg2 = 1.0;
+    //arg1 = 0.1;
+    //arg2 = 1.0;
 
-    inbuf[0] = (double)arg1 * (double)2147483648.0;
-    inbuf[1] = (double)arg2 * (double)2147483648.0;
+    //inbuf[0] = (double)arg1 * (double)2147483648.0;
+    //inbuf[1] = (double)arg2 * (double)2147483648.0;
 
-    HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
+    //HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
 
-    res1 = (double)outbuf[0] / (double)2147483648.0;
-    res2 = (double)outbuf[1] / (double)2147483648.0;
+    //res1 = (double)outbuf[0] / (double)2147483648.0;
+    //res2 = (double)outbuf[1] / (double)2147483648.0;
 
-    // 1.00000000*cos(0.10000000/pi)=0.95105672, sin=0.30901575
-    sprintf(buf, "%.8lf*cos(%.8lf/pi)=%.8lf, sin=%.8lf\r\n", arg2, arg1, res1, res2);
+    //// 1.00000000*cos(0.10000000/pi)=0.95105672, sin=0.30901575
+    //sprintf(buf, "%.8lf*cos(%.8lf/pi)=%.8lf, sin=%.8lf\r\n", arg2, arg1, res1, res2);
 
-    uart_comm_write(comm_pc, buf, strlen(buf));
-    */
+    //uart_comm_write(comm_pc, buf, strlen(buf));
 
+    // dac11001
+    inbuf[0] = 0;
+    inbuf[1] = 0.9*(double)2147483648.0;
 
   /* USER CODE END 2 */
 
@@ -167,22 +182,42 @@ int main(void)
   /* USER CODE BEGIN WHILE */
     while (1)
     {
+        // timer driven ldac
+        if (flag)
+        {
+            cnt+=1;
+            // todo overflow
+            //cnt = cnt % 0xFFFFF;
+            if (cnt > (double)fs / (double)2.0 / (double)f)
+                cnt -= (double)fs / (double)f;
+
+            arg1 = (double)2.0 / (double)fs * (double)cnt * (double)f * (double)2147483648.0;
 
 
+            inbuf[0] = (double)2.0 / (double)fs * (double)cnt * (double)f * (double)2147483648.0;
+
+            HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
+            code = (double)outbuf[0] / (double)2147483648.0 * (double)524288.0-(double)524288.0;
+            dut_dac11001_set_code(0, code);
+            //code = (double)outbuf[1] / (double)2147483648.0 * (double)524288.0-(double)524288.0;
+            dut_dac11001_set_code(1, code);
+
+            flag = 0;
+        }
 
         // DAC11001
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x00000); // MIN
-        dut_dac11001_set_code(1, 0xFFFFF); // MAX
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x7FFFF); // MID
-        dut_dac11001_set_code(1, 0x7FFFF); // MID
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0xFFFFF); // MAX
-        dut_dac11001_set_code(1, 0x00000); // MIN
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x7FFFF); // MID
-        dut_dac11001_set_code(1, 0x7FFFF); // MID
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0x00000); // MIN
+        //dut_dac11001_set_code(1, 0xFFFFF); // MAX
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0x7FFFF); // MID
+        //dut_dac11001_set_code(1, 0x7FFFF); // MID
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0xFFFFF); // MAX
+        //dut_dac11001_set_code(1, 0x00000); // MIN
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0x7FFFF); // MID
+        //dut_dac11001_set_code(1, 0x7FFFF); // MID
 
 
         // GPIO INSTRUCTION FREQ=23MHz
@@ -296,7 +331,7 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-          /* User can add his own implementation to report the HAL error return state */
+            /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -315,8 +350,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-          /* User can add his own implementation to report the file name and line number,
-             ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+            /* User can add his own implementation to report the file name and line number,
+               ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

@@ -1,6 +1,7 @@
 #include "dut_inc.h"
 
 #define SHARED_LDAC
+#define PWM_LDAC
 
 dut_interface_t dac11001_profile =
 {
@@ -16,13 +17,14 @@ dut_interface_t dac11001_profile =
     #endif
 
     .pin_configs = (io_t[]) {
+    #ifndef PWM_LDAC
     #ifdef SHARED_LDAC
         {.btb_pin = 11, .pin_name = "#LDAC",       .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
     #else
         {.btb_pin = 11, .pin_name = "#LDAC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
         {.btb_pin = 12, .pin_name = "#LDAC[1]",    .port = GPIO_PORT(C), .pin = GPIO_PIN(2),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
     #endif
-
+    #endif
         //{.btb_pin = 17, .pin_name = "#SYNC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
         //{.btb_pin = 19, .pin_name = "#SYNC[1]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
         {.btb_pin = 23, .pin_name = "SPI_SCK[0]",  .port = GPIO_PORT(B), .pin = GPIO_PIN(3),  .func = BSP_IO_FUNC_SPI_SCK,  .state = IO_STATE_RESERVED },
@@ -54,6 +56,10 @@ uint8_t txbuf[4];
 void dut_dac11001_init()
 {
     dut_init(&dac11001_profile);
+    
+    #ifdef PWM_LDAC
+    // todo
+    #endif
 }
 
 void dut_dac11001_set_spi(uint8_t id, spi_t* hspi)
@@ -82,14 +88,18 @@ void dut_dac11001_reg_write(uint8_t id, uint8_t addr, uint32_t data)
 
 void dut_dac11001_set_code(uint8_t id, uint32_t code)
 {
+    #ifndef PWM_LDAC
     #ifdef SHARED_LDAC
     io_t* io_ldac = dut_get_io(&dac11001_profile, "#LDAC");
     #else
     io_t* io_ldac = dut_get_io_id(&dac11001_profile, id, "#LDAC");
     #endif
+    #endif
 
     dut_dac11001_reg_write(id, 0x01, code);
+    #ifndef PWM_LDAC
     gpio_write(io_ldac, IO_STATE_LOW);
     for (int i = 0; i < 5; i++);
     gpio_write(io_ldac, IO_STATE_HIGH);
+    #endif
 }
