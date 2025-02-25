@@ -42,9 +42,9 @@ dut_interface_t dac11001_profile =
                   | SWITCH_EN(4)
                   | SWITCH_EN(6) ,
 
-    .perh = {
-        &spi_instances[0],  // config from cubemx
-        &spi_instances[1],  // config from cubemx
+    .perh = (void*[]){
+        &hspi1,  // 现在 spi_instances 是编译时常量
+        &hspi3,
         NULL
     }
 };

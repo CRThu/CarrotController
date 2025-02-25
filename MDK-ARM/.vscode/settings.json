@@ -19,6 +19,8 @@
         "dut_dac11001.h": "c",
         "cordic.h": "c",
         "__config": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "bsp_tim.h": "c",
+        "cevent.h": "c"
     }
 }

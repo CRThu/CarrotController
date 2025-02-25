@@ -28,6 +28,7 @@ extern "C"
 		
     #include "bsp_io.h"
     #include "bsp_spi.h"
+    #include "bsp_tim.h"
     #include "bsp_dut.h"
     #include "bsp_mux.h"
 
