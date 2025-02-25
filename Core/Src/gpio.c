@@ -52,8 +52,8 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, MUX_SEL12_Pin|MUX_SEL11_Pin|MUX_SEL07_Pin|MUX_SEL04_Pin
-                          |MUX_SEL03_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, MUX_SEL09_Pin|MUX_SEL12_Pin|MUX_SEL11_Pin|MUX_SEL07_Pin
+                          |MUX_SEL04_Pin|MUX_SEL03_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOF, LEDA_Pin|LEDB_Pin|FT_RDN_Pin|FT_WRN_Pin
@@ -77,16 +77,10 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(MUX_SEL10_GPIO_Port, MUX_SEL10_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : MUX_SEL09_Pin */
-  GPIO_InitStruct.Pin = MUX_SEL09_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(MUX_SEL09_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : MUX_SEL12_Pin MUX_SEL11_Pin MUX_SEL07_Pin MUX_SEL04_Pin
-                           MUX_SEL03_Pin */
-  GPIO_InitStruct.Pin = MUX_SEL12_Pin|MUX_SEL11_Pin|MUX_SEL07_Pin|MUX_SEL04_Pin
-                          |MUX_SEL03_Pin;
+  /*Configure GPIO pins : MUX_SEL09_Pin MUX_SEL12_Pin MUX_SEL11_Pin MUX_SEL07_Pin
+                           MUX_SEL04_Pin MUX_SEL03_Pin */
+  GPIO_InitStruct.Pin = MUX_SEL09_Pin|MUX_SEL12_Pin|MUX_SEL11_Pin|MUX_SEL07_Pin
+                          |MUX_SEL04_Pin|MUX_SEL03_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

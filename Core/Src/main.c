@@ -18,6 +18,7 @@
  /* USER CODE END Header */
  /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cordic.h"
 #include "gpdma.h"
 #include "i2c.h"
 #include "icache.h"
@@ -112,6 +113,7 @@ int main(void)
     MX_I2C1_Init();
     MX_SPI1_Init();
     MX_SPI3_Init();
+    MX_CORDIC_Init();
     /* USER CODE BEGIN 2 */
 
     comm_pc = uart_comm_create(&huart4, 2048);
@@ -122,24 +124,60 @@ int main(void)
 
 
     dut_dac11001_init();
+
+
+    HAL_CORDIC_Configure(&hcordic, &(CORDIC_ConfigTypeDef) {
+        .Function = CORDIC_FUNCTION_COSINE,
+            .InSize = CORDIC_INSIZE_32BITS,
+            .OutSize = CORDIC_OUTSIZE_32BITS,
+            .NbWrite = CORDIC_NBWRITE_2,
+            .NbRead = CORDIC_NBREAD_2,
+            .Precision = CORDIC_PRECISION_6CYCLES,
+    });
+
+    int32_t inbuf[16];
+    int32_t outbuf[16];
+    double arg1, arg2, res1, res2;
+    uint8_t buf[256];
+
+    arg1 = 0.1;
+    arg2 = 1.0;
+
+    inbuf[0] = (double)arg1 * (double)2147483648.0;
+    inbuf[1] = (double)arg2 * (double)2147483648.0;
+
+    HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
+
+    res1 = (double)outbuf[0] / (double)2147483648.0;
+    res2 = (double)outbuf[1] / (double)2147483648.0;
+
+    // 1.00000000*cos(0.10000000/pi)=0.95105672, sin=0.30901575
+    sprintf(buf, "%.8lf*cos(%.8lf/pi)=%.8lf, sin=%.8lf\r\n", arg2, arg1, res1, res2);
+
+    uart_comm_write(comm_pc, buf, strlen(buf));
+
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x00000); // MIN
-        dut_dac11001_set_code(1, 0xFFFFF); // MAX
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x7FFFF); // MID
-        dut_dac11001_set_code(1, 0x7FFFF); // MID
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0xFFFFF); // MAX
-        dut_dac11001_set_code(1, 0x00000); // MIN
-        HAL_Delay(1000);
-        dut_dac11001_set_code(0, 0x7FFFF); // MID
-        dut_dac11001_set_code(1, 0x7FFFF); // MID
+
+        
+
+        // DAC11001
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0x00000); // MIN
+        //dut_dac11001_set_code(1, 0xFFFFF); // MAX
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0x7FFFF); // MID
+        //dut_dac11001_set_code(1, 0x7FFFF); // MID
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0xFFFFF); // MAX
+        //dut_dac11001_set_code(1, 0x00000); // MIN
+        //HAL_Delay(1000);
+        //dut_dac11001_set_code(0, 0x7FFFF); // MID
+        //dut_dac11001_set_code(1, 0x7FFFF); // MID
 
 
         // GPIO INSTRUCTION FREQ=23MHz
@@ -253,7 +291,7 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-        /* User can add his own implementation to report the HAL error return state */
+          /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -272,8 +310,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-        /* User can add his own implementation to report the file name and line number,
-           ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-           /* USER CODE END 6 */
+          /* User can add his own implementation to report the file name and line number,
+             ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+             /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

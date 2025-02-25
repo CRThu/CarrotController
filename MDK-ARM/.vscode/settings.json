@@ -16,6 +16,7 @@
         "bsp_dut.h": "c",
         "bsp_spi.h": "c",
         "dut_inc.h": "c",
-        "dut_dac11001.h": "c"
+        "dut_dac11001.h": "c",
+        "cordic.h": "c"
     }
 }
