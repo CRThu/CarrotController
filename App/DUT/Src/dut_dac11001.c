@@ -23,8 +23,8 @@ dut_interface_t dac11001_profile =
         {.btb_pin = 12, .pin_name = "#LDAC[1]",    .port = GPIO_PORT(C), .pin = GPIO_PIN(2),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
     #endif
 
-        {.btb_pin = 17, .pin_name = "#SYNC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 19, .pin_name = "#SYNC[1]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        //{.btb_pin = 17, .pin_name = "#SYNC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        //{.btb_pin = 19, .pin_name = "#SYNC[1]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
         {.btb_pin = 23, .pin_name = "SPI_SCK[0]",  .port = GPIO_PORT(B), .pin = GPIO_PIN(3),  .func = BSP_IO_FUNC_SPI_SCK,  .state = IO_STATE_RESERVED },
         {.btb_pin = 25, .pin_name = "SPI_MOSI[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(5),  .func = BSP_IO_FUNC_SPI_MOSI, .state = IO_STATE_RESERVED },
         {.btb_pin = 27, .pin_name = "SPI_MISO[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_SPI_MISO, .state = IO_STATE_RESERVED },
@@ -71,13 +71,13 @@ void dut_dac11001_reg_write(uint8_t id, uint8_t addr, uint32_t data)
     txbuf[2] = (data >> 8) & 0xFF;
     txbuf[3] = (data >> 0) & 0xFF;
 
-    io_t* io_nsync = dut_get_io_id(&dac11001_profile, id, "#SYNC");
+    //io_t* io_nsync = dut_get_io_id(&dac11001_profile, id, "#SYNC");
 
-    gpio_write(io_nsync, IO_STATE_LOW);
-    for (int i = 0; i < 5; i++);
+    //gpio_write(io_nsync, IO_STATE_LOW);
+    //for (int i = 0; i < 5; i++);
     spi_write((spi_t*)dac11001_profile.perh[id], txbuf, 4);
-    for (int i = 0; i < 5; i++);
-    gpio_write(io_nsync, IO_STATE_HIGH);
+    //for (int i = 0; i < 5; i++);
+    //gpio_write(io_nsync, IO_STATE_HIGH);
 }
 
 void dut_dac11001_set_code(uint8_t id, uint32_t code)
