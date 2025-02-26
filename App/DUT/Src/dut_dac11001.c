@@ -42,8 +42,8 @@ dut_interface_t dac11001_profile =
                   | SWITCH_EN(4)
                   | SWITCH_EN(6) ,
 
-    .perh = (void*[]){
-        &hspi1,  // 现在 spi_instances 是编译时常量
+    .perh = {
+        &hspi1,
         &hspi3,
         NULL
     }
@@ -81,7 +81,7 @@ void dut_dac11001_reg_write(uint8_t id, uint8_t addr, uint32_t data)
 
     //gpio_write(io_nsync, IO_STATE_LOW);
     //for (int i = 0; i < 5; i++);
-    spi_write((spi_t*)dac11001_profile.perh[id], txbuf, 4);
+    spi_write(dac11001_profile.perh[id], txbuf, 4);
     //for (int i = 0; i < 5; i++);
     //gpio_write(io_nsync, IO_STATE_HIGH);
 }

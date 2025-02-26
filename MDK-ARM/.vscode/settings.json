@@ -21,6 +21,7 @@
         "__config": "c",
         "type_traits": "c",
         "bsp_tim.h": "c",
-        "cevent.h": "c"
+        "cevent.h": "c",
+        "math.h": "c"
     }
 }
