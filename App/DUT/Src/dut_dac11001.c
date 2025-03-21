@@ -1,4 +1,4 @@
-#include "dut_inc.h"
+#include "dut_dac11001.h"
 
 #define SHARED_LDAC
 #define PWM_LDAC
@@ -38,9 +38,9 @@ dut_interface_t dac11001_profile =
         {.btb_pin = IO_ARR_END_ID}
     },
 
-    .switch_value = SWITCH_EN(1)
-                  | SWITCH_EN(4)
-                  | SWITCH_EN(6) ,
+    .switch_value = BSPMUX_BTB_CLK1_TO_MCU_IO
+                  | BSPMUX_BTB_SPIA_SCK_TO_MCU_SPIA_SCK
+                  | BSPMUX_BTB_SPIB_SCK_TO_MCU_SPIB_SCK ,
 
     .perh = {
         &hspi1,

@@ -27,7 +27,7 @@ extern "C"
 
     typedef struct dut_interface_t
     {
-        uint16_t id;                        // dut id
+        uint32_t id;                        // dut id
         const char* name;                   // dut name
 
         uint16_t preset_id;                 // dut preset id

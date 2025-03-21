@@ -1271,6 +1271,11 @@
               <FileType>1</FileType>
               <FilePath>..\App\DUT\Src\dut_dac11001.c</FilePath>
             </File>
+            <File>
+              <FileName>dut_ad7616.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\DUT\Src\dut_ad7616.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

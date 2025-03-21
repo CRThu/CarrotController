@@ -17,6 +17,7 @@ extern "C"
     #include "bsp_inc.h"
 
     #include "dut_dac11001.h"
+    #include "dut_ad7616.h"
 
 
     /*

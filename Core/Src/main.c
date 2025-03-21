@@ -55,6 +55,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+/*
 uart_comm_t* comm_pc = NULL;
 
 volatile uint8_t flag = 0;
@@ -62,6 +63,7 @@ volatile double cnt = 0;
 
 uint8_t recv_bytes[256];
 uint16_t recv_len = 0;
+*/
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,6 +74,8 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+/*
 void test(TIM_HandleTypeDef* htim)
 {
     recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
@@ -80,11 +84,11 @@ void test(TIM_HandleTypeDef* htim)
         uart_comm_write(comm_pc, recv_bytes, recv_len);
     }
 }
-
 void set_flag(TIM_HandleTypeDef* htim)
 {
     flag = 1;
 }
+*/
 /* USER CODE END 0 */
 
 /**
@@ -127,6 +131,14 @@ int main(void)
     MX_TIM5_Init();
     /* USER CODE BEGIN 2 */
 
+
+    dut_ad7616_init();
+    io_t* io_rstn = dut_get_io(&ad7616_profiles[0], "nRESET");
+    gpio_write(io_rstn, IO_STATE_LOW);
+    HAL_Delay(10);
+    gpio_write(io_rstn, IO_STATE_HIGH);
+    HAL_Delay(10);
+    /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
 
@@ -177,13 +189,20 @@ int main(void)
     // dac11001
     inbuf[0] = 0;
     inbuf[1] = 0.9 * (double)2147483648.0;
-
+    */
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
     {
+    io_t* io_convst = dut_get_io(&ad7616_profiles[0], "CONVST");
+    gpio_write(io_convst, IO_STATE_LOW);
+    HAL_Delay(1);
+    gpio_write(io_convst, IO_STATE_HIGH);
+    HAL_Delay(1);
+
+        /*
         // timer driven ldac
         if (flag)
         {
@@ -214,59 +233,6 @@ int main(void)
 
             flag = 0;
         }
-
-        // DAC11001
-        //HAL_Delay(1000);
-        //dut_dac11001_set_code(0, 0x00000); // MIN
-        //dut_dac11001_set_code(1, 0xFFFFF); // MAX
-        //HAL_Delay(1000);
-        //dut_dac11001_set_code(0, 0x7FFFF); // MID
-        //dut_dac11001_set_code(1, 0x7FFFF); // MID
-        //HAL_Delay(1000);
-        //dut_dac11001_set_code(0, 0xFFFFF); // MAX
-        //dut_dac11001_set_code(1, 0x00000); // MIN
-        //HAL_Delay(1000);
-        //dut_dac11001_set_code(0, 0x7FFFF); // MID
-        //dut_dac11001_set_code(1, 0x7FFFF); // MID
-
-
-        // GPIO INSTRUCTION FREQ=23MHz
-        /*
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
-        */
-        //  GPIO INSTRUCTION FREQ=250MHz
-        /*
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
-        LED1_GPIO_Port->BSRR = LED1_Pin;
-        LED1_GPIO_Port->BRR = LED1_Pin;
         */
         /* USER CODE END WHILE */
 

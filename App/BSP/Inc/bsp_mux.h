@@ -36,8 +36,31 @@ extern "C"
 
     #define IO_SWITCH_ARR_END_ID        (uint8_t)(-1)
 
-    #define SWITCH_EN(_MUX_ID_)          ( 1 << ((_MUX_ID_) - 1))
+    #define SWITCH_EN(_MUX_ID_)         ( 1 << ((_MUX_ID_) - 1))
 
+    #define BSPMUX_BTB_CLK1_TO_MCU_IO              SWITCH_EN(1)
+    #define BSPMUX_BTB_CLK1_TO_PLL_CLK             SWITCH_EN(2)
+    #define BSPMUX_BTB_CLK2_TO_MCU_IO              (0)
+    #define BSPMUX_BTB_CLK2_TO_MCU_SPIA_SCK        SWITCH_EN(3)
+    #define BSPMUX_BTB_SPIA_SCK_TO_MCU_SPIA_SCK    SWITCH_EN(4)
+    #define BSPMUX_MCU_SPIA_SCK_TO_MCU_SPIB_SCK    SWITCH_EN(5)
+    #define BSPMUX_BTB_SPIB_SCK_TO_MCU_SPIB_SCK    SWITCH_EN(6)
+    #define BSPMUX_BTB_CLK3_TO_MCU_IO              SWITCH_EN(7)
+    #define BSPMUX_BTB_CLK3_TO_PLL_CLK             SWITCH_EN(8)
+    #define BSPMUX_BTB_CLK4_TO_MCU_IO              SWITCH_EN(9)
+    #define BSPMUX_BTB_CLK4_TO_PLL_CLK             SWITCH_EN(10)
+    #define BSPMUX_BTB_CLK5_TO_MCU_IO              SWITCH_EN(11)
+    #define BSPMUX_BTB_CLK6_TO_MCU_IO              SWITCH_EN(12)
+
+    #define BSPMUX_DEFAULT                         (  BSPMUX_BTB_CLK1_TO_MCU_IO \
+                                                    | BSPMUX_BTB_CLK2_TO_MCU_IO \
+                                                    | BSPMUX_BTB_CLK3_TO_MCU_IO \
+                                                    | BSPMUX_BTB_CLK4_TO_MCU_IO \
+                                                    | BSPMUX_BTB_CLK5_TO_MCU_IO \
+                                                    | BSPMUX_BTB_CLK6_TO_MCU_IO \
+                                                    | BSPMUX_BTB_SPIA_SCK_TO_MCU_SPIA_SCK \
+                                                    | BSPMUX_BTB_SPIB_SCK_TO_MCU_SPIB_SCK \
+                                                    )
 
     extern io_switch_t switch_config[];
 
