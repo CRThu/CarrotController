@@ -23,6 +23,7 @@
         "bsp_tim.h": "c",
         "cevent.h": "c",
         "math.h": "c",
-        "dut_ad7616.h": "c"
+        "dut_ad7616.h": "c",
+        "cdelay.h": "c"
     }
 }
