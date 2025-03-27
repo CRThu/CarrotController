@@ -944,7 +944,7 @@
   </Group>
 
   <Group>
-    <GroupName>App/DUT</GroupName>
+    <GroupName>App/DUT/ad7616</GroupName>
     <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -956,20 +956,28 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\App\DUT\Src\dut_dac11001.c</PathWithFileName>
-      <FilenameWithoutPath>dut_dac11001.c</FilenameWithoutPath>
+      <PathWithFileName>..\App\DUT\AD7616\src\dut_ad7616.c</PathWithFileName>
+      <FilenameWithoutPath>dut_ad7616.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+  </Group>
+
+  <Group>
+    <GroupName>App/DUT/dac11001</GroupName>
+    <tvExp>1</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>7</GroupNumber>
+      <GroupNumber>8</GroupNumber>
       <FileNumber>52</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\App\DUT\Src\dut_ad7616.c</PathWithFileName>
-      <FilenameWithoutPath>dut_ad7616.c</FilenameWithoutPath>
+      <PathWithFileName>..\App\DUT\dac11001\src\dut_dac11001.c</PathWithFileName>
+      <FilenameWithoutPath>dut_dac11001.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
