@@ -1358,6 +1358,21 @@
               <FileType>1</FileType>
               <FilePath>..\App\LIB\Src\uart_comm.c</FilePath>
             </File>
+            <File>
+              <FileName>cmdparse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\LIB\Src\cmdparse.c</FilePath>
+            </File>
+            <File>
+              <FileName>dyncall.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\LIB\Src\dyncall.c</FilePath>
+            </File>
+            <File>
+              <FileName>dynpool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\LIB\Src\dynpool.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
