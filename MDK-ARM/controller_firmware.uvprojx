@@ -1358,11 +1358,6 @@
               <FileType>1</FileType>
               <FilePath>..\App\FW\Src\uart_comm.c</FilePath>
             </File>
-            <File>
-              <FileName>cdelay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\App\FW\Src\cdelay.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
