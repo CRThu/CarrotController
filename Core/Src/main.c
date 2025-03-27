@@ -215,7 +215,12 @@ int main(void)
         // cdelay_nops(var)                 100nop      520ns
 
         // (NOP IMPL when < CDELAY_NS_IMPL_THRESHOLD)
-        // cdelay_ns                        4ns         12ns
+        // cdelay_ns                        0ns         4ns
+        // cdelay_ns                        4ns         4ns
+        // cdelay_ns                        8ns         12ns
+        // cdelay_ns                        12ns        12ns
+        // cdelay_ns                        16ns        16ns
+        // (NOP IMPL with CAL when < CDELAY_NS_IMPL_THRESHOLD)
         // cdelay_ns                        20ns        28ns
         // cdelay_ns                        50ns        52ns
         // cdelay_ns                        78ns        80ns
@@ -230,23 +235,23 @@ int main(void)
         
         // cdelay_ms                        10ms        11ms
 
-        cdelay_ns(4);
-        cdelay_ns(4);
+        cdelay_ns(18);
+        cdelay_ns(18);
         GPIOA->BSRR = GPIO_PIN_1;
-        cdelay_ns(4);
+        cdelay_ns(18);
         GPIOA->BRR = GPIO_PIN_1;
-        cdelay_ns(4);
+        cdelay_ns(18);
         GPIOA->BSRR = GPIO_PIN_1;
-        cdelay_ns(4);
+        cdelay_ns(18);
         GPIOA->BRR = GPIO_PIN_1;
-        cdelay_ns(4);
+        cdelay_ns(18);
         GPIOA->BSRR = GPIO_PIN_1;
-        cdelay_ns(4);
+        cdelay_ns(18);
         GPIOA->BRR = GPIO_PIN_1;
-        cdelay_ns(4);
+        cdelay_ns(18);
         GPIOA->BSRR = GPIO_PIN_1;
-        cdelay_ns(4);
-        cdelay_ns(4);
+        cdelay_ns(18);
+        cdelay_ns(18);
 
         /*
         // timer driven ldac
