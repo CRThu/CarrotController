@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H563xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;../App/BSP/Inc;..\App\LIB\Inc;..\App\DUT\common\Inc;..\App\DUT\dac11001\Inc;..\App\DUT\ad7616\Inc</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;../App/BSP/Inc;..\App\LIB\Inc;..\App\DUT\common\Inc;..\App\DUT\dac11001\Inc;..\App\DUT\ad7616\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1382,6 +1382,21 @@
               <FileName>dut_ad7616.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\DUT\AD7616\src\dut_ad7616.c</FilePath>
+            </File>
+            <File>
+              <FileName>ad7616_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\DUT\ad7616\src\ad7616_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>ad7616_iocfg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\DUT\ad7616\src\ad7616_iocfg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ad7616_sample.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\DUT\ad7616\src\ad7616_sample.c</FilePath>
             </File>
           </Files>
         </Group>

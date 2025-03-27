@@ -131,8 +131,11 @@ int main(void)
     MX_TIM5_Init();
     MX_ICACHE_Init();
     /* USER CODE BEGIN 2 */
-    volatile uint8_t is_support_dwt = cdelay_init();
 
+    // initial cdelay module
+    if (cdelay_init() == 0)      Error_Handler();
+
+    // initial dut ad7616 board
     dut_ad7616_init();
     io_t* io_rstn = dut_get_io(&ad7616_profiles[0], "nRESET");
     gpio_write(io_rstn, IO_STATE_LOW);
