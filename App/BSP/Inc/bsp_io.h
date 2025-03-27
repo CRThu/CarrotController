@@ -1,7 +1,7 @@
 /****************************
  * BSP IO
  * CARROT HU
- * 2025.02.19
+ * 2025.03.27
  *****************************/
 #pragma once
 #ifndef _BSP_IO_H_
@@ -38,6 +38,32 @@ extern "C"
 
     #define GPIO_WRITE(IO, STATE)           HAL_GPIO_WritePin((IO)->port, (IO)->pin, ((STATE) == IO_STATE_HIGH) ? GPIO_PIN_SET : GPIO_PIN_RESET)
     #define GPIO_READ(IO)                   ((HAL_GPIO_ReadPin((IO)->port, (IO)->pin) == GPIO_PIN_SET) ? IO_STATE_HIGH : IO_STATE_LOW)
+
+
+    /* from stm32h5xx_hal.h
+        #define SET_BIT(REG, BIT)     ((REG) |= (BIT))
+        #define CLEAR_BIT(REG, BIT)   ((REG) &= ~(BIT))
+        #define READ_BIT(REG, BIT)    ((REG) & (BIT))
+        #define CLEAR_REG(REG)        ((REG) = (0x0))
+        #define WRITE_REG(REG, VAL)   ((REG) = (VAL))
+        #define READ_REG(REG)         ((REG))
+        #define MODIFY_REG(REG, CLEARMASK, SETMASK)  WRITE_REG((REG), (((READ_REG(REG)) & (~(CLEARMASK))) | (SETMASK)))
+        #define POSITION_VAL(VAL)     (__CLZ(__RBIT(VAL)))
+    */
+
+    #define BITSMASK(START, END)                    ((((1U) << ((END) - (START) + 1)) - 1) << (START))
+    #define WRITE_RS_REG(REG, DATA, MASK)           WRITE_REG((REG), ((DATA) & (MASK)) | ((~(DATA) & (MASK)) << 16U))
+
+    #define WRITE_DB_MASK(GPIOx, DATA, MASK)        WRITE_RS_REG((GPIOx)->BSRR, (DATA), (MASK))
+    #define WRITE_DB(GPIOx, DATA)                   WRITE_DB_MASK((GPIOx), (DATA), AD7616_DB_MASK)
+    #define WRITE_IO(GPIOx, PINMASK, STATE)         WRITE_REG((GPIOx)->BSRR, ((STATE)? (PINMASK) : (PINMASK) << 16U))
+    #define READ_DB(GPIOx)                          (uint32_t)(READ_REG((GPIOx)->IDR))
+    #define READ_IO(GPIOx, PINMASK)                 ((READ_REG((GPIOx)->IDR) & (PINMASK)) != 0 ? 1 : 0)
+
+    #define BITS_GET(REG, START, END)               (((REG) & BITSMASK((START), (END))) >> (START))
+    #define BITS_SET(REG, START, END, DATA)         (((REG) & (~BITSMASK((START), (END))) | (((DATA) << (START)) & BITSMASK((START), (END)))))
+
+
     #endif
 
 

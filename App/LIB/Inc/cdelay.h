@@ -8,8 +8,7 @@ extern "C"
     #endif
 
     #include <stdint.h>
-    #include "stm32h5xx_hal.h"
-
+    
     #define CDELAY_VERSION                  "2.0.0"             // Library version
 
     ////////////////////////////////////////////////////////////////////////////
