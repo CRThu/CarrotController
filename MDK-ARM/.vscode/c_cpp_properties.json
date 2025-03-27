@@ -9,7 +9,7 @@
                 "d:\\Projects\\CarrotController\\controller_firmware\\Drivers\\CMSIS\\Device\\ST\\STM32H5xx\\Include",
                 "d:\\Projects\\CarrotController\\controller_firmware\\Drivers\\CMSIS\\Include",
                 "d:\\Projects\\CarrotController\\controller_firmware\\App\\BSP\\Inc",
-                "d:\\Projects\\CarrotController\\controller_firmware\\App\\FW\\Inc",
+                "d:\\Projects\\CarrotController\\controller_firmware\\App\\LIB\\Inc",
                 "d:\\Projects\\CarrotController\\controller_firmware\\App\\DUT\\Inc",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux",
@@ -19,7 +19,7 @@
                 "d:\\Projects\\CarrotController\\controller_firmware\\Core\\Src",
                 "d:\\Projects\\CarrotController\\controller_firmware\\Drivers\\STM32H5xx_HAL_Driver\\Src",
                 "d:\\Projects\\CarrotController\\controller_firmware\\App\\BSP\\Src",
-                "d:\\Projects\\CarrotController\\controller_firmware\\App\\FW\\Src",
+                "d:\\Projects\\CarrotController\\controller_firmware\\App\\LIB\\Src",
                 "d:\\Projects\\CarrotController\\controller_firmware\\App\\DUT\\Src"
             ],
             "defines": [

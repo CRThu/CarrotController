@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H563xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;../App/BSP/Inc;../App/FW/Inc;../App/DUT/Inc</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc;../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H5xx/Include;../Drivers/CMSIS/Include;../App/BSP/Inc;..\App\LIB\Inc;../App/DUT/Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1341,22 +1341,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>App/FW</GroupName>
+          <GroupName>App/LIB</GroupName>
           <Files>
             <File>
               <FileName>cevent.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\App\FW\Src\cevent.c</FilePath>
+              <FilePath>..\App\LIB\Src\cevent.c</FilePath>
             </File>
             <File>
               <FileName>clog.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\App\FW\Src\clog.c</FilePath>
+              <FilePath>..\App\LIB\Src\clog.c</FilePath>
             </File>
             <File>
               <FileName>uart_comm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\App\FW\Src\uart_comm.c</FilePath>
+              <FilePath>..\App\LIB\Src\uart_comm.c</FilePath>
             </File>
           </Files>
         </Group>
