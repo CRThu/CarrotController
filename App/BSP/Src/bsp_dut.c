@@ -20,7 +20,7 @@ gpio_config_status_t dut_init(dut_interface_t* dut)
 }
 
 // pin name: name
-io_t* dut_get_io(dut_interface_t* dut, const char* name)
+__FORCEINLINE io_t* dut_get_io(dut_interface_t* dut, const char* name)
 {
     uint16_t i = 0;
     while ((dut->pin_configs[i]).btb_pin != IO_ARR_END_ID)

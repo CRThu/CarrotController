@@ -32,10 +32,10 @@
 /* USER CODE BEGIN Includes */
 #include "uart_comm.h"
 
-#include "dut_inc.h"
+#include "ad7616_iocfg.h"
+#include "io_utils.h"
 
 #include "arm_math.h"
-#include "cdelay.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -137,11 +137,17 @@ int main(void)
 
     // initial dut ad7616 board
     dut_ad7616_init();
-    io_t* io_rstn = dut_get_io(&ad7616_profiles[0], "nRESET");
-    IO_WRITE(io_rstn->port, io_rstn->pin, IO_STATE_LOW);
-    HAL_Delay(10);
-    IO_WRITE(io_rstn->port, io_rstn->pin, IO_STATE_HIGH);
-    HAL_Delay(10);
+
+
+    ad7616_t adc = {
+        .dut_interface = &(ad7616_profiles[0])
+    };
+    ad7616_reset(&adc);
+    //io_t* io_rstn = dut_get_io(&ad7616_profiles[0], "nRESET");
+    //BSP_IO_WRITE(io_rstn, IO_STATE_LOW);
+    //HAL_Delay(10);
+    //BSP_IO_WRITE(io_rstn, IO_STATE_HIGH);
+    //HAL_Delay(10);
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
