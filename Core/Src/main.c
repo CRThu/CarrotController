@@ -137,70 +137,18 @@ int main(void)
 
     // initial dut ad7616 board
     dut_ad7616_init();
-
-
-    ad7616_t adc = {
-        .dut_interface = &(ad7616_profiles[0])
-    };
+    
+    ad7616_t adc;
+    ad7616_init(&adc, &ad7616_profiles[0]);
     ad7616_reset(&adc);
-    //io_t* io_rstn = dut_get_io(&ad7616_profiles[0], "nRESET");
-    //BSP_IO_WRITE(io_rstn, IO_STATE_LOW);
-    //HAL_Delay(10);
-    //BSP_IO_WRITE(io_rstn, IO_STATE_HIGH);
-    //HAL_Delay(10);
+
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
 
     HAL_TIM_RegisterCallback(&htim6, HAL_TIM_PERIOD_ELAPSED_CB_ID, test);
     HAL_TIM_Base_Start_IT(&htim6);
-
-
-    dut_dac11001_init();
-
-    HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, set_flag);
-    HAL_TIM_Base_Start_IT(&htim5);
-    HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
-
-    // cordic test
-    HAL_CORDIC_Configure(&hcordic, &(CORDIC_ConfigTypeDef) {
-        .Function = CORDIC_FUNCTION_COSINE,
-            .InSize = CORDIC_INSIZE_32BITS,
-            .OutSize = CORDIC_OUTSIZE_32BITS,
-            .NbWrite = CORDIC_NBWRITE_2,
-            .NbRead = CORDIC_NBREAD_2,
-            .Precision = CORDIC_PRECISION_8CYCLES,
-    });
-
-    int32_t inbuf[16];
-    int32_t outbuf[16];
-    double arg1, arg2, res1, res2;
-    double f = 921;
-    double fs = 100000;
-    int32_t code;
-    //uint8_t buf[256];
-
-    //arg1 = 0.1;
-    //arg2 = 1.0;
-
-    //inbuf[0] = (double)arg1 * (double)2147483648.0;
-    //inbuf[1] = (double)arg2 * (double)2147483648.0;
-
-    //HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
-
-    //res1 = (double)outbuf[0] / (double)2147483648.0;
-    //res2 = (double)outbuf[1] / (double)2147483648.0;
-
-    //// 1.00000000*cos(0.10000000/pi)=0.95105672, sin=0.30901575
-    //sprintf(buf, "%.8lf*cos(%.8lf/pi)=%.8lf, sin=%.8lf\r\n", arg2, arg1, res1, res2);
-
-    //uart_comm_write(comm_pc, buf, strlen(buf));
-
-    // dac11001
-    inbuf[0] = 0;
-    inbuf[1] = 0.9 * (double)2147483648.0;
     */
-    io_t* io_convst = dut_get_io(&ad7616_profiles[0], "CONVST");
 
     /* USER CODE END 2 */
 
@@ -208,38 +156,6 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        /*
-        // timer driven ldac
-        if (flag)
-        {
-            cnt += 1;
-
-           if (cnt > (double)fs / (double)2.0 / (double)f)
-               cnt -= (double)fs / (double)f;
-
-           inbuf[0] = (double)2.0 / (double)fs * (double)cnt * (double)f * (double)2147483648.0;
-
-           HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
-
-                     //outbuf[0] = arm_cos_q31(inbuf[0]);
-                     //outbuf[0] *=0.9;
-
-           code = (double)outbuf[0] / (double)2147483648.0 * (double)524288.0 - (double)524288.0;
-
-
-            //code = 0.9*cos(2.0*3.14159265*cnt/(double)fs*(double)f) *(double)524288.0 - (double)524288.0 ;
-
-                        //code = 0.9*arm_cos_f32(2.0*3.14159265*cnt/(double)fs*(double)f)*(double)524288.0 - (double)524288.0;
-
-                    //arm_cos_q31
-
-            dut_dac11001_set_code(0, code);
-            //code = (double)outbuf[1] / (double)2147483648.0 * (double)524288.0-(double)524288.0;
-            dut_dac11001_set_code(1, code);
-
-            flag = 0;
-        }
-        */
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */

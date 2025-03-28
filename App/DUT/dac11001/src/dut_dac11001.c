@@ -56,7 +56,7 @@ uint8_t txbuf[4];
 void dut_dac11001_init()
 {
     dut_init(&dac11001_profile);
-    
+
     #ifdef PWM_LDAC
     // todo
     #endif
@@ -103,3 +103,87 @@ void dut_dac11001_set_code(uint8_t id, uint32_t code)
     gpio_write(io_ldac, IO_STATE_HIGH);
     #endif
 }
+
+
+/*
+
+    dut_dac11001_init();
+
+    HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, set_flag);
+    HAL_TIM_Base_Start_IT(&htim5);
+    HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
+
+    // cordic test
+    HAL_CORDIC_Configure(&hcordic, &(CORDIC_ConfigTypeDef) {
+        .Function = CORDIC_FUNCTION_COSINE,
+            .InSize = CORDIC_INSIZE_32BITS,
+            .OutSize = CORDIC_OUTSIZE_32BITS,
+            .NbWrite = CORDIC_NBWRITE_2,
+            .NbRead = CORDIC_NBREAD_2,
+            .Precision = CORDIC_PRECISION_8CYCLES,
+    });
+
+    int32_t inbuf[16];
+    int32_t outbuf[16];
+    double arg1, arg2, res1, res2;
+    double f = 921;
+    double fs = 100000;
+    int32_t code;
+    //uint8_t buf[256];
+
+    //arg1 = 0.1;
+    //arg2 = 1.0;
+
+    //inbuf[0] = (double)arg1 * (double)2147483648.0;
+    //inbuf[1] = (double)arg2 * (double)2147483648.0;
+
+    //HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
+
+    //res1 = (double)outbuf[0] / (double)2147483648.0;
+    //res2 = (double)outbuf[1] / (double)2147483648.0;
+
+    //// 1.00000000*cos(0.10000000/pi)=0.95105672, sin=0.30901575
+    //sprintf(buf, "%.8lf*cos(%.8lf/pi)=%.8lf, sin=%.8lf\r\n", arg2, arg1, res1, res2);
+
+    //uart_comm_write(comm_pc, buf, strlen(buf));
+
+    // dac11001
+    inbuf[0] = 0;
+    inbuf[1] = 0.9 * (double)2147483648.0;
+
+*/
+
+
+
+/*
+// timer driven ldac
+if (flag)
+{
+    cnt += 1;
+
+   if (cnt > (double)fs / (double)2.0 / (double)f)
+       cnt -= (double)fs / (double)f;
+
+   inbuf[0] = (double)2.0 / (double)fs * (double)cnt * (double)f * (double)2147483648.0;
+
+   HAL_CORDIC_CalculateZO(&hcordic, inbuf, outbuf, 1, 0xFFFF);
+
+             //outbuf[0] = arm_cos_q31(inbuf[0]);
+             //outbuf[0] *=0.9;
+
+   code = (double)outbuf[0] / (double)2147483648.0 * (double)524288.0 - (double)524288.0;
+
+
+    //code = 0.9*cos(2.0*3.14159265*cnt/(double)fs*(double)f) *(double)524288.0 - (double)524288.0 ;
+
+                //code = 0.9*arm_cos_f32(2.0*3.14159265*cnt/(double)fs*(double)f)*(double)524288.0 - (double)524288.0;
+
+            //arm_cos_q31
+
+    dut_dac11001_set_code(0, code);
+    //code = (double)outbuf[1] / (double)2147483648.0 * (double)524288.0-(double)524288.0;
+    dut_dac11001_set_code(1, code);
+
+    flag = 0;
+}
+*/
