@@ -35,7 +35,7 @@ gpio_config_status_t switch_set(io_switch_t* switch_configs, uint16_t value)
     uint16_t i = 0;
     while (switch_configs[i].id != IO_SWITCH_ARR_END_ID)
     {
-        GPIO_WRITE(&(switch_configs[i].sw_sel), (value >> i) & 0x01);
+        BSP_IO_WRITE(&(switch_configs[i].sw_sel), (value >> i) & 0x01);
         i++;
     }
     return GPIO_CONFIG_STATUS_NO_ERR;
@@ -47,7 +47,7 @@ uint32_t switch_get(io_switch_t* switch_configs)
     uint16_t i = 0;
     while (switch_configs[i].id != IO_SWITCH_ARR_END_ID)
     {
-        val = (val << 1) | (GPIO_READ(&(switch_configs[i].sw_sel)) & 0x01);
+        val = (val << 1) | (BSP_IO_READ(&(switch_configs[i].sw_sel)) & 0x01);
         i++;
     }
     return val;

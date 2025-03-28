@@ -30,7 +30,7 @@ gpio_config_status_t gpio_init(io_t* gpio)
     case BSP_IO_FUNC_OUT:
     case BSP_IO_SWITCH_SEL:
         /*Configure GPIO pin Output Level */
-        GPIO_WRITE(gpio, gpio->state);
+        BSP_IO_WRITE(gpio, gpio->state);
 
         /*Configure GPIO pin */
         GPIO_InitStruct.Pin = gpio->pin;

@@ -138,9 +138,9 @@ int main(void)
     // initial dut ad7616 board
     dut_ad7616_init();
     io_t* io_rstn = dut_get_io(&ad7616_profiles[0], "nRESET");
-    gpio_write(io_rstn, IO_STATE_LOW);
+    IO_WRITE(io_rstn->port, io_rstn->pin, IO_STATE_LOW);
     HAL_Delay(10);
-    gpio_write(io_rstn, IO_STATE_HIGH);
+    IO_WRITE(io_rstn->port, io_rstn->pin, IO_STATE_HIGH);
     HAL_Delay(10);
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
