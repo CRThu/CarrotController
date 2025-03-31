@@ -6,56 +6,114 @@
 
 #include "ad7616_iocfg.h"
 
-void ad7616_init(ad7616_t* adc, dut_interface_t* intf)
+__FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode* mode)
 {
-    COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
-    COPY_FROM_IO(&(adc->csn), dut_get_io(intf, "nCS"));
-    COPY_FROM_IO(&(adc->rdn), dut_get_io(intf, "nRD"));
-    COPY_FROM_IO(&(adc->wrn), dut_get_io(intf, "nWR"));
-    COPY_FROM_IO(&(adc->db[0]), dut_get_io(intf, "DB0"));
-    COPY_FROM_IO(&(adc->db[1]), dut_get_io(intf, "DB1"));
-    COPY_FROM_IO(&(adc->db[2]), dut_get_io(intf, "DB2"));
-    COPY_FROM_IO(&(adc->db[3]), dut_get_io(intf, "DB3"));
-    COPY_FROM_IO(&(adc->db[4]), dut_get_io(intf, "DB4"));
-    COPY_FROM_IO(&(adc->db[5]), dut_get_io(intf, "DB5"));
-    COPY_FROM_IO(&(adc->db[6]), dut_get_io(intf, "DB6"));
-    COPY_FROM_IO(&(adc->db[7]), dut_get_io(intf, "DB7"));
-    COPY_FROM_IO(&(adc->db[8]), dut_get_io(intf, "DB8"));
-    COPY_FROM_IO(&(adc->db[9]), dut_get_io(intf, "DB9"));
-    COPY_FROM_IO(&(adc->db[10]), dut_get_io(intf, "DB10"));
-    COPY_FROM_IO(&(adc->db[11]), dut_get_io(intf, "DB11"));
-    COPY_FROM_IO(&(adc->db[12]), dut_get_io(intf, "DB12"));
-    COPY_FROM_IO(&(adc->db[13]), dut_get_io(intf, "DB13"));
-    COPY_FROM_IO(&(adc->db[14]), dut_get_io(intf, "DB14"));
-    COPY_FROM_IO(&(adc->db[15]), dut_get_io(intf, "DB15"));
+    adc->mode = mode;
 }
 
-__FORCEINLINE void ad7616_reset(ad7616_t* adc)
+__FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
 {
-    IO_WRITE(GPIOA, GPIO_PIN_1, 1);
-    IO_WRITE(GPIOA, GPIO_PIN_1, 0);
-    IO_WRITE(GPIOA, GPIO_PIN_1, 1);
-    IO_WRITE(GPIOA, GPIO_PIN_1, 0);
+    if (adc->mode == AD7616_SER_SW)
+    {
+        COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
+        COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
+        COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SER/nPAR"));
+        COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
+        COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
+        COPY_FROM_IO(&(adc->ser1wn), dut_get_io(intf, "DB4"));
+    }
+
+    if (adc->mode == AD7616_PAR_SW)
+    {
+        COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
+        COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
+        COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SER/nPAR"));
+        COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
+        COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
+        COPY_FROM_IO(&(adc->csn), dut_get_io(intf, "nCS"));
+        COPY_FROM_IO(&(adc->rdn), dut_get_io(intf, "nRD"));
+        COPY_FROM_IO(&(adc->wrn), dut_get_io(intf, "nWR"));
+    }
+
+    if (adc->mode == AD7616_SER_HW)
+    {
+        COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
+        COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
+        COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SER/nPAR"));
+        COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
+        COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
+        COPY_FROM_IO(&(adc->chsel0), dut_get_io(intf, "CHSEL0"));
+        COPY_FROM_IO(&(adc->chsel1), dut_get_io(intf, "CHSEL1"));
+        COPY_FROM_IO(&(adc->chsel2), dut_get_io(intf, "CHSEL2"));
+        COPY_FROM_IO(&(adc->seqen), dut_get_io(intf, "SEQEN"));
+        COPY_FROM_IO(&(adc->rngsel0), dut_get_io(intf, "RNGSEL0"));
+        COPY_FROM_IO(&(adc->rngsel1), dut_get_io(intf, "RNGSEL1"));
+        COPY_FROM_IO(&(adc->ser1wn), dut_get_io(intf, "DB4"));
+        COPY_FROM_IO(&(adc->burst), dut_get_io(intf, "nWR"));
+        COPY_FROM_IO(&(adc->crcen), dut_get_io(intf, "DB5"));
+        COPY_FROM_IO(&(adc->os0), dut_get_io(intf, "OS0"));
+        COPY_FROM_IO(&(adc->os1), dut_get_io(intf, "OS1"));
+        COPY_FROM_IO(&(adc->os2), dut_get_io(intf, "OS2"));
+    }
+
+    if (adc->mode == AD7616_PAR_HW)
+    {
+        COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
+        COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
+        COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SER/nPAR"));
+        COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
+        COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
+        COPY_FROM_IO(&(adc->csn), dut_get_io(intf, "nCS"));
+        COPY_FROM_IO(&(adc->rdn), dut_get_io(intf, "nRD"));
+        COPY_FROM_IO(&(adc->chsel0), dut_get_io(intf, "CHSEL0"));
+        COPY_FROM_IO(&(adc->chsel1), dut_get_io(intf, "CHSEL1"));
+        COPY_FROM_IO(&(adc->chsel2), dut_get_io(intf, "CHSEL2"));
+        COPY_FROM_IO(&(adc->seqen), dut_get_io(intf, "SEQEN"));
+        COPY_FROM_IO(&(adc->rngsel0), dut_get_io(intf, "RNGSEL0"));
+        COPY_FROM_IO(&(adc->rngsel1), dut_get_io(intf, "RNGSEL1"));
+        COPY_FROM_IO(&(adc->burst), dut_get_io(intf, "nWR"));
+    }
+}
+
+__FORCEINLINE void ad7616_set_perh(ad7616_t* adc)
+{
+    adc->clk1_pwm = &BTB_CLK1_PWM;   // TODO: IMPL OF BTB_CLK1_PWM
+    adc->clk2_etr = &BTB_CLK2_ETR;   // TODO: IMPL OF BTB_CLK2_ETR
+
+    if (adc->mode == AD7616_SER_SW
+        || adc->mode == AD7616_SER_HW)
+    {
+        adc->spi_a = &BTB_SPIA;
+        adc->spi_b = &BTB_SPIB;
+    }
+
+    if (adc->mode == AD7616_PAR_SW
+        || adc->mode == AD7616_PAR_HW)
+    {
+        adc->par_db = BTB_DB_PORT;
+    }
+}
+
+__FORCEINLINE void ad7616_full_reset(ad7616_t* adc)
+{
     BSP_IO_WRITE(&(adc->resetn), IO_STATE_LOW);
-    IO_WRITE(GPIOA, GPIO_PIN_1, 1);
-    //HAL_Delay(10);
+    delay_ns(1200);     // full reset = 1200ns
     BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
-    IO_WRITE(GPIOA, GPIO_PIN_1, 0);
-    //HAL_Delay(10);
+    delay_ms(15);       // full reset = 15ms
 }
 
-
-// __AD7616_IOCFG_INLINE void ad7616_dbl_init(uint8_t io_dir)
-// {
-// }
-
-// __AD7616_IOCFG_INLINE void ad7616_dbh_init(uint8_t io_dir)
-// {
-// }
-
-// __AD7616_IOCFG_INLINE uint32_t ad7616_reg_read(uint32_t addr)
-// {
-// }
+__FORCEINLINE uint32_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
+{
+    if (adc->mode == AD7616_PAR_SW
+        || adc->mode == AD7616_PAR_HW)
+    {
+        /* PAR */
+    }
+    else
+    {
+        /* SER */
+    }
+}
 
 // __AD7616_IOCFG_INLINE void ad7616_reg_write(uint32_t addr, uint32_t data)
 // {

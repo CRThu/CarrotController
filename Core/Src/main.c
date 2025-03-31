@@ -139,8 +139,9 @@ int main(void)
     dut_ad7616_init();
     
     ad7616_t adc;
-    ad7616_init(&adc, &ad7616_profiles[0]);
-    ad7616_reset(&adc);
+    ad7616_set_mode(&adc, AD7616_PAR_SW);
+    ad7616_set_io(&adc, &ad7616_profiles[0]);
+    ad7616_set_perh(&adc);
 
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
@@ -156,6 +157,8 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
+    ad7616_full_reset(&adc);
+        delay_ms(100);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */

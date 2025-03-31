@@ -83,8 +83,26 @@ extern "C"
     #define IO_ARR_END_ID           (uint16_t)(-1)
     #define IO_PIN_NAME_MAX_LEN     (32)
 
-    #define gpio_write      GPIO_WRITE
-    #define gpio_read       GPIO_READ
+    #define gpio_write              GPIO_WRITE
+    #define gpio_read               GPIO_READ
+
+
+    // TODO: FOR TEMP USE
+    // BTB IMPL
+    // TODO: HTIMx is PLACEHOLDER
+    #define BTB_DB_PORT                 GPIO_PORT(D)
+    #define BTB_CLK1_PWM                htim5
+    #define BTB_CLK2_ETR                htim6
+    #define BTB_SPIA                    hspi1
+    #define BTB_SPIB                    hspi3
+
+    // DB OPER
+    #define BSP_DB_WRITE(PORT, DATA)    DB_WRITE(PORT, DATA)
+    #define BSP_DB_READ(PORT)           DB_READ(PORT)
+
+    // alias
+    #define bsp_db_write                BSP_DB_WRITE
+    #define bsp_db_read                 BSP_DB_READ
 
     gpio_config_status_t gpio_init(io_t* gpio);
 
