@@ -27,13 +27,6 @@ typedef struct ad7616_io_t
     ad7616_gpio_pin_t pin;
 } ad7616_io_t;
 
-typedef enum {
-    AD7616_SER_SW,
-    AD7616_PAR_SW,
-    AD7616_SER_HW,
-    AD7616_PAR_HW
-} ad7616_mode;
-
 typedef struct ad7616_t
 {
     /* config */
@@ -68,10 +61,10 @@ typedef struct ad7616_t
     void* clk2_etr;
     void* spi_a;
     void* spi_b;
-    void* par_db;
+    gpio_port_t* par_db;
 } ad7616_t;
 
-void ad7616_set_mode(ad7616_t* adc, ad7616_mode* mode);
+void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode);
 void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf);
 void ad7616_set_perh(ad7616_t* adc);
 void ad7616_init_interface(ad7616_t* adc);

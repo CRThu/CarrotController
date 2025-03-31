@@ -73,7 +73,7 @@ extern "C"
 
     /* 写入完整数据总线 */
     #define DB_WRITE(GPIOx, DATA) \
-        (WRITE_REG((GPIOx)->ODR), (DATA))
+        (WRITE_REG((GPIOx)->ODR, (DATA)))
         /* @示例：写入0xA5到PB端口
         *  DB_WRITE(GPIOB, 0xA5) */
 

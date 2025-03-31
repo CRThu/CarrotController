@@ -6,7 +6,7 @@
 
 #include "ad7616_iocfg.h"
 
-__FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode* mode)
+__FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode)
 {
     adc->mode = mode;
 }
@@ -104,15 +104,43 @@ __FORCEINLINE void ad7616_full_reset(ad7616_t* adc)
 
 __FORCEINLINE uint32_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
 {
+    uint32_t wr_cmd = 0 << 15 | addr << 9 | 0 << 0; // TODO
+    uint32_t rd_data = 0;
+
     if (adc->mode == AD7616_PAR_SW
         || adc->mode == AD7616_PAR_HW)
     {
         /* PAR */
+
+        /* WRITE COMMAND */
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_WRN_SETUP);
+        BSP_IO_WRITE(&(adc->wrn), IO_STATE_LOW);
+        BSP_DB_WRITE(adc->par_db, wr_cmd);
+        AD7616_DELAY(T_MAX(AD7616_PAR_T_DIN_SETUP, AD7616_PAR_T_WRN_LOW));
+        BSP_IO_WRITE(&(adc->wrn), IO_STATE_HIGH);
+        AD7616_DELAY(AD7616_PAR_T_WRN_HOLD);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_HIGH);
+
+        /* READ COMMAND */
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_RDN_SETUP);
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_DOUT_SETUP);
+        rd_data = BSP_DB_READ(adc->par_db);
+        AD7616_DELAY(T_SUB(AD7616_PAR_T_RDN_LOW, AD7616_PAR_T_DOUT_SETUP));
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_HIGH);
+        AD7616_DELAY(AD7616_PAR_T_RDN_HOLD);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_HIGH);
+        AD7616_DELAY(AD7616_PAR_T_DOUT_3STATE);
     }
     else
     {
         /* SER */
+        // TODO IMPL
     }
+
+    return rd_data;
 }
 
 // __AD7616_IOCFG_INLINE void ad7616_reg_write(uint32_t addr, uint32_t data)

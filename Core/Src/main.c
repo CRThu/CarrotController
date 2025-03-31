@@ -143,6 +143,8 @@ int main(void)
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_set_perh(&adc);
 
+    ad7616_full_reset(&adc);
+    
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
@@ -157,7 +159,9 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-    ad7616_full_reset(&adc);
+    volatile uint32_t data = ad7616_reg_read(&adc,0x04);
+    data=data;
+        
         delay_ms(100);
         /* USER CODE END WHILE */
 
