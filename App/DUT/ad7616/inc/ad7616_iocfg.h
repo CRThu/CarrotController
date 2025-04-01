@@ -71,5 +71,8 @@ void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode);
 void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf);
 void ad7616_full_reset(ad7616_t* adc);
 uint32_t ad7616_reg_read(ad7616_t* adc, uint32_t addr);
+void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data);
+
+int8_t ad7616_comm_test(ad7616_t* adc);
 
 #endif // _AD7616_IOCFG_H_

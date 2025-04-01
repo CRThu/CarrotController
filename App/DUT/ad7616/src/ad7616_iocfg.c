@@ -175,8 +175,8 @@ __FORCEINLINE void ad7616_full_reset(ad7616_t* adc)
 
 __FORCEINLINE uint32_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
 {
-    uint32_t wr_cmd = 0 << 15 | addr << 9 | 0 << 0; // TODO
-    uint32_t rd_data = 0;
+    uint16_t wr_cmd = AD7616_PAR_RD << 15 | addr << 9 | 0 << 0;
+    uint16_t rd_data = 0;
 
     if (adc->mode == AD7616_PAR_SW
         || adc->mode == AD7616_PAR_HW)
@@ -216,8 +216,31 @@ __FORCEINLINE uint32_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
     return rd_data;
 }
 
-__FORCEINLINE uint32_t ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
+__FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
 {
+    uint16_t wr_cmd = (((AD7616_PAR_WR << 15) | (addr & 0x3F) << 9) | ((data & 0x1FF) << 0));
+
+    if (adc->mode == AD7616_PAR_SW
+        || adc->mode == AD7616_PAR_HW)
+    {
+        /* PAR */
+
+        /* WRITE COMMAND */
+        BSP_DB_TYPE(adc->par_db, IO_TYPE_OUT);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_WRN_SETUP);
+        BSP_IO_WRITE(&(adc->wrn), IO_STATE_LOW);
+        BSP_DB_WRITE(adc->par_db, wr_cmd);
+        AD7616_DELAY(T_MAX(AD7616_PAR_T_DIN_SETUP, AD7616_PAR_T_WRN_LOW));
+        BSP_IO_WRITE(&(adc->wrn), IO_STATE_HIGH);
+        AD7616_DELAY(AD7616_PAR_T_WRN_HOLD);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_HIGH);
+    }
+    else
+    {
+        /* SER */
+        // TODO IMPL
+    }
 
 }
 
@@ -236,3 +259,46 @@ __FORCEINLINE uint32_t ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t d
 // __AD7616_IOCFG_INLINE void ad7616_enter_register_mode()
 // {
 // }
+
+
+int8_t ad7616_comm_test(ad7616_t* adc)
+{
+    uint16_t txdata, rxdata;
+
+    for (uint8_t reg = 0x04; reg <= 0x07; reg++)
+    {
+        txdata = 0x00;
+        rxdata = 0xCC;
+
+        ad7616_reg_write(adc, reg, txdata);
+        rxdata = ad7616_reg_read(adc, reg);
+        if (rxdata != txdata)    return -1;
+        delay_us(10);
+
+        txdata = 0x55;
+        rxdata = 0xCC;
+
+        ad7616_reg_write(adc, reg, txdata);
+        rxdata = ad7616_reg_read(adc, reg);
+        if (rxdata != txdata)    return -1;
+        delay_us(10);
+
+        txdata = 0xAA;
+        rxdata = 0xCC;
+
+        ad7616_reg_write(adc, reg, txdata);
+        rxdata = ad7616_reg_read(adc, reg);
+        if (rxdata != txdata)    return -1;
+        delay_us(10);
+
+        txdata = 0xFF;
+        rxdata = 0xCC;
+
+        ad7616_reg_write(adc, reg, txdata);
+        rxdata = ad7616_reg_read(adc, reg);
+        if (rxdata != txdata)    return -1;
+        delay_us(10);
+    }
+
+    return 0;
+}

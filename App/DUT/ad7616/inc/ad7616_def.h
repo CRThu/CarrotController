@@ -12,6 +12,9 @@
 
 #define AD7616_CONV_BUFFER_LEN          65536
 
+#define AD7616_PAR_WR                   1
+#define AD7616_PAR_RD                   0
+
 typedef enum ad7616_mode{
     AD7616_SER_SW,
     AD7616_PAR_SW,

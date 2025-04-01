@@ -160,10 +160,9 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        volatile uint32_t data = ad7616_reg_read(&adc, 0x04);
-        data = data;
-        delay_ms(100);
-
+        volatile int8_t ret = ad7616_comm_test(&adc);
+        ret = ret;
+        delay_ms(1000);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
