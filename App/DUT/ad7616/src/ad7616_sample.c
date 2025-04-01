@@ -1,30 +1,42 @@
 /****************************
  AD7616 SAMPLE
  CRTHu
- 2025.03.27
+ 2025.04.01
  ****************************/
 
 #include "ad7616_sample.h"
 
-uint32_t adc_data_buffer[AD7616_CONV_BUFFER_LEN] = {0};
-uint32_t adc_data_count = {0};
+volatile uint32_t adc_data_buffer[AD7616_CONV_BUFFER_LEN] = { 0 };
+volatile uint32_t adc_data_count = 0;
 
-void ad7616_adc_convst_signal_start(uint8_t conv_mode, uint32_t freq)
+__FORCEINLINE void ad7616_set_convst_mode(ad7616_t* adc, ad7616_convst_mode mode)
 {
+    adc->convst_mode = mode;
 }
 
-void ad7616_adc_convst_signal_pulse(uint8_t conv_mode)
+__FORCEINLINE void ad7616_set_convst_freq(ad7616_t* adc, uint32_t freq)
 {
+    adc->convst_freq = freq;
 }
 
-void ad7616_adc_convst_signal_stop(uint8_t conv_mode)
+__FORCEINLINE void ad7616_sample_start(ad7616_t* adc, uint16_t channel_mask, uint32_t count)
 {
+    // TODO: channel_mask
+    for (uint32_t i = 0; i < count; i++)
+    {
+        BSP_IO_WRITE(&(adc->convst), IO_STATE_HIGH);
+        delay_ns(AD7616_T_CONV_HIGH);
+        BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
+
+        delay_ns(600);
+        ad7616_sample_callback(adc);
+
+        delay_us(10);
+    }
 }
 
-void ad7616_adc_sample_cont(uint32_t channel_mask, uint32_t count, uint32_t freq)
+__FORCEINLINE void ad7616_sample_callback(ad7616_t* adc)
 {
-}
-
-void ad7616_adc_sample_single(uint32_t channel_mask)
-{
+    adc_data_buffer[adc_data_count] = ad7616_data_read(adc);
+    adc_data_count++;
 }

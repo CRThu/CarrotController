@@ -15,12 +15,74 @@
 #define AD7616_PAR_WR                   1
 #define AD7616_PAR_RD                   0
 
-typedef enum ad7616_mode{
+typedef enum ad7616_mode {
     AD7616_SER_SW,
     AD7616_PAR_SW,
     AD7616_SER_HW,
     AD7616_PAR_HW
 } ad7616_mode;
+
+typedef enum ad7616_convst_mode {
+    AD7616_CONVST_IO,
+    AD7616_CONVST_PWM,
+} ad7616_convst_mode;
+
+
+typedef gpio_port_t ad7616_gpio_port_t;
+typedef gpio_pin_t ad7616_gpio_pin_t;
+
+#define COPY_FROM_IO(dst, src) do {     \
+    if(dst != NULL && src != NULL)      \
+    {                                   \
+        (dst)->port = (src)->port;      \
+        (dst)->pin = (src)->pin;        \
+    }                                   \
+} while(0)
+
+typedef struct ad7616_io_t
+{
+    volatile ad7616_gpio_port_t* port;
+    volatile ad7616_gpio_pin_t pin;
+} ad7616_io_t;
+
+typedef struct ad7616_t
+{
+    /* config */
+    ad7616_mode mode;
+    ad7616_convst_mode convst_mode;
+    uint32_t convst_freq;
+
+    /* io */
+    ad7616_io_t convst;
+    ad7616_io_t busy;
+    ad7616_io_t resetn;
+    ad7616_io_t csn;
+    ad7616_io_t rdn;
+    ad7616_io_t wrn;
+
+    ad7616_io_t chsel0;
+    ad7616_io_t chsel1;
+    ad7616_io_t chsel2;
+    ad7616_io_t seqen;
+    ad7616_io_t rngsel1;
+    ad7616_io_t rngsel0;
+    ad7616_io_t sersel;
+    ad7616_io_t refsel;
+
+    ad7616_io_t burst;
+    ad7616_io_t ser1wn;
+    ad7616_io_t crcen;
+    ad7616_io_t os0;
+    ad7616_io_t os1;
+    ad7616_io_t os2;
+
+    /* perh */
+    void* clk1_pwm;
+    void* clk2_etr;
+    void* spi_a;
+    void* spi_b;
+    gpio_port_t* par_db;
+} ad7616_t;
 
 /* T (ns) */
 #define T_MIN(t1, t2)                   (((t1) < (t2)) ? t1 : t2 )
@@ -32,6 +94,8 @@ typedef enum ad7616_mode{
 
 #define AD7616_DEBUG_DELAY              0
 #define AD7616_RESERVED_DELAY           0
+
+#define AD7616_T_CONV_HIGH              50
 
 #define AD7616_PAR_T_RDN_SETUP          10
 #define AD7616_PAR_T_RDN_HOLD           10

@@ -33,9 +33,7 @@
 #include "uart_comm.h"
 
 #include "ad7616_iocfg.h"
-#include "io_utils.h"
-
-#include "arm_math.h"
+#include "ad7616_sample.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -146,6 +144,11 @@ int main(void)
 
     ad7616_full_reset(&adc);
 
+    // volatile int8_t ret = ad7616_comm_test(&adc);
+    // ret = ret;
+
+    ad7616_sample_start(&adc, 0x00, 16);
+
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
@@ -160,8 +163,6 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        volatile int8_t ret = ad7616_comm_test(&adc);
-        ret = ret;
         delay_ms(1000);
         /* USER CODE END WHILE */
 

@@ -1,7 +1,7 @@
 /****************************
  AD7616 IO CONFIG
  CRTHu
- 2025.03.27
+ 2025.04.01
  ****************************/
 
 #include "ad7616_iocfg.h"
@@ -173,7 +173,7 @@ __FORCEINLINE void ad7616_full_reset(ad7616_t* adc)
     delay_ms(15);       // full reset = 15ms
 }
 
-__FORCEINLINE uint32_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
+__FORCEINLINE uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
 {
     uint16_t wr_cmd = AD7616_PAR_RD << 15 | addr << 9 | 0 << 0;
     uint16_t rd_data = 0;
@@ -244,7 +244,7 @@ __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
 
 }
 
-__FORCEINLINE uint32_t ad7616_reg_bits_read(ad7616_t* adc, uint32_t addr, uint8_t start, uint8_t end)
+__FORCEINLINE uint16_t ad7616_reg_bits_read(ad7616_t* adc, uint32_t addr, uint8_t start, uint8_t end)
 {
     return BITS_GET(ad7616_reg_read(adc, addr), start, end);
 }
@@ -252,6 +252,36 @@ __FORCEINLINE uint32_t ad7616_reg_bits_read(ad7616_t* adc, uint32_t addr, uint8_
 __FORCEINLINE void ad7616_reg_bits_write(ad7616_t* adc, uint32_t addr, uint8_t start, uint8_t end, uint32_t data)
 {
     ad7616_reg_write(adc, addr, BITS_SET(ad7616_reg_read(adc, addr), start, end, data));
+}
+
+__FORCEINLINE uint16_t ad7616_data_read(ad7616_t* adc)
+{
+    uint16_t rd_data = 0;
+
+    if (adc->mode == AD7616_PAR_SW
+        || adc->mode == AD7616_PAR_HW)
+    {
+        /* PAR */
+
+        /* READ COMMAND */
+        BSP_DB_TYPE(adc->par_db, IO_TYPE_IN);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_RDN_SETUP);
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_DOUT_SETUP);
+        rd_data = BSP_DB_READ(adc->par_db);
+        AD7616_DELAY(T_SUB(AD7616_PAR_T_RDN_LOW, AD7616_PAR_T_DOUT_SETUP));
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_HIGH);
+        AD7616_DELAY(AD7616_PAR_T_RDN_HOLD);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_HIGH);
+    }
+    else
+    {
+        /* SER */
+        // TODO IMPL
+    }
+
+    return rd_data;
 }
 
 int8_t ad7616_comm_test(ad7616_t* adc)
