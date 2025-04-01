@@ -123,12 +123,12 @@ int main(void)
     MX_GPIO_Init();
     MX_GPDMA1_Init();
     MX_UART4_Init();
-    MX_TIM6_Init();
-    MX_I2C1_Init();
-    MX_SPI1_Init();
-    MX_SPI3_Init();
-    MX_CORDIC_Init();
-    MX_TIM5_Init();
+    //MX_TIM6_Init();
+    //MX_I2C1_Init();
+    //MX_SPI1_Init();
+    //MX_SPI3_Init();
+    //MX_CORDIC_Init();
+    //MX_TIM5_Init();
     MX_ICACHE_Init();
     /* USER CODE BEGIN 2 */
 
@@ -137,14 +137,17 @@ int main(void)
 
     // initial dut ad7616 board
     dut_ad7616_init();
-    
+
+    //switch_init(switch_config);
+    //switch_set(switch_config, ad7616_profiles[0].switch_value);
+
+
     ad7616_t adc;
     ad7616_set_mode(&adc, AD7616_PAR_SW);
     ad7616_set_io(&adc, &ad7616_profiles[0]);
-    ad7616_set_perh(&adc);
 
     ad7616_full_reset(&adc);
-    
+
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
@@ -159,10 +162,10 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-    volatile uint32_t data = ad7616_reg_read(&adc,0x04);
-    data=data;
-        
+        volatile uint32_t data = ad7616_reg_read(&adc, 0x04);
+        data = data;
         delay_ms(100);
+
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */

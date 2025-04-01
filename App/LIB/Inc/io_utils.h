@@ -103,6 +103,11 @@ extern "C"
         MODIFY_REG((GPIOx)->MODER, (0x3UL << (2 * POSITION_VAL(PIN))), ((MODE) << (2 * POSITION_VAL(PIN))))
         /* @示例：设置PC13为输入
         *  IO_SET_MODE(GPIOC, GPIO_PIN_13, IN) */
+    /* 单GPIO设置速度 1: NORMAL, 3: FAST */
+    #define IO_SET_SPEED(GPIOx, PIN, SPEED) \
+        MODIFY_REG((GPIOx)->OSPEEDR, (0x3UL << (2 * POSITION_VAL(PIN))), ((SPEED) << (2 * POSITION_VAL(PIN))))
+        /* @示例：设置PC13为高速
+        *  IO_SET_SPEED(GPIOC, GPIO_PIN_13, FAST) */
     /* 单GPIO设置为输入模式 */
     #define IO_IN(GPIOx, PIN) \
         IO_SET_MODE((GPIOx), (PIN), 0)
@@ -118,9 +123,14 @@ extern "C"
     
     /* 完整数据总线设置模式 0: Input, 1: Output */
     #define DB_SET_MODE(GPIOx, MODE) \
-        (WRITE_REG((GPIOx)->MODER), (MODE == 0) ? 0x00000000UL : 0x55555555UL)
+        (WRITE_REG((GPIOx)->MODER, (MODE == GPIO_MODE_INPUT) ? 0x00000000UL : 0x55555555UL))
         /* @示例：设置PC端口为输入
         *  DB_SET_MODE(GPIOC, IN) */
+    /* 完整数据总线设置速度 1: NORMAL, 3: FAST */
+    #define DB_SET_SPEED(GPIOx, SPEED) \
+        (WRITE_REG((GPIOx)->OSPEEDR, (SPEED == GPIO_SPEED_FREQ_MEDIUM) ? 0x55555555UL : 0xFFFFFFFFUL))
+        /* @示例：设置PC端口为高速
+        *  DB_SET_SPEED(GPIOC, FAST) */
     /* 完整数据总线设置为输入模式 */
     #define DB_IN(GPIOx) \
         DB_SET_MODE((GPIOx), 0)

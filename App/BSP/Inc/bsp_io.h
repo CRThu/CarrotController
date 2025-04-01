@@ -31,20 +31,16 @@ extern "C"
 
      // STM32 IMPL
     #ifdef USE_STM32H5_HAL_IMPL
-        typedef GPIO_TypeDef gpio_port_t;
-        typedef uint16_t gpio_pin_t;
-    
-        #define GPIO_CLOCK(X)                   __HAL_RCC_GPIO##X##_CLK_ENABLE()
-        #define GPIO_PORT(X)                    GPIO##X
-        #define GPIO_PIN(X)                     GPIO_PIN_##X
-    
-        #define BSP_IO_WRITE(IO, STATE)           IO_WRITE((IO)->port, (IO)->pin, ((STATE) == IO_STATE_HIGH) ? GPIO_PIN_SET : GPIO_PIN_RESET)
-        #define BSP_IO_READ(IO)                   ((IO_READ((IO)->port, (IO)->pin) == GPIO_PIN_SET) ? IO_STATE_HIGH : IO_STATE_LOW)
-    
-        
+    typedef GPIO_TypeDef gpio_port_t;
+    typedef uint16_t gpio_pin_t;
+
+    #define GPIO_CLOCK(X)                   __HAL_RCC_GPIO##X##_CLK_ENABLE()
+    #define GPIO_PORT(X)                    GPIO##X
+    #define GPIO_PIN(X)                     GPIO_PIN_##X
+
     #endif
 
-        typedef enum {
+    typedef enum {
         BSP_IO_FUNC_NONE,
         BSP_IO_SWITCH_SEL,
         // IO
@@ -61,11 +57,22 @@ extern "C"
     } bsp_io_func;
 
     typedef enum {
-        IO_STATE_LOW,
-        IO_STATE_HIGH,
+        IO_STATE_LOW = 0,
+        IO_STATE_HIGH = 1,
         IO_STATE_RESERVED
     } io_state;
 
+    typedef enum {
+        IO_TYPE_IN = GPIO_MODE_INPUT,
+        IO_TYPE_OUT = GPIO_MODE_OUTPUT_PP,
+        IO_TYPE_RESERVED
+    } io_type;
+
+    typedef enum {
+        IO_SPEED_NORMAL = GPIO_SPEED_FREQ_MEDIUM,
+        IO_SPEED_FAST = GPIO_SPEED_FREQ_VERY_HIGH,
+        IO_SPEED_RESERVED
+    } io_speed;
 
     typedef uint16_t gpio_config_status_t;
     typedef struct io_t {
@@ -96,7 +103,15 @@ extern "C"
     #define BTB_SPIA                    hspi1
     #define BTB_SPIB                    hspi3
 
+    #define BSP_IO_TYPE(IO, TYPE)       IO_SET_MODE((IO)->port, (IO)->pin, TYPE)
+    #define BSP_IO_SPEED(IO, SPEED)     IO_SET_SPEED((IO)->port, (IO)->pin, SPEED)
+    #define BSP_IO_WRITE(IO, STATE)     IO_WRITE((IO)->port, (IO)->pin, ((STATE) == IO_STATE_HIGH) ? GPIO_PIN_SET : GPIO_PIN_RESET)
+    #define BSP_IO_READ(IO)             ((IO_READ((IO)->port, (IO)->pin) == GPIO_PIN_SET) ? IO_STATE_HIGH : IO_STATE_LOW)
+
+
     // DB OPER
+    #define BSP_DB_TYPE(PORT, TYPE)     DB_SET_MODE(PORT, TYPE)
+    #define BSP_DB_SPEED(PORT, SPEED)   DB_SET_SPEED(PORT, SPEED)
     #define BSP_DB_WRITE(PORT, DATA)    DB_WRITE(PORT, DATA)
     #define BSP_DB_READ(PORT)           DB_READ(PORT)
 

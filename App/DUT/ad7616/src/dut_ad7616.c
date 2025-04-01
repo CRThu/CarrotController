@@ -12,12 +12,22 @@ dut_interface_t ad7616_profiles[] =
         .pin_configs = (io_t[]) {
             { .btb_pin = 11, .pin_name = "CONVST"     , .port = GPIO_PORT(A), .pin = GPIO_PIN( 1),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_LOW      },
             { .btb_pin = 13, .pin_name = "BUSY"       , .port = GPIO_PORT(A), .pin = GPIO_PIN( 0),  .func = BSP_IO_FUNC_IN   , .state = IO_STATE_RESERVED },
+            
+            { .btb_pin = 17, .pin_name = "nCS"        , .port = GPIO_PORT(A), .pin = GPIO_PIN( 4),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_HIGH     },
+            
+            { .btb_pin = 12, .pin_name = "CHSEL0"     , .port = GPIO_PORT(C), .pin = GPIO_PIN( 2),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
+            { .btb_pin = 14, .pin_name = "CHSEL1"     , .port = GPIO_PORT(C), .pin = GPIO_PIN( 3),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
+            { .btb_pin = 18, .pin_name = "CHSEL2"     , .port = GPIO_PORT(A), .pin = GPIO_PIN( 2),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
+            { .btb_pin = 20, .pin_name = "SEQEN"      , .port = GPIO_PORT(A), .pin = GPIO_PIN( 3),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
+            { .btb_pin = 57, .pin_name = "RNGSEL0"    , .port = GPIO_PORT(A), .pin = GPIO_PIN(10),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
+            { .btb_pin = 55, .pin_name = "RNGSEL1"    , .port = GPIO_PORT(A), .pin = GPIO_PIN( 9),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
             { .btb_pin = 51, .pin_name = "SER/nPAR"   , .port = GPIO_PORT(E), .pin = GPIO_PIN(14),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_LOW      },
             { .btb_pin = 49, .pin_name = "REFSEL"     , .port = GPIO_PORT(E), .pin = GPIO_PIN(12),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_LOW      },
             { .btb_pin = 32, .pin_name = "nRESET"     , .port = GPIO_PORT(C), .pin = GPIO_PIN( 6),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_HIGH     },
-            { .btb_pin = 17, .pin_name = "nCS"        , .port = GPIO_PORT(A), .pin = GPIO_PIN( 4),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_HIGH     },
+            
             { .btb_pin = 50, .pin_name = "nRD"        , .port = GPIO_PORT(E), .pin = GPIO_PIN(13),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_HIGH     },
             { .btb_pin = 52, .pin_name = "nWR"        , .port = GPIO_PORT(E), .pin = GPIO_PIN(15),  .func = BSP_IO_FUNC_OUT  , .state = IO_STATE_HIGH     },
+            
             { .btb_pin = 34, .pin_name = "DB0"        , .port = GPIO_PORT(D), .pin = GPIO_PIN( 0),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
             { .btb_pin = 36, .pin_name = "DB1"        , .port = GPIO_PORT(D), .pin = GPIO_PIN( 1),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
             { .btb_pin = 38, .pin_name = "DB2"        , .port = GPIO_PORT(D), .pin = GPIO_PIN( 2),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
@@ -35,12 +45,6 @@ dut_interface_t ad7616_profiles[] =
             { .btb_pin = 45, .pin_name = "DB14"       , .port = GPIO_PORT(D), .pin = GPIO_PIN(14),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
             { .btb_pin = 47, .pin_name = "DB15"       , .port = GPIO_PORT(D), .pin = GPIO_PIN(15),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
             
-            { .btb_pin = 12, .pin_name = "CHSEL0"     , .port = GPIO_PORT(A), .pin = GPIO_PIN( 1),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
-            { .btb_pin = 14, .pin_name = "CHSEL1"     , .port = GPIO_PORT(A), .pin = GPIO_PIN( 0),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
-            { .btb_pin = 18, .pin_name = "CHSEL2"     , .port = GPIO_PORT(A), .pin = GPIO_PIN( 4),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
-            { .btb_pin = 20, .pin_name = "SEQEN"      , .port = GPIO_PORT(A), .pin = GPIO_PIN(15),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
-            { .btb_pin = 57, .pin_name = "RNGSEL0"    , .port = GPIO_PORT(B), .pin = GPIO_PIN(12),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
-            { .btb_pin = 55, .pin_name = "RNGSEL1"    , .port = GPIO_PORT(E), .pin = GPIO_PIN(15),  .func = BSP_IO_FUNC_INOUT, .state = IO_STATE_RESERVED },
             { .btb_pin = IO_ARR_END_ID }
         },
         
