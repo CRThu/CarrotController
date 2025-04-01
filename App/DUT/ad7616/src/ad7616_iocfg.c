@@ -244,22 +244,15 @@ __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
 
 }
 
-// __AD7616_IOCFG_INLINE uint32_t ad7616_reg_bits_read(uint32_t addr, uint8_t start, uint8_t end)
-// {
-// }
+__FORCEINLINE uint32_t ad7616_reg_bits_read(ad7616_t* adc, uint32_t addr, uint8_t start, uint8_t end)
+{
+    return BITS_GET(ad7616_reg_read(adc, addr), start, end);
+}
 
-// __AD7616_IOCFG_INLINE void ad7616_reg_bits_write(uint32_t addr, uint8_t start, uint8_t end, uint32_t data)
-// {
-// }
-
-// __AD7616_IOCFG_INLINE void ad7616_enter_adc_mode()
-// {
-// }
-
-// __AD7616_IOCFG_INLINE void ad7616_enter_register_mode()
-// {
-// }
-
+__FORCEINLINE void ad7616_reg_bits_write(ad7616_t* adc, uint32_t addr, uint8_t start, uint8_t end, uint32_t data)
+{
+    ad7616_reg_write(adc, addr, BITS_SET(ad7616_reg_read(adc, addr), start, end, data));
+}
 
 int8_t ad7616_comm_test(ad7616_t* adc)
 {
