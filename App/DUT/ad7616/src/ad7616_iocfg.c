@@ -216,9 +216,10 @@ __FORCEINLINE uint32_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
     return rd_data;
 }
 
-// __AD7616_IOCFG_INLINE void ad7616_reg_write(uint32_t addr, uint32_t data)
-// {
-// }
+__FORCEINLINE uint32_t ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
+{
+
+}
 
 // __AD7616_IOCFG_INLINE uint32_t ad7616_reg_bits_read(uint32_t addr, uint8_t start, uint8_t end)
 // {

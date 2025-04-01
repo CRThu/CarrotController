@@ -18,6 +18,11 @@ io_switch_t switch_config[] =
     {.id = IO_SWITCH_ARR_END_ID}
 };
 
+void bsp_switch_init(uint16_t swval)
+{
+    switch_init(switch_config);
+    switch_set(switch_config, swval);
+}
 
 gpio_config_status_t switch_init(io_switch_t* switch_configs)
 {

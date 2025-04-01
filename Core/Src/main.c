@@ -135,13 +135,11 @@ int main(void)
     // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
+    // initial bsp perh
+    bsp_gpio_init();
+    bsp_switch_init(BSPMUX_DEFAULT);
+
     // initial dut ad7616 board
-    dut_ad7616_init();
-
-    //switch_init(switch_config);
-    //switch_set(switch_config, ad7616_profiles[0].switch_value);
-
-
     ad7616_t adc;
     ad7616_set_mode(&adc, AD7616_PAR_SW);
     ad7616_set_io(&adc, &ad7616_profiles[0]);

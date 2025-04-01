@@ -34,7 +34,7 @@ extern "C"
     typedef GPIO_TypeDef gpio_port_t;
     typedef uint16_t gpio_pin_t;
 
-    #define GPIO_CLOCK(X)                   __HAL_RCC_GPIO##X##_CLK_ENABLE()
+    #define GPIO_CLOCK_EN(X)                __HAL_RCC_GPIO##X##_CLK_ENABLE()
     #define GPIO_PORT(X)                    GPIO##X
     #define GPIO_PIN(X)                     GPIO_PIN_##X
 
@@ -119,6 +119,7 @@ extern "C"
     #define bsp_db_write                BSP_DB_WRITE
     #define bsp_db_read                 BSP_DB_READ
 
+    void bsp_gpio_init();
     gpio_config_status_t gpio_init(io_t* gpio);
 
     #ifdef __cplusplus

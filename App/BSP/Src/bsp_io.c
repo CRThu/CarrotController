@@ -1,5 +1,35 @@
 #include "bsp_inc.h"
 
+void bsp_gpio_init()
+{
+    #ifdef GPIOA
+    GPIO_CLOCK_EN(A);
+    #endif
+    #ifdef GPIOB
+    GPIO_CLOCK_EN(B);
+    #endif
+    #ifdef GPIOC
+    GPIO_CLOCK_EN(C);
+    #endif
+    #ifdef GPIOD
+    GPIO_CLOCK_EN(D);
+    #endif
+    #ifdef GPIOE
+    GPIO_CLOCK_EN(E);
+    #endif
+    #ifdef GPIOF
+    GPIO_CLOCK_EN(F);
+    #endif
+    #ifdef GPIOG
+    GPIO_CLOCK_EN(G);
+    #endif
+    #ifdef GPIOH
+    GPIO_CLOCK_EN(H);
+    #endif
+    #ifdef GPIOI
+    GPIO_CLOCK_EN(I);
+    #endif
+}
 
 gpio_config_status_t gpio_init(io_t* gpio)
 {
@@ -11,15 +41,15 @@ gpio_config_status_t gpio_init(io_t* gpio)
     GPIO_InitTypeDef GPIO_InitStruct = { 0 };
 
     /* GPIO Ports Clock Enable */
-    if (gpio->port == GPIO_PORT(A))  GPIO_CLOCK(A);
-    if (gpio->port == GPIO_PORT(B))  GPIO_CLOCK(B);
-    if (gpio->port == GPIO_PORT(C))  GPIO_CLOCK(C);
-    if (gpio->port == GPIO_PORT(D))  GPIO_CLOCK(D);
-    if (gpio->port == GPIO_PORT(E))  GPIO_CLOCK(E);
-    if (gpio->port == GPIO_PORT(F))  GPIO_CLOCK(F);
-    if (gpio->port == GPIO_PORT(G))  GPIO_CLOCK(G);
-    if (gpio->port == GPIO_PORT(H))  GPIO_CLOCK(H);
-    if (gpio->port == GPIO_PORT(I))  GPIO_CLOCK(I);
+    if (gpio->port == GPIO_PORT(A))  GPIO_CLOCK_EN(A);
+    if (gpio->port == GPIO_PORT(B))  GPIO_CLOCK_EN(B);
+    if (gpio->port == GPIO_PORT(C))  GPIO_CLOCK_EN(C);
+    if (gpio->port == GPIO_PORT(D))  GPIO_CLOCK_EN(D);
+    if (gpio->port == GPIO_PORT(E))  GPIO_CLOCK_EN(E);
+    if (gpio->port == GPIO_PORT(F))  GPIO_CLOCK_EN(F);
+    if (gpio->port == GPIO_PORT(G))  GPIO_CLOCK_EN(G);
+    if (gpio->port == GPIO_PORT(H))  GPIO_CLOCK_EN(H);
+    if (gpio->port == GPIO_PORT(I))  GPIO_CLOCK_EN(I);
 
 
     switch (gpio->func)
