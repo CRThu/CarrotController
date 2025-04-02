@@ -98,8 +98,8 @@ extern "C"
     // BTB IMPL
     // TODO: HTIMx is PLACEHOLDER
     #define BTB_DB_PORT                 GPIO_PORT(D)
-    #define BTB_CLK1_PWM                htim5
-    #define BTB_CLK2_ETR                htim6
+    #define BTB_CLK1_PWM                NULL
+    #define BTB_CLK2_ETR                NULL
     #define BTB_SPIA                    hspi1
     #define BTB_SPIB                    hspi3
 

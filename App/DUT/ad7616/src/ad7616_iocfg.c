@@ -13,8 +13,8 @@ __FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode)
 
 __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
 {
-    adc->clk1_pwm = &BTB_CLK1_PWM;   // TODO: IMPL OF BTB_CLK1_PWM
-    adc->clk2_etr = &BTB_CLK2_ETR;   // TODO: IMPL OF BTB_CLK2_ETR
+    adc->clk1_pwm = BTB_CLK1_PWM;   // TODO: IMPL OF BTB_CLK1_PWM
+    adc->clk2_etr = BTB_CLK2_ETR;   // TODO: IMPL OF BTB_CLK2_ETR
 
     /*
         if (adc->mode == AD7616_SER_SW)
