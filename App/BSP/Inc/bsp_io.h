@@ -100,8 +100,6 @@ extern "C"
     #define BTB_DB_PORT                 GPIO_PORT(D)
     #define BTB_CLK1_PWM                NULL
     #define BTB_CLK2_ETR                NULL
-    #define BTB_SPIA                    hspi1
-    #define BTB_SPIB                    hspi3
 
     #define BSP_IO_TYPE(IO, TYPE)       IO_SET_MODE((IO)->port, (IO)->pin, TYPE)
     #define BSP_IO_SPEED(IO, SPEED)     IO_SET_SPEED((IO)->port, (IO)->pin, SPEED)

@@ -1328,6 +1328,11 @@
               <FileType>1</FileType>
               <FilePath>..\App\BSP\Src\bsp_tim.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\BSP\Src\bsp_spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

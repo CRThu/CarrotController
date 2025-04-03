@@ -29,9 +29,16 @@ extern "C"
     #endif
     extern const void* const spi_instances[];
 
-    #define spi_write       SPI_WRITE
-    #define spi_read        SPI_READ
-    #define spi_readwrite   SPI_RW
+    #define spi_write                   SPI_WRITE
+    #define spi_read                    SPI_READ
+    #define spi_readwrite               SPI_RW
+
+    #define BTB_SPIA                    hspi1
+    #define BTB_SPIB                    hspi3
+
+    
+    void bsp_spi_init();
+
 
     #ifdef __cplusplus
 }
