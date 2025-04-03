@@ -47,11 +47,8 @@ extern "C"
         BSP_IO_FUNC_IN,
         BSP_IO_FUNC_OUT,
         BSP_IO_FUNC_INOUT,
-        // SPI
-        BSP_IO_FUNC_SPI_NSS,
-        BSP_IO_FUNC_SPI_SCK,
-        BSP_IO_FUNC_SPI_MOSI,
-        BSP_IO_FUNC_SPI_MISO,
+        // PERH
+        BSP_IO_FUNC_PERH,
         // PRESERVED
         BSP_IO_FUNC_CUSTOM_BASE = 100
     } bsp_io_func;
