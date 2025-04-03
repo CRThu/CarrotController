@@ -19,6 +19,7 @@ extern volatile uint32_t adc_data_count;
 
 void ad7616_set_convst_mode(ad7616_t* adc, ad7616_convst_mode mode);
 void ad7616_set_convst_freq(ad7616_t* adc, uint32_t freq);
+void ad7616_convst_generate(ad7616_t* adc);
 void ad7616_sample_start(ad7616_t* adc, uint16_t channel_mask, uint32_t count);
 void ad7616_sample_callback(ad7616_t* adc);
 
