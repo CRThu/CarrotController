@@ -15,7 +15,8 @@ extern "C"
 
     #include "bsp_inc.h"
 		
-	#include "spi.h"
+	//#include "spi.h"
+    #include "stm32h5xx_hal_spi.h"
 
     // STM32 IMPL
     #ifdef USE_STM32H5_HAL_IMPL

@@ -43,8 +43,8 @@ dut_interface_t dac11001_profile =
                   | BSPMUX_BTB_SPIB_SCK_TO_MCU_SPIB_SCK ,
 
     .perh = {
-        &hspi1,
-        &hspi3,
+        NULL, //&hspi1,
+        NULL,//&hspi3,
         NULL
     }
 };

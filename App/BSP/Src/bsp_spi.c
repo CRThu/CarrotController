@@ -16,6 +16,7 @@ io_t spi_ios[] =
 
 void bsp_spi_init()
 {
+    /*
     io_t* io;
     io = dut_get_io(spi_ios, "NSSA");
     BSP_IO_TYPE(io, IO_TYPE_IN);
@@ -56,4 +57,6 @@ void bsp_spi_init()
     BSP_IO_TYPE(io, IO_TYPE_IN);
     BSP_IO_SPEED(io, IO_SPEED_NORMAL);
     BSP_IO_WRITE(io, IO_STATE_LOW);
+
+    */
 }
