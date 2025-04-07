@@ -101,6 +101,7 @@ extern "C"
     #define BTB_CLK1_PWM                NULL
     #define BTB_CLK2_ETR                NULL
 
+    #define BSP_IO_SET_AF(IO)           IO_SET_AF((IO)->port, (IO)->pin, (IO)->af)
     #define BSP_IO_TYPE(IO, TYPE)       IO_SET_MODE((IO)->port, (IO)->pin, TYPE)
     #define BSP_IO_SPEED(IO, SPEED)     IO_SET_SPEED((IO)->port, (IO)->pin, SPEED)
     #define BSP_IO_WRITE(IO, STATE)     IO_WRITE((IO)->port, (IO)->pin, ((STATE) == IO_STATE_HIGH) ? GPIO_PIN_SET : GPIO_PIN_RESET)

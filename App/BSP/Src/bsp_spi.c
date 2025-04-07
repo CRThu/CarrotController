@@ -6,10 +6,10 @@ io_t spi_io_cfg[] =
     {.btb_pin = 23, .pin_name = "SCK[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(3) , .af = GPIO_AF5_SPI1 },
     {.btb_pin = 25, .pin_name = "SDI[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(5) , .af = GPIO_AF5_SPI1 },
     {.btb_pin = 27, .pin_name = "SDO[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(4) , .af = GPIO_AF5_SPI1 },
-    {.btb_pin = 19, .pin_name = "NSS[1]", .port = GPIO_PORT(A), .pin = GPIO_PIN(15) },
-    {.btb_pin = 24, .pin_name = "SCK[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(10) },
-    {.btb_pin = 26, .pin_name = "SDI[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(12) },
-    {.btb_pin = 28, .pin_name = "SDO[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(11) },
+    {.btb_pin = 19, .pin_name = "NSS[1]", .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .af = GPIO_AF6_SPI3 },
+    {.btb_pin = 24, .pin_name = "SCK[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(10), .af = GPIO_AF6_SPI3 },
+    {.btb_pin = 26, .pin_name = "SDI[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(12), .af = GPIO_AF6_SPI3 },
+    {.btb_pin = 28, .pin_name = "SDO[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(11), .af = GPIO_AF6_SPI3 },
 
     {.btb_pin = IO_ARR_END_ID }
 };
@@ -54,6 +54,7 @@ void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode)
     }
     else
     {
+        BSP_IO_SET_AF(io);
         BSP_IO_TYPE(io, IO_TYPE_PERH);
         BSP_IO_SPEED(io, IO_SPEED_FAST);
         BSP_IO_WRITE(io, IO_STATE_LOW);
@@ -69,6 +70,7 @@ void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode)
     }
     else
     {
+        BSP_IO_SET_AF(io);
         BSP_IO_TYPE(io, IO_TYPE_PERH);
         BSP_IO_SPEED(io, IO_SPEED_FAST);
         BSP_IO_WRITE(io, IO_STATE_LOW);
@@ -84,6 +86,7 @@ void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode)
     }
     else
     {
+        BSP_IO_SET_AF(io);
         BSP_IO_TYPE(io, IO_TYPE_PERH);
         BSP_IO_SPEED(io, IO_SPEED_FAST);
         BSP_IO_WRITE(io, IO_STATE_LOW);
@@ -99,6 +102,7 @@ void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode)
     }
     else
     {
+        BSP_IO_SET_AF(io);
         BSP_IO_TYPE(io, IO_TYPE_PERH);
         BSP_IO_SPEED(io, IO_SPEED_FAST);
         BSP_IO_WRITE(io, IO_STATE_LOW);

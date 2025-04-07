@@ -108,6 +108,11 @@ extern "C"
         MODIFY_REG((GPIOx)->OSPEEDR, (0x3UL << (2 * POSITION_VAL(PIN))), ((SPEED) << (2 * POSITION_VAL(PIN))))
         /* @示例：设置PC13为高速
         *  IO_SET_SPEED(GPIOC, GPIO_PIN_13, FAST) */
+    /* 单GPIO设置AF */
+    #define IO_SET_AF(GPIOx, PIN, AF) \
+        MODIFY_REG((GPIOx)->AFR[POSITION_VAL(PIN) >> 0x3], (0xFUL << (4 * (POSITION_VAL(PIN) % 8))), ((AF) << (4 * (POSITION_VAL(PIN) % 8))))
+        /* @示例：设置PC13为AF=0x05功能
+        *  IO_SET_AF(GPIOC, GPIO_PIN_13, 0x05) */
     /* 单GPIO设置为输入模式 */
     #define IO_IN(GPIOx, PIN) \
         IO_SET_MODE((GPIOx), (PIN), 0)

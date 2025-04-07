@@ -122,33 +122,33 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
 
   /* USER CODE END SPI1_MspInit 0 */
     /* SPI1 clock enable */
-    __HAL_RCC_SPI1_CLK_ENABLE();
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_GPIOB_CLK_ENABLE();
-    /**SPI1 GPIO Configuration
-    PA4     ------> SPI1_NSS
-    PB3(JTDO/TRACESWO)     ------> SPI1_SCK
-    PB4(NJTRST)     ------> SPI1_MISO
-    PB5     ------> SPI1_MOSI
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_4;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-    /* SPI1 interrupt Init */
-    HAL_NVIC_SetPriority(SPI1_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(SPI1_IRQn);
+    // __HAL_RCC_SPI1_CLK_ENABLE();
+// 
+    // __HAL_RCC_GPIOA_CLK_ENABLE();
+    // __HAL_RCC_GPIOB_CLK_ENABLE();
+    // /**SPI1 GPIO Configuration
+    // PA4     ------> SPI1_NSS
+    // PB3(JTDO/TRACESWO)     ------> SPI1_SCK
+    // PB4(NJTRST)     ------> SPI1_MISO
+    // PB5     ------> SPI1_MOSI
+    // */
+    // GPIO_InitStruct.Pin = GPIO_PIN_4;
+    // GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    // GPIO_InitStruct.Pull = GPIO_NOPULL;
+    // GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    // GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+    // HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+// 
+    // GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+    // GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    // GPIO_InitStruct.Pull = GPIO_NOPULL;
+    // GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    // GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+    // HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+// 
+    // /* SPI1 interrupt Init */
+    // HAL_NVIC_SetPriority(SPI1_IRQn, 0, 0);
+    // HAL_NVIC_EnableIRQ(SPI1_IRQn);
   /* USER CODE BEGIN SPI1_MspInit 1 */
 
   /* USER CODE END SPI1_MspInit 1 */
@@ -159,29 +159,29 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
 
   /* USER CODE END SPI3_MspInit 0 */
     /* SPI3 clock enable */
-    __HAL_RCC_SPI3_CLK_ENABLE();
-
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    __HAL_RCC_GPIOC_CLK_ENABLE();
-    /**SPI3 GPIO Configuration
-    PA15(JTDI)     ------> SPI3_NSS
-    PC10     ------> SPI3_SCK
-    PC11     ------> SPI3_MISO
-    PC12     ------> SPI3_MOSI
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_15;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    //__HAL_RCC_SPI3_CLK_ENABLE();
+//
+    //__HAL_RCC_GPIOA_CLK_ENABLE();
+    //__HAL_RCC_GPIOC_CLK_ENABLE();
+    ///**SPI3 GPIO Configuration
+    //PA15(JTDI)     ------> SPI3_NSS
+    //PC10     ------> SPI3_SCK
+    //PC11     ------> SPI3_MISO
+    //PC12     ------> SPI3_MOSI
+    //*/
+    //GPIO_InitStruct.Pin = GPIO_PIN_15;
+    //GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    //GPIO_InitStruct.Pull = GPIO_NOPULL;
+    //GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    //GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+    //HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+//
+    //GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
+    //GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    //GPIO_InitStruct.Pull = GPIO_NOPULL;
+    //GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    //GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+    //HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /* USER CODE BEGIN SPI3_MspInit 1 */
 
