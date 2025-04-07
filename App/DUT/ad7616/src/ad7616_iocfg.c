@@ -210,12 +210,12 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
 
 
         /* PERH */
-        adc->spi_a = NULL;
-        adc->spi_b = NULL;
+        adc->spi_a = bsp_get_spi_instance(0);
+        adc->spi_b = bsp_get_spi_instance(1);
         adc->par_db = NULL;
 
         /* PERH IOCFG */
-
+        
     }
 
     if (adc->mode == AD7616_PAR_SW)

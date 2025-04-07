@@ -15,8 +15,8 @@ extern "C"
 
     #include "bsp_inc.h"
 
-    //#include "spi.h"
-    #include "stm32h5xx_hal_spi.h"
+    #include "spi.h"
+    //#include "stm32h5xx_hal_spi.h"
 
     // STM32 IMPL
     #ifdef USE_STM32H5_HAL_IMPL
@@ -62,7 +62,9 @@ extern "C"
     } bsp_spi_mode;
 
 
-    void bsp_spi_init(bsp_spi_mode spi_a_mode, bsp_spi_mode spi_b_mode);
+    spi_t* bsp_get_spi_instance(uint8_t index);
+    void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode);
+    void bsp_spi_init_all(bsp_spi_mode spi_mode);
 
 
     #ifdef __cplusplus

@@ -141,7 +141,7 @@ int main(void)
 
     // initial bsp perh
     bsp_gpio_init();
-    bsp_spi_init(BSP_SPI_MODE_OFF, BSP_SPI_MODE_OFF);
+    bsp_spi_init_all(BSP_SPI_MODE_OFF);
     bsp_switch_init(BSPMUX_DEFAULT);
 
     // initial dut ad7616 board
