@@ -20,13 +20,13 @@ gpio_config_status_t dut_init(dut_interface_t* dut)
 }
 
 // pin name: name
-__FORCEINLINE io_t* dut_get_io(dut_interface_t* dut, const char* name)
+__FORCEINLINE io_t* dut_get_io(io_t* io_cfg, const char* name)
 {
     uint16_t i = 0;
-    while ((dut->pin_configs[i]).btb_pin != IO_ARR_END_ID)
+    while ((io_cfg[i]).btb_pin != IO_ARR_END_ID)
     {
-        if (strcmp(dut->pin_configs[i].pin_name, name) == 0)
-            return &(dut->pin_configs[i]);
+        if (strcmp(io_cfg[i].pin_name, name) == 0)
+            return &(io_cfg[i]);
         i++;
     }
     return NULL;
@@ -34,17 +34,17 @@ __FORCEINLINE io_t* dut_get_io(dut_interface_t* dut, const char* name)
 
 
 // pin name: name[id]
-io_t* dut_get_io_id(dut_interface_t* dut, uint8_t id, const char* name)
+io_t* dut_get_io_id(io_t* io_cfg, uint8_t id, const char* name)
 {
     char name_id[IO_PIN_NAME_MAX_LEN + 8];
 
     if (snprintf(name_id, sizeof(name_id), "%s[%d]", name, id) >= sizeof(name_id))
         return NULL; // OVERFLOW
     uint16_t i = 0;
-    while ((dut->pin_configs[i]).btb_pin != IO_ARR_END_ID)
+    while ((io_cfg[i]).btb_pin != IO_ARR_END_ID)
     {
-        if (strcmp(dut->pin_configs[i].pin_name, name_id) == 0)
-            return &(dut->pin_configs[i]);
+        if (strcmp(io_cfg[i].pin_name, name_id) == 0)
+            return &(io_cfg[i]);
         i++;
     }
     return NULL;
