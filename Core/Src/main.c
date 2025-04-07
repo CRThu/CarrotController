@@ -145,7 +145,7 @@ int main(void)
     SystemClock_Config();
 
     /* Configure the peripherals common clocks */
-    //PeriphCommonClock_Config();
+    PeriphCommonClock_Config();
 
     /* USER CODE BEGIN SysInit */
 
@@ -163,7 +163,7 @@ int main(void)
     MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-        // initial cdelay module
+    // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
@@ -177,7 +177,7 @@ int main(void)
     //ad7616_set_mode(&adc, AD7616_PAR_SW);
     /* SER SW*/
     ad7616_set_mode(&adc, AD7616_SER_SW);
-    
+
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
 
@@ -206,11 +206,11 @@ int main(void)
 
         volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
         volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
-        
-        
+
+
         //volatile uint8_t result = ad7616_comm_test(&adc);
         //BSP_IO_WRITE(&(adc.convst),result==0?1:0);
-        
+
         delay_us(1000);
         /* USER CODE END WHILE */
 
@@ -314,7 +314,7 @@ void PeriphCommonClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                          /* User can add his own implementation to report the HAL error return state */
+                            /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -333,8 +333,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                          /* User can add his own implementation to report the file name and line number,
-                             ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                             /* USER CODE END 6 */
+                            /* User can add his own implementation to report the file name and line number,
+                               ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+                               /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
