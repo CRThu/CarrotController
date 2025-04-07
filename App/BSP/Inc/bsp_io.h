@@ -62,6 +62,7 @@ extern "C"
     typedef enum {
         IO_TYPE_IN = GPIO_MODE_INPUT,
         IO_TYPE_OUT = GPIO_MODE_OUTPUT_PP,
+        IO_TYPE_PERH = GPIO_MODE_AF_PP,
         IO_TYPE_RESERVED
     } io_type;
 
@@ -82,6 +83,8 @@ extern "C"
 
         bsp_io_func func;           // gpio func
         //void* perh;               // perh instance
+
+        uint32_t af;                // alternate function
     } io_t;
 
     #define IO_ARR_END_ID           (uint16_t)(-1)

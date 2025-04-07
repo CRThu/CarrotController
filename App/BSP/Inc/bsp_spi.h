@@ -28,7 +28,6 @@ extern "C"
     #define SPI_RW(__INSTANCE__, __WRBUF__, __RDBUF__, __SIZE__)    HAL_SPI_TransmitReceive((__INSTANCE__), __WRBUF__, __RDBUF__, __SIZE__, __SPI_TIMEOUT__)
 
     #endif
-    extern const void* const spi_instances[];
 
     #define spi_write                   SPI_WRITE
     #define spi_read                    SPI_READ
@@ -60,7 +59,6 @@ extern "C"
         /* BSP_SPI_MODE_CR_CSIN_SCKIN when use spi cs(in), sck(in), rx */
         BSP_SPI_MODE_CR_CSIN_SCKIN = BSP_SPI_MODE_CS_EN | BSP_SPI_MODE_RX_EN | BSP_SPI_MODE_CS_IN | BSP_SPI_MODE_SCK_IN,
     } bsp_spi_mode;
-
 
     spi_t* bsp_get_spi_instance(uint8_t index);
     void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode);

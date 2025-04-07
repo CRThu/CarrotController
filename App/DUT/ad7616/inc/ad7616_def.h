@@ -53,35 +53,38 @@ typedef struct ad7616_t
     uint32_t convst_freq;
 
     /* io */
-    ad7616_io_t convst;
-    ad7616_io_t busy;
-    ad7616_io_t resetn;
-    ad7616_io_t csn;
-    ad7616_io_t rdn;
-    ad7616_io_t wrn;
+    /* IO AVAILABLE AT MODE            */
+    /* S:SERIAL, P:PARALLEL    S P S P */
+    /* S:Software, H:Hardware  S S H H */
+    ad7616_io_t convst;     /* + + + + */
+    ad7616_io_t busy;       /* + + + + */
+    ad7616_io_t csn;        /*         */
+    ad7616_io_t rdn;        /*         */
+    ad7616_io_t wrn;        /*         */
 
-    ad7616_io_t chsel0;
-    ad7616_io_t chsel1;
-    ad7616_io_t chsel2;
-    ad7616_io_t seqen;
-    ad7616_io_t rngsel1;
-    ad7616_io_t rngsel0;
-    ad7616_io_t sersel;
-    ad7616_io_t refsel;
+    ad7616_io_t chsel0;     /*         */
+    ad7616_io_t chsel1;     /*         */
+    ad7616_io_t chsel2;     /*         */
+    ad7616_io_t seqen;      /*         */
+    ad7616_io_t rngsel1;    /*         */
+    ad7616_io_t rngsel0;    /*         */
+    ad7616_io_t sersel;     /*         */
+    ad7616_io_t refsel;     /* + + + + */
+    ad7616_io_t resetn;     /* + + + + */
 
-    ad7616_io_t burst;
-    ad7616_io_t ser1wn;
-    ad7616_io_t crcen;
-    ad7616_io_t os0;
-    ad7616_io_t os1;
-    ad7616_io_t os2;
+    ad7616_io_t burst;      /*         */
+    ad7616_io_t ser1wn;     /*         */
+    ad7616_io_t crcen;      /*         */
+    ad7616_io_t os0;        /*         */
+    ad7616_io_t os1;        /*         */
+    ad7616_io_t os2;        /*         */
 
     /* perh */
-    void* clk1_pwm;
-    void* clk2_etr;
-    void* spi_a;
-    void* spi_b;
-    gpio_port_t* par_db;
+    void* clk1_pwm;         /*         */
+    void* clk2_etr;         /*         */
+    void* spi_a;            /*         */
+    void* spi_b;            /*         */
+    gpio_port_t* par_db;    /*         */
 } ad7616_t;
 
 /* T (ns) */

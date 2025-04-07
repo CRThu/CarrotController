@@ -132,8 +132,8 @@ int main(void)
     MX_I2C1_Init();
     MX_CORDIC_Init();
     MX_ICACHE_Init();
-    MX_TIM5_Init();
-    MX_SPI1_Init();
+    //MX_TIM5_Init();
+    //MX_SPI1_Init();
     /* USER CODE BEGIN 2 */
 
       // initial cdelay module

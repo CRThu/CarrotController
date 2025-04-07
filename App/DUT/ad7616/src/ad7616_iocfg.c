@@ -16,21 +16,31 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     adc->clk1_pwm = BTB_CLK1_PWM;   // TODO: IMPL OF BTB_CLK1_PWM
     adc->clk2_etr = BTB_CLK2_ETR;   // TODO: IMPL OF BTB_CLK2_ETR
 
+    ad7616_io_t initial_io;
+
+    /* SER/PAR SW/HW Shared IO */
+    COPY_FROM_IO(&(adc->convst), dut_get_io(intf->pin_configs, "CONVST"));
+    BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
+    BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
+    BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
+
+    COPY_FROM_IO(&(adc->busy), dut_get_io(intf->pin_configs, "BUSY"));
+    BSP_IO_TYPE(&(adc->busy), IO_TYPE_IN);
+    BSP_IO_SPEED(&(adc->busy), IO_SPEED_NORMAL);
+    BSP_IO_WRITE(&(adc->busy), IO_STATE_LOW);
+
+    COPY_FROM_IO(&(adc->refsel), dut_get_io(intf->pin_configs, "REFSEL"));
+    BSP_IO_TYPE(&(adc->refsel), IO_TYPE_OUT);
+    BSP_IO_SPEED(&(adc->refsel), IO_SPEED_NORMAL);
+    BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
+
+    COPY_FROM_IO(&(adc->resetn), dut_get_io(intf->pin_configs, "nRESET"));
+    BSP_IO_TYPE(&(adc->resetn), IO_TYPE_OUT);
+    BSP_IO_SPEED(&(adc->resetn), IO_SPEED_NORMAL);
+    BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
 
     if (adc->mode == AD7616_SER_SW)
     {
-        ad7616_io_t initial_io;
-
-        COPY_FROM_IO(&(adc->convst), dut_get_io(intf->pin_configs, "CONVST"));
-        BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
-
-        COPY_FROM_IO(&(adc->busy), dut_get_io(intf->pin_configs, "BUSY"));
-        BSP_IO_TYPE(&(adc->busy), IO_TYPE_IN);
-        BSP_IO_SPEED(&(adc->busy), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->busy), IO_STATE_LOW);
-
         /*
             COPY_FROM_IO(&(adc->csn), dut_get_io(intf->pin_configs, "nCSA"));
             BSP_IO_TYPE(&(adc->csn), IO_TYPE_OUT);
@@ -107,16 +117,6 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
         BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
         BSP_IO_WRITE(&(initial_io), IO_STATE_HIGH);
-
-        COPY_FROM_IO(&(adc->refsel), dut_get_io(intf->pin_configs, "REFSEL"));
-        BSP_IO_TYPE(&(adc->refsel), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->refsel), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
-
-        COPY_FROM_IO(&(adc->resetn), dut_get_io(intf->pin_configs, "nRESET"));
-        BSP_IO_TYPE(&(adc->resetn), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->resetn), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
 
         COPY_FROM_IO(&(initial_io), dut_get_io(intf->pin_configs, "nRD"));
         BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
@@ -215,23 +215,12 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         adc->par_db = NULL;
 
         /* PERH IOCFG */
-        
+        bsp_spi_init(0, BSP_SPI_MODE_CRT);
+        bsp_spi_init(1, BSP_SPI_MODE_CR_CSIN_SCKIN);
     }
 
     if (adc->mode == AD7616_PAR_SW)
     {
-        ad7616_io_t initial_io;
-
-        COPY_FROM_IO(&(adc->convst), dut_get_io(intf->pin_configs, "CONVST"));
-        BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
-
-        COPY_FROM_IO(&(adc->busy), dut_get_io(intf->pin_configs, "BUSY"));
-        BSP_IO_TYPE(&(adc->busy), IO_TYPE_IN);
-        BSP_IO_SPEED(&(adc->busy), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->busy), IO_STATE_LOW);
-
         COPY_FROM_IO(&(adc->csn), dut_get_io(intf->pin_configs, "nCSA"));
         BSP_IO_TYPE(&(adc->csn), IO_TYPE_OUT);
         BSP_IO_SPEED(&(adc->csn), IO_SPEED_FAST);
@@ -306,16 +295,6 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
         BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
         BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
-
-        COPY_FROM_IO(&(adc->refsel), dut_get_io(intf->pin_configs, "REFSEL"));
-        BSP_IO_TYPE(&(adc->refsel), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->refsel), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
-
-        COPY_FROM_IO(&(adc->resetn), dut_get_io(intf->pin_configs, "nRESET"));
-        BSP_IO_TYPE(&(adc->resetn), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->resetn), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
 
         COPY_FROM_IO(&(adc->rdn), dut_get_io(intf->pin_configs, "nRD"));
         BSP_IO_TYPE(&(adc->rdn), IO_TYPE_OUT);
