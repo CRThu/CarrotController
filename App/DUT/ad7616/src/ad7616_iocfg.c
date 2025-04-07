@@ -16,25 +16,212 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     adc->clk1_pwm = BTB_CLK1_PWM;   // TODO: IMPL OF BTB_CLK1_PWM
     adc->clk2_etr = BTB_CLK2_ETR;   // TODO: IMPL OF BTB_CLK2_ETR
 
-    /*
-        if (adc->mode == AD7616_SER_SW)
-        {
-            adc->spi_a = &BTB_SPIA;
-            adc->spi_b = &BTB_SPIB;
-            COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
-            COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
-            COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SER/nPAR"));
-            COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
-            COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
-            COPY_FROM_IO(&(adc->ser1wn), dut_get_io(intf, "DB4"));
 
-            // TODO
-        }
-    */
+    if (adc->mode == AD7616_SER_SW)
+    {
+        ad7616_io_t initial_io;
+
+        COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
+        BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
+        BSP_IO_TYPE(&(adc->busy), IO_TYPE_IN);
+        BSP_IO_SPEED(&(adc->busy), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(adc->busy), IO_STATE_LOW);
+
+        /*
+            COPY_FROM_IO(&(adc->csn), dut_get_io(intf, "nCSA"));
+            BSP_IO_TYPE(&(adc->csn), IO_TYPE_OUT);
+            BSP_IO_SPEED(&(adc->csn), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(adc->csn), IO_STATE_HIGH);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SCKA"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_HIGH);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SDIA"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_HIGH);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SDOA"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "nCSB"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SCKB"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SDIB"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SDOB"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+        */
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "CHSEL0"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "CHSEL1"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "CHSEL2"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SEQEN"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "RNGSEL0"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "RNGSEL1"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SERSEL"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_HIGH);
+
+        COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
+        BSP_IO_TYPE(&(adc->refsel), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(adc->refsel), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
+        BSP_IO_TYPE(&(adc->resetn), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(adc->resetn), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "nRD"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "nWR"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB0"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB1"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB2"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB3"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(adc->ser1wn), dut_get_io(intf, "DB4"));
+        BSP_IO_TYPE(&(adc->ser1wn), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(adc->ser1wn), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(adc->ser1wn), IO_STATE_HIGH);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB5"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB6"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB7"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB8"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB9"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB10"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB11"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB12"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB13"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB14"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB15"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+
+        /* PERH */
+        adc->spi_a = NULL;
+        adc->spi_b = NULL;
+        adc->par_db = NULL;
+
+        /* PERH IOCFG */
+
+    }
+
     if (adc->mode == AD7616_PAR_SW)
     {
         ad7616_io_t initial_io;
-        
+
         COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
         BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
         BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
@@ -70,7 +257,7 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
         BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "CLKB"));
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SCKB"));
         BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
         BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
         BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
@@ -85,40 +272,40 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
         BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(adc->chsel0), dut_get_io(intf, "CHSEL0"));
-        BSP_IO_TYPE(&(adc->chsel0), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->chsel0), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->chsel0), IO_STATE_LOW);
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "CHSEL0"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(adc->chsel1), dut_get_io(intf, "CHSEL1"));
-        BSP_IO_TYPE(&(adc->chsel1), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->chsel1), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->chsel1), IO_STATE_LOW);
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "CHSEL1"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(adc->chsel2), dut_get_io(intf, "CHSEL2"));
-        BSP_IO_TYPE(&(adc->chsel2), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->chsel2), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->chsel2), IO_STATE_LOW);
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "CHSEL2"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(adc->seqen), dut_get_io(intf, "SEQEN"));
-        BSP_IO_TYPE(&(adc->seqen), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->seqen), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->seqen), IO_STATE_LOW);
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SEQEN"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(adc->rngsel0), dut_get_io(intf, "RNGSEL0"));
-        BSP_IO_TYPE(&(adc->rngsel0), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->rngsel0), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->rngsel0), IO_STATE_LOW);
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "RNGSEL0"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(adc->rngsel1), dut_get_io(intf, "RNGSEL1"));
-        BSP_IO_TYPE(&(adc->rngsel1), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->rngsel1), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->rngsel1), IO_STATE_LOW);
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "RNGSEL1"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
-        COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SERSEL"));
-        BSP_IO_TYPE(&(adc->sersel), IO_TYPE_OUT);
-        BSP_IO_SPEED(&(adc->sersel), IO_SPEED_NORMAL);
-        BSP_IO_WRITE(&(adc->sersel), IO_STATE_LOW);
+        COPY_FROM_IO(&(initial_io), dut_get_io(intf, "SERSEL"));
+        BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(initial_io), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
 
         COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
         BSP_IO_TYPE(&(adc->refsel), IO_TYPE_OUT);
@@ -140,11 +327,94 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         BSP_IO_SPEED(&(adc->wrn), IO_SPEED_FAST);
         BSP_IO_WRITE(&(adc->wrn), IO_STATE_HIGH);
 
+        /*
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB0"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB1"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB2"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB3"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB4"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_HIGH);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB5"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB6"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB7"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB8"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB9"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB10"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB11"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB12"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB13"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB14"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+
+            COPY_FROM_IO(&(initial_io), dut_get_io(intf, "DB15"));
+            BSP_IO_TYPE(&(initial_io), IO_TYPE_IN);
+            BSP_IO_SPEED(&(initial_io), IO_SPEED_FAST);
+            BSP_IO_WRITE(&(initial_io), IO_STATE_LOW);
+        */
+
         /* PERH */
         adc->spi_a = NULL;
         adc->spi_b = NULL;
         adc->par_db = BTB_DB_PORT;
 
+        /* PERH IOCFG */
         BSP_DB_TYPE(adc->par_db, IO_TYPE_IN);
         BSP_DB_SPEED(adc->par_db, IO_SPEED_FAST);
         BSP_DB_WRITE(adc->par_db, IO_STATE_LOW);
@@ -153,51 +423,11 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     /*
         if (adc->mode == AD7616_SER_HW)
         {
-            adc->spi_a = &BTB_SPIA;
-            adc->spi_b = &BTB_SPIB;
-            COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
-            COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
-            COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SER/nPAR"));
-            COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
-            COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
-            COPY_FROM_IO(&(adc->chsel0), dut_get_io(intf, "CHSEL0"));
-            COPY_FROM_IO(&(adc->chsel1), dut_get_io(intf, "CHSEL1"));
-            COPY_FROM_IO(&(adc->chsel2), dut_get_io(intf, "CHSEL2"));
-            COPY_FROM_IO(&(adc->seqen), dut_get_io(intf, "SEQEN"));
-            COPY_FROM_IO(&(adc->rngsel0), dut_get_io(intf, "RNGSEL0"));
-            COPY_FROM_IO(&(adc->rngsel1), dut_get_io(intf, "RNGSEL1"));
-            COPY_FROM_IO(&(adc->ser1wn), dut_get_io(intf, "DB4"));
-            COPY_FROM_IO(&(adc->burst), dut_get_io(intf, "nWR"));
-            COPY_FROM_IO(&(adc->crcen), dut_get_io(intf, "DB5"));
-            COPY_FROM_IO(&(adc->os0), dut_get_io(intf, "OS0"));
-            COPY_FROM_IO(&(adc->os1), dut_get_io(intf, "OS1"));
-            COPY_FROM_IO(&(adc->os2), dut_get_io(intf, "OS2"));
-
-            // TODO
         }
 
         if (adc->mode == AD7616_PAR_HW)
         {
-            adc->par_db = BTB_DB_PORT;
-            COPY_FROM_IO(&(adc->convst), dut_get_io(intf, "CONVST"));
-            COPY_FROM_IO(&(adc->busy), dut_get_io(intf, "BUSY"));
-            COPY_FROM_IO(&(adc->sersel), dut_get_io(intf, "SER/nPAR"));
-            COPY_FROM_IO(&(adc->refsel), dut_get_io(intf, "REFSEL"));
-            COPY_FROM_IO(&(adc->resetn), dut_get_io(intf, "nRESET"));
-            COPY_FROM_IO(&(adc->csn), dut_get_io(intf, "nCS"));
-            COPY_FROM_IO(&(adc->rdn), dut_get_io(intf, "nRD"));
-            COPY_FROM_IO(&(adc->chsel0), dut_get_io(intf, "CHSEL0"));
-            COPY_FROM_IO(&(adc->chsel1), dut_get_io(intf, "CHSEL1"));
-            COPY_FROM_IO(&(adc->chsel2), dut_get_io(intf, "CHSEL2"));
-            COPY_FROM_IO(&(adc->seqen), dut_get_io(intf, "SEQEN"));
-            COPY_FROM_IO(&(adc->rngsel0), dut_get_io(intf, "RNGSEL0"));
-            COPY_FROM_IO(&(adc->rngsel1), dut_get_io(intf, "RNGSEL1"));
-            COPY_FROM_IO(&(adc->burst), dut_get_io(intf, "nWR"));
-
-            // TODO
-        }
-
-        */
+    */
 }
 
 __FORCEINLINE void ad7616_full_reset(ad7616_t* adc)

@@ -163,18 +163,18 @@ int main(void)
     HAL_TIM_Base_Start_IT(&htim6);
     */
 
-    ad7616_reg_write(&adc, 0x2F, 0x11);
-    ad7616_reg_write(&adc, 0x3F, 0x122);
-
-    volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
-    volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
     while (1)
     {
+    ad7616_reg_write(&adc, 0x2F, 0x11);
+    ad7616_reg_write(&adc, 0x3F, 0x122);
+
+    volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
+    volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
+
         delay_us(1000);
     /* USER CODE END WHILE */
 
