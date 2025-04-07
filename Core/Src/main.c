@@ -23,6 +23,7 @@
 #include "i2c.h"
 #include "icache.h"
 #include "memorymap.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -132,6 +133,7 @@ int main(void)
   MX_CORDIC_Init();
   MX_ICACHE_Init();
   MX_TIM5_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
     // initial cdelay module

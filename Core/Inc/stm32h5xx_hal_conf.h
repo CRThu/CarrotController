@@ -20,7 +20,6 @@
 
   */
 
-#include "stm32h5xx_hal_conf_ex.h"
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -----------------------------------------------------------------------------*/
@@ -78,7 +77,7 @@
 /*#define HAL_MMC_MODULE_ENABLED */
 /*#define HAL_SMARTCARD_MODULE_ENABLED */
 /*#define HAL_SMBUS_MODULE_ENABLED */
-/*#define HAL_SPI_MODULE_ENABLED */
+#define HAL_SPI_MODULE_ENABLED
 /*#define HAL_SRAM_MODULE_ENABLED */
 #define HAL_TIM_MODULE_ENABLED
 /*#define HAL_RAMCFG_MODULE_ENABLED */
