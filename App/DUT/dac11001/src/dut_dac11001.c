@@ -81,7 +81,7 @@ void dut_dac11001_reg_write(uint8_t id, uint8_t addr, uint32_t data)
 
     //gpio_write(io_nsync, IO_STATE_LOW);
     //for (int i = 0; i < 5; i++);
-    spi_write(dac11001_profile.perh[id], txbuf, 4);
+    bsp_spi_write(dac11001_profile.perh[id], txbuf, 4);
     //for (int i = 0; i < 5; i++);
     //gpio_write(io_nsync, IO_STATE_HIGH);
 }

@@ -22,25 +22,25 @@ extern "C"
     #ifdef USE_STM32H5_HAL_IMPL
     typedef SPI_HandleTypeDef spi_t;
 
-    #define __SPI_TIMEOUT__                                         (0xFFFF)
-    #define SPI_WRITE(__INSTANCE__, __BUF__, __SIZE__)              HAL_SPI_Transmit((__INSTANCE__), __BUF__, __SIZE__, __SPI_TIMEOUT__)
-    #define SPI_READ(__INSTANCE__, __BUF__, __SIZE__)               HAL_SPI_Receive((__INSTANCE__), __BUF__, __SIZE__, __SPI_TIMEOUT__)
-    #define SPI_RW(__INSTANCE__, __WRBUF__, __RDBUF__, __SIZE__)    HAL_SPI_TransmitReceive((__INSTANCE__), __WRBUF__, __RDBUF__, __SIZE__, __SPI_TIMEOUT__)
+    #define __SPI_TIMEOUT__                                             (0xFFFF)
+    #define BSP_SPI_WRITE(__INSTANCE__, __BUF__, __SIZE__)              HAL_SPI_Transmit((__INSTANCE__), __BUF__, __SIZE__, __SPI_TIMEOUT__)
+    #define BSP_SPI_READ(__INSTANCE__, __BUF__, __SIZE__)               HAL_SPI_Receive((__INSTANCE__), __BUF__, __SIZE__, __SPI_TIMEOUT__)
+    #define BSP_SPI_RW(__INSTANCE__, __WRBUF__, __RDBUF__, __SIZE__)    HAL_SPI_TransmitReceive((__INSTANCE__), __WRBUF__, __RDBUF__, __SIZE__, __SPI_TIMEOUT__)
 
     #endif
 
-    #define spi_write                   SPI_WRITE
-    #define spi_read                    SPI_READ
-    #define spi_readwrite               SPI_RW
+    #define bsp_spi_write                   BSP_SPI_WRITE
+    #define bsp_spi_read                    BSP_SPI_READ
+    #define bsp_spi_readwrite               BSP_SPI_RW
 
-    #define BTB_SPIA                    hspi1
-    #define BTB_SPIB                    hspi3
+    #define BTB_SPIA                        hspi1
+    #define BTB_SPIB                        hspi3
 
-    #define BSP_SPI_MODE_SCK_IN         (1 << 4)
-    #define BSP_SPI_MODE_CS_IN          (1 << 3)
-    #define BSP_SPI_MODE_CS_EN          (1 << 2)
-    #define BSP_SPI_MODE_RX_EN          (1 << 1)
-    #define BSP_SPI_MODE_TX_EN          (1 << 0)
+    #define BSP_SPI_MODE_SCK_IN             (1 << 4)
+    #define BSP_SPI_MODE_CS_IN              (1 << 3)
+    #define BSP_SPI_MODE_CS_EN              (1 << 2)
+    #define BSP_SPI_MODE_RX_EN              (1 << 1)
+    #define BSP_SPI_MODE_TX_EN              (1 << 0)
 
     /* SPI MODE = ++++++++
                   ---kcCRT

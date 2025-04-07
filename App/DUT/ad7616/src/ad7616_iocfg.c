@@ -483,7 +483,11 @@ __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
     else
     {
         /* SER */
-        // TODO IMPL
+        uint8_t wr_cmd_arr[2];
+        wr_cmd_arr[0] = wr_cmd >> 8;
+        wr_cmd_arr[1] = wr_cmd;
+
+        bsp_spi_write(adc->spi_a, wr_cmd_arr, sizeof(wr_cmd_arr));
     }
 
 }
@@ -522,7 +526,6 @@ __FORCEINLINE uint16_t ad7616_data_read(ad7616_t* adc)
     else
     {
         /* SER */
-        // TODO IMPL
     }
 
     return rd_data;

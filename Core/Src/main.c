@@ -174,9 +174,9 @@ int main(void)
 
     // initial dut ad7616 board
     /* PAR SW*/
-    //ad7616_set_mode(&adc, AD7616_PAR_SW);
-    /* PAR SW*/
-    ad7616_set_mode(&adc, AD7616_SER_SW);
+    ad7616_set_mode(&adc, AD7616_PAR_SW);
+    /* SER SW*/
+    //ad7616_set_mode(&adc, AD7616_SER_SW);
     
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
