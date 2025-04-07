@@ -12,7 +12,7 @@ io_t spi_io_cfg[] =
     {.btb_pin = 28, .pin_name = "SDO[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(11) },
 
     {.btb_pin = IO_ARR_END_ID }
-    };
+};
 
 spi_t spi_instances[] =
 {
@@ -27,6 +27,21 @@ __FORCEINLINE spi_t* bsp_get_spi_instance(uint8_t index)
 
 void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode)
 {
+    /* CLOCK CONFIG */
+    switch (index)
+    {
+    case 0:
+        __HAL_RCC_SPI1_CONFIG(RCC_SPI1CLKSOURCE_PLL2P);
+        __HAL_RCC_SPI1_CLK_ENABLE();
+        break;
+    case 1:
+        __HAL_RCC_SPI3_CONFIG(RCC_SPI3CLKSOURCE_PLL2P);
+        __HAL_RCC_SPI3_CLK_ENABLE();
+    default:
+        break;
+    }
+
+    /* IO INITIAL */
     io_t* io;
 
     /* SCKx io initial */

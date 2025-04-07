@@ -69,6 +69,7 @@ uint16_t recv_len = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -96,6 +97,28 @@ void read_data()
 {
     ad7616_sample_callback(&adc);
 }
+
+void bsp_clock_init()
+{
+    RCC_PLL2InitTypeDef pll2;
+    if (~RCC->CR & RCC_CR_PLL2ON)
+    {
+        pll2.PLL2Source = RCC_PLL2_SOURCE_HSE;
+        pll2.PLL2M = 5;
+        pll2.PLL2N = 80;
+        pll2.PLL2P = 2;
+        pll2.PLL2Q = 2;
+        pll2.PLL2R = 2;
+        pll2.PLL2RGE = RCC_PLL2_VCIRANGE_2;
+        pll2.PLL2VCOSEL = RCC_PLL2_VCORANGE_WIDE;
+        pll2.PLL2FRACN = 0;
+        pll2.PLL2ClockOut = RCC_PLL2_DIVP;
+        if (HAL_RCCEx_EnablePLL2(&pll2) != HAL_OK)
+        {
+            Error_Handler();
+        }
+    }
+}
 /* USER CODE END 0 */
 
 /**
@@ -121,6 +144,9 @@ int main(void)
     /* Configure the system clock */
     SystemClock_Config();
 
+    /* Configure the peripherals common clocks */
+    //PeriphCommonClock_Config();
+
     /* USER CODE BEGIN SysInit */
 
     /* USER CODE END SysInit */
@@ -132,20 +158,26 @@ int main(void)
     MX_I2C1_Init();
     MX_CORDIC_Init();
     MX_ICACHE_Init();
-    //MX_TIM5_Init();
-    //MX_SPI1_Init();
+    MX_TIM5_Init();
+    MX_SPI1_Init();
+    MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-      // initial cdelay module
+        // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
+    bsp_clock_init();
     bsp_gpio_init();
     bsp_spi_init_all(BSP_SPI_MODE_OFF);
     bsp_switch_init(BSPMUX_DEFAULT);
 
     // initial dut ad7616 board
-    ad7616_set_mode(&adc, AD7616_PAR_SW);
+    /* PAR SW*/
+    //ad7616_set_mode(&adc, AD7616_PAR_SW);
+    /* PAR SW*/
+    ad7616_set_mode(&adc, AD7616_SER_SW);
+    
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
 
@@ -239,6 +271,35 @@ void SystemClock_Config(void)
     __HAL_FLASH_SET_PROGRAM_DELAY(FLASH_PROGRAMMING_DELAY_2);
 }
 
+/**
+  * @brief Peripherals Common Clock Configuration
+  * @retval None
+  */
+void PeriphCommonClock_Config(void)
+{
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = { 0 };
+
+    /** Initializes the peripherals clock
+    */
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SPI1 | RCC_PERIPHCLK_SPI3;
+    PeriphClkInitStruct.PLL2.PLL2Source = RCC_PLL2_SOURCE_HSE;
+    PeriphClkInitStruct.PLL2.PLL2M = 5;
+    PeriphClkInitStruct.PLL2.PLL2N = 80;
+    PeriphClkInitStruct.PLL2.PLL2P = 2;
+    PeriphClkInitStruct.PLL2.PLL2Q = 2;
+    PeriphClkInitStruct.PLL2.PLL2R = 2;
+    PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2_VCIRANGE_2;
+    PeriphClkInitStruct.PLL2.PLL2VCOSEL = RCC_PLL2_VCORANGE_WIDE;
+    PeriphClkInitStruct.PLL2.PLL2FRACN = 0;
+    PeriphClkInitStruct.PLL2.PLL2ClockOut = RCC_PLL2_DIVP;
+    PeriphClkInitStruct.Spi1ClockSelection = RCC_SPI1CLKSOURCE_PLL2P;
+    PeriphClkInitStruct.Spi3ClockSelection = RCC_SPI3CLKSOURCE_PLL2P;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+        Error_Handler();
+    }
+}
+
 /* USER CODE BEGIN 4 */
 /* USER CODE END 4 */
 
@@ -249,7 +310,7 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                        /* User can add his own implementation to report the HAL error return state */
+                          /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -268,8 +329,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                        /* User can add his own implementation to report the file name and line number,
-                           ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                           /* USER CODE END 6 */
+                          /* User can add his own implementation to report the file name and line number,
+                             ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+                             /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
