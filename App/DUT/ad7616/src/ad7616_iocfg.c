@@ -486,8 +486,14 @@ __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
         uint8_t wr_cmd_arr[2];
         wr_cmd_arr[0] = wr_cmd >> 8;
         wr_cmd_arr[1] = wr_cmd;
-
-        bsp_spi_write(adc->spi_a, wr_cmd_arr, sizeof(wr_cmd_arr));
+        
+        
+        //HAL_SPI_Transmit(&hspi1,wr_cmd_arr,sizeof(wr_cmd_arr),100);
+        while(hspi1.State == HAL_BUSY) ;
+        BSP_IO_WRITE(&(adc->convst),1);
+        //HAL_SPI_Transmit(adc->spi_a,wr_cmd_arr,sizeof(wr_cmd_arr),100);
+        bsp_spi_write((spi_t*)(adc->spi_a), wr_cmd_arr, sizeof(wr_cmd_arr));
+        BSP_IO_WRITE(&(adc->convst),0);
     }
 
 }
