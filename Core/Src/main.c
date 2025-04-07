@@ -174,9 +174,9 @@ int main(void)
 
     // initial dut ad7616 board
     /* PAR SW*/
-    ad7616_set_mode(&adc, AD7616_PAR_SW);
+    //ad7616_set_mode(&adc, AD7616_PAR_SW);
     /* SER SW*/
-    //ad7616_set_mode(&adc, AD7616_SER_SW);
+    ad7616_set_mode(&adc, AD7616_SER_SW);
     
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
@@ -206,7 +206,11 @@ int main(void)
 
         volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
         volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
-
+        
+        
+        //volatile uint8_t result = ad7616_comm_test(&adc);
+        //BSP_IO_WRITE(&(adc.convst),result==0?1:0);
+        
         delay_us(1000);
         /* USER CODE END WHILE */
 
