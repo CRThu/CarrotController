@@ -6,6 +6,7 @@
 
 #include "ad7616_iocfg.h"
 
+// TODO serial_wire only support 1
 __FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode, uint8_t serial_wire)
 {
     adc->mode = mode;
@@ -587,10 +588,22 @@ __FORCEINLINE void ad7616_data_read_two(ad7616_t* adc, uint16_t* pa, uint16_t* p
     else
     {
         /* SER: READ ONLY CHA */
-        while (hspi1.State == HAL_BUSY);
-        bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
-        while (hspi1.State == HAL_BUSY);
-        bsp_spi_read(((adc->serial_wire == 1) ? adc->spi_a : adc->spi_b), (uint8_t*)pb, 1);
+        if (adc->serial_wire == 1)
+        {
+            while ((adc->spi_a)->State == HAL_BUSY);
+            bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
+            while ((adc->spi_a)->State == HAL_BUSY);
+            bsp_spi_read(adc->spi_a, (uint8_t*)pb, 1);
+        }
+        else
+        {
+            // TODO
+            // while ((adc->spi_a)->State == HAL_BUSY);
+            // while ((adc->spi_b)->State == HAL_BUSY);
+            // HAL_SPI_Receive_IT(adc->spi_b, (uint8_t*)pb, 1);
+            // bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
+            // while (hspi1.State == HAL_BUSY);
+        }
     }
 }
 

@@ -28,6 +28,8 @@ __FORCEINLINE void ad7616_convst_generate(ad7616_t* adc)
 
 __FORCEINLINE void ad7616_sample_start(ad7616_t* adc, uint16_t channel_mask, uint32_t count)
 {
+    adc_data_count = 0;
+    
     // TODO: channel_mask
     for (uint32_t i = 0; i < count; i++)
     {
