@@ -6,8 +6,8 @@
 
 #include "ad7616_sample.h"
 
-volatile uint32_t adc_data_buffer[AD7616_CONV_BUFFER_LEN] = { 0 };
-volatile uint32_t adc_data_count = 0;
+uint16_t adc_data_buffer[AD7616_CONV_BUFFER_LEN] = { 0 };
+uint32_t adc_data_count = 0;
 
 __FORCEINLINE void ad7616_set_convst_mode(ad7616_t* adc, ad7616_convst_mode mode)
 {
@@ -42,6 +42,6 @@ __FORCEINLINE void ad7616_sample_start(ad7616_t* adc, uint16_t channel_mask, uin
 
 __FORCEINLINE void ad7616_sample_callback(ad7616_t* adc)
 {
-    adc_data_buffer[adc_data_count] = ad7616_data_read(adc);
-    adc_data_count++;
+    ad7616_data_read_two(adc, &adc_data_buffer[adc_data_count], &adc_data_buffer[adc_data_count + 1]);
+    adc_data_count += 2;
 }

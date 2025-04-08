@@ -51,6 +51,7 @@ typedef struct ad7616_t
     ad7616_mode mode;
     ad7616_convst_mode convst_mode;
     uint32_t convst_freq;
+    uint8_t serial_wire;
 
     /* io */
     /* IO AVAILABLE AT MODE            */
@@ -111,5 +112,7 @@ typedef struct ad7616_t
 #define AD7616_PAR_T_WRN_HIGH           20
 #define AD7616_PAR_T_WRN_LOW            30
 #define AD7616_PAR_T_DIN_SETUP          30
+
+#define AD7616_PAR_T_CSN_HIGH           10
 
 #endif // _AD7616_DEF_H_

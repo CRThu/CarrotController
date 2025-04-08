@@ -159,8 +159,8 @@ int main(void)
     MX_CORDIC_Init();
     MX_ICACHE_Init();
     MX_TIM5_Init();
-    //MX_SPI1_Init();
-    //MX_SPI3_Init();
+    MX_SPI1_Init();
+    MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
         // initial cdelay module
@@ -174,9 +174,10 @@ int main(void)
 
     // initial dut ad7616 board
     /* PAR SW*/
-    //ad7616_set_mode(&adc, AD7616_PAR_SW);
+    //ad7616_set_mode(&adc, AD7616_PAR_SW, 0);
     /* SER SW*/
-    ad7616_set_mode(&adc, AD7616_SER_SW);
+    ad7616_set_mode(&adc, AD7616_SER_SW, 1);
+    //ad7616_set_mode(&adc, AD7616_SER_SW, 2);
 
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
@@ -185,7 +186,6 @@ int main(void)
     //bsp_pwm_callback(read_data);
     //bsp_pwm_start();
 
-    //ad7616_sample_start(&adc, 0x00, 16);
 
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
@@ -201,16 +201,20 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-
-        ad7616_reg_write(&adc, 0x2F, 0x11);
+        /* REG COMM TEST */
+        //ad7616_reg_write(&adc, 0x2F, 0x11);
         //ad7616_reg_write(&adc, 0x3F, 0x122);
 
-        volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
+        //volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
         //   volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
 
 
         //volatile uint8_t result = ad7616_comm_test(&adc);
         //BSP_IO_WRITE(&(adc.convst),result==0?1:0);
+
+        /* REG COMM TEST */
+
+        ad7616_sample_start(&adc, 0x00, 16);
 
         delay_us(1000);
         /* USER CODE END WHILE */

@@ -6,9 +6,10 @@
 
 #include "ad7616_iocfg.h"
 
-__FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode)
+__FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode, uint8_t serial_wire)
 {
     adc->mode = mode;
+    adc->serial_wire = serial_wire;
 }
 
 __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
@@ -151,7 +152,7 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         COPY_FROM_IO(&(adc->ser1wn), dut_get_io(intf->pin_configs, "DB4"));
         BSP_IO_TYPE(&(adc->ser1wn), IO_TYPE_OUT);
         BSP_IO_SPEED(&(adc->ser1wn), IO_SPEED_FAST);
-        BSP_IO_WRITE(&(adc->ser1wn), IO_STATE_HIGH);
+        BSP_IO_WRITE(&(adc->ser1wn), (adc->serial_wire == 1) ? IO_STATE_LOW : IO_STATE_HIGH);
 
         COPY_FROM_IO(&(initial_io), dut_get_io(intf->pin_configs, "DB5"));
         BSP_IO_TYPE(&(initial_io), IO_TYPE_OUT);
@@ -421,8 +422,9 @@ __FORCEINLINE void ad7616_full_reset(ad7616_t* adc)
 
 __FORCEINLINE uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
 {
-    uint16_t wr_cmd = AD7616_PAR_RD << 15 | addr << 9 | 0 << 0;
-    uint16_t rd_data = 0;
+    uint16_t regcmd[2];
+    regcmd[0] = AD7616_PAR_RD << 15 | addr << 9 | 0 << 0;
+    regcmd[1] = 0;
 
     if (adc->mode == AD7616_PAR_SW
         || adc->mode == AD7616_PAR_HW)
@@ -434,7 +436,7 @@ __FORCEINLINE uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
         BSP_IO_WRITE(&(adc->csn), IO_STATE_LOW);
         AD7616_DELAY(AD7616_PAR_T_WRN_SETUP);
         BSP_IO_WRITE(&(adc->wrn), IO_STATE_LOW);
-        BSP_DB_WRITE(adc->par_db, wr_cmd);
+        BSP_DB_WRITE(adc->par_db, regcmd[0]);
         AD7616_DELAY(T_MAX(AD7616_PAR_T_DIN_SETUP, AD7616_PAR_T_WRN_LOW));
         BSP_IO_WRITE(&(adc->wrn), IO_STATE_HIGH);
         AD7616_DELAY(AD7616_PAR_T_WRN_HOLD);
@@ -446,7 +448,7 @@ __FORCEINLINE uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
         AD7616_DELAY(AD7616_PAR_T_RDN_SETUP);
         BSP_IO_WRITE(&(adc->rdn), IO_STATE_LOW);
         AD7616_DELAY(AD7616_PAR_T_DOUT_SETUP);
-        rd_data = BSP_DB_READ(adc->par_db);
+        regcmd[1] = BSP_DB_READ(adc->par_db);
         AD7616_DELAY(T_SUB(AD7616_PAR_T_RDN_LOW, AD7616_PAR_T_DOUT_SETUP));
         BSP_IO_WRITE(&(adc->rdn), IO_STATE_HIGH);
         AD7616_DELAY(AD7616_PAR_T_RDN_HOLD);
@@ -457,11 +459,13 @@ __FORCEINLINE uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
     {
         /* SER */
         while (hspi1.State == HAL_BUSY);
-        bsp_spi_write(adc->spi_a, (uint8_t*)&wr_cmd, 1);
-        bsp_spi_read(adc->spi_a, (uint8_t*)&rd_data, 1);
+        bsp_spi_write(adc->spi_a, (uint8_t*)&regcmd[0], 1);
+        while (hspi1.State == HAL_BUSY);
+        bsp_spi_read(adc->spi_a, (uint8_t*)&regcmd[1], 1);
+        //bsp_spi_readwrite(adc->spi_a, (uint8_t*)regcmd, (uint8_t*)regcmd, 2);
     }
 
-    return rd_data;
+    return regcmd[1];
 }
 
 __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
@@ -541,10 +545,53 @@ __FORCEINLINE uint16_t ad7616_data_read(ad7616_t* adc)
     }
     else
     {
-        /* SER */
+        /* SER: READ ONLY CHA */
+        while (hspi1.State == HAL_BUSY);
+        bsp_spi_read(adc->spi_a, (uint8_t*)&rd_data, 1);
     }
 
     return rd_data;
+}
+
+__FORCEINLINE void ad7616_data_read_two(ad7616_t* adc, uint16_t* pa, uint16_t* pb)
+{
+    if (adc->mode == AD7616_PAR_SW
+        || adc->mode == AD7616_PAR_HW)
+    {
+        /* PAR */
+
+        /* READ COMMAND */
+        BSP_DB_TYPE(adc->par_db, IO_TYPE_IN);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_RDN_SETUP);
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_DOUT_SETUP);
+        *pa = BSP_DB_READ(adc->par_db);
+        AD7616_DELAY(T_SUB(AD7616_PAR_T_RDN_LOW, AD7616_PAR_T_DOUT_SETUP));
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_HIGH);
+        AD7616_DELAY(AD7616_PAR_T_RDN_HOLD);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_HIGH);
+
+        AD7616_DELAY(AD7616_PAR_T_CSN_HIGH);
+
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_RDN_SETUP);
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_LOW);
+        AD7616_DELAY(AD7616_PAR_T_DOUT_SETUP);
+        *pb = BSP_DB_READ(adc->par_db);
+        AD7616_DELAY(T_SUB(AD7616_PAR_T_RDN_LOW, AD7616_PAR_T_DOUT_SETUP));
+        BSP_IO_WRITE(&(adc->rdn), IO_STATE_HIGH);
+        AD7616_DELAY(AD7616_PAR_T_RDN_HOLD);
+        BSP_IO_WRITE(&(adc->csn), IO_STATE_HIGH);
+    }
+    else
+    {
+        /* SER: READ ONLY CHA */
+        while (hspi1.State == HAL_BUSY);
+        bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
+        while (hspi1.State == HAL_BUSY);
+        bsp_spi_read(((adc->serial_wire == 1) ? adc->spi_a : adc->spi_b), (uint8_t*)pb, 1);
+    }
 }
 
 int8_t ad7616_comm_test(ad7616_t* adc)

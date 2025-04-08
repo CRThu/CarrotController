@@ -13,8 +13,8 @@
 #include "ad7616_def.h"
 #include "bsp_inc.h"
 
-extern volatile uint32_t adc_data_buffer[AD7616_CONV_BUFFER_LEN];
-extern volatile uint32_t adc_data_count;
+extern uint16_t adc_data_buffer[AD7616_CONV_BUFFER_LEN];
+extern uint32_t adc_data_count;
 
 
 void ad7616_set_convst_mode(ad7616_t* adc, ad7616_convst_mode mode);
