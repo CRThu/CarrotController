@@ -25,22 +25,8 @@ __FORCEINLINE spi_t* bsp_get_spi_instance(uint8_t index)
     return &spi_instances[index];
 }
 
-void bsp_spi_init(uint8_t index, bsp_spi_io_mode spi_io_mode, bsp_spi_mode master, bsp_spi_cpha cpha, bsp_spi_cpol cpol)
+void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode)
 {
-    /* CLOCK CONFIG */
-    switch (index)
-    {
-    case 0:
-        __HAL_RCC_SPI1_CONFIG(RCC_SPI1CLKSOURCE_PLL2P);
-        __HAL_RCC_SPI1_CLK_ENABLE();
-        break;
-    case 1:
-        __HAL_RCC_SPI3_CONFIG(RCC_SPI3CLKSOURCE_PLL2P);
-        __HAL_RCC_SPI3_CLK_ENABLE();
-    default:
-        break;
-    }
-
     /* IO INITIAL */
     io_t* io;
 
@@ -107,19 +93,46 @@ void bsp_spi_init(uint8_t index, bsp_spi_io_mode spi_io_mode, bsp_spi_mode maste
         BSP_IO_SPEED(io, IO_SPEED_FAST);
         BSP_IO_WRITE(io, IO_STATE_LOW);
     }
+}
+
+void bsp_spi_io_config_all(bsp_spi_io_mode spi_io_mode)
+{
+    for (int i = 0; i < sizeof(spi_instances) / sizeof(spi_t); i++)
+    {
+        bsp_spi_io_config(i, spi_io_mode);
+    }
+}
+
+void bsp_spi_perh_config(uint8_t index, bsp_spi_mode master, bsp_spi_data_size datasize, bsp_spi_clk_psc psc, bsp_spi_cpha cpha, bsp_spi_cpol cpol)
+{
+    /* CLOCK CONFIG */
+    switch (index)
+    {
+    case 0:
+        __HAL_RCC_SPI1_CONFIG(RCC_SPI1CLKSOURCE_PLL2P);
+        __HAL_RCC_SPI1_CLK_ENABLE();
+        break;
+    case 1:
+        __HAL_RCC_SPI3_CONFIG(RCC_SPI3CLKSOURCE_PLL2P);
+        __HAL_RCC_SPI3_CLK_ENABLE();
+    default:
+        break;
+    }
 
     /* PERH initial */
     //spi_instances[index].Instance = SPI1;
     //spi_instances[index].Init.Mode = SPI_MODE_MASTER;
     spi_instances[index].Init.Mode = master;
     spi_instances[index].Init.Direction = SPI_DIRECTION_2LINES;
-    spi_instances[index].Init.DataSize = SPI_DATASIZE_8BIT;
+    //spi_instances[index].Init.DataSize = SPI_DATASIZE_16BIT;
+    spi_instances[index].Init.DataSize = datasize;
     //spi_instances[index].Init.CLKPolarity = SPI_POLARITY_LOW;
     spi_instances[index].Init.CLKPolarity = cpol;
     //spi_instances[index].Init.CLKPhase = SPI_PHASE_1EDGE;
     spi_instances[index].Init.CLKPhase = cpha;
     spi_instances[index].Init.NSS = SPI_NSS_HARD_OUTPUT;
-    spi_instances[index].Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+    //spi_instances[index].Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+    spi_instances[index].Init.BaudRatePrescaler = psc;
     spi_instances[index].Init.FirstBit = SPI_FIRSTBIT_MSB;
     spi_instances[index].Init.TIMode = SPI_TIMODE_DISABLE;
     spi_instances[index].Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -137,13 +150,5 @@ void bsp_spi_init(uint8_t index, bsp_spi_io_mode spi_io_mode, bsp_spi_mode maste
     if (HAL_SPI_Init(&spi_instances[index]) != HAL_OK)
     {
         Error_Handler();
-    }
-}
-
-void bsp_spi_init_all(bsp_spi_io_mode spi_io_mode, bsp_spi_mode master, bsp_spi_cpha cpha, bsp_spi_cpol cpol)
-{
-    for (int i = 0; i < sizeof(spi_instances) / sizeof(spi_t); i++)
-    {
-        bsp_spi_init(i, spi_io_mode, master, cpha, cpol);
     }
 }

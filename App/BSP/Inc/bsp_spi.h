@@ -71,6 +71,24 @@ extern "C"
         BSP_SPI_MODE_MASTER = SPI_MODE_MASTER
     } bsp_spi_mode;
 
+    typedef enum bsp_spi_data_size {
+        BSP_SPI_DATA_SIZE_8B = SPI_DATASIZE_8BIT,
+        BSP_SPI_DATA_SIZE_16B = SPI_DATASIZE_16BIT,
+        BSP_SPI_DATA_SIZE_24B = SPI_DATASIZE_24BIT,
+        BSP_SPI_DATA_SIZE_32B = SPI_DATASIZE_32BIT
+    } bsp_spi_data_size;
+
+    typedef enum bsp_spi_clk_psc {
+        BSP_SPI_CLK_PSC_2 = SPI_BAUDRATEPRESCALER_2,
+        BSP_SPI_CLK_PSC_4 = SPI_BAUDRATEPRESCALER_4,
+        BSP_SPI_CLK_PSC_8 = SPI_BAUDRATEPRESCALER_8,
+        BSP_SPI_CLK_PSC_16 = SPI_BAUDRATEPRESCALER_16,
+        BSP_SPI_CLK_PSC_32 = SPI_BAUDRATEPRESCALER_32,
+        BSP_SPI_CLK_PSC_64 = SPI_BAUDRATEPRESCALER_64,
+        BSP_SPI_CLK_PSC_128 = SPI_BAUDRATEPRESCALER_128,
+        BSP_SPI_CLK_PSC_256 = SPI_BAUDRATEPRESCALER_256,
+    } bsp_spi_clk_psc;
+
     typedef enum bsp_spi_cpha {
         BSP_SPI_CPHA_0 = SPI_PHASE_1EDGE,
         BSP_SPI_CPHA_1 = SPI_PHASE_2EDGE
@@ -82,8 +100,9 @@ extern "C"
     } bsp_spi_cpol;
 
     spi_t* bsp_get_spi_instance(uint8_t index);
-    void bsp_spi_init(uint8_t index, bsp_spi_io_mode spi_io_mode, bsp_spi_mode master, bsp_spi_cpha cpha, bsp_spi_cpol cpol);
-    void bsp_spi_init_all(bsp_spi_io_mode spi_io_mode, bsp_spi_mode master, bsp_spi_cpha cpha, bsp_spi_cpol cpol);
+    void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode);
+    void bsp_spi_io_config_all(bsp_spi_io_mode spi_io_mode);
+    void bsp_spi_perh_config(uint8_t index, bsp_spi_mode master, bsp_spi_data_size datasize, bsp_spi_clk_psc psc, bsp_spi_cpha cpha, bsp_spi_cpol cpol);
 
 
     #ifdef __cplusplus
