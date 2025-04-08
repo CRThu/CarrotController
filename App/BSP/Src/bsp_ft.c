@@ -1,3 +1,6 @@
 #include "bsp_inc.h"
 
-// todo
+void bsp_ft_init()
+{
+
+}

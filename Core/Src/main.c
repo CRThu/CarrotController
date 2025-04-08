@@ -163,12 +163,13 @@ int main(void)
     MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-      // initial cdelay module
+    // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
     bsp_clock_init();
     bsp_gpio_init();
+    bsp_ft_init();
     bsp_spi_io_config_all(BSP_SPI_IO_MODE_OFF);
     bsp_switch_init(BSPMUX_DEFAULT);
 
