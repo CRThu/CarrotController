@@ -97,11 +97,13 @@ void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode)
     /* PERH initial */
     if (spi_io_mode != BSP_SPI_IO_MODE_OFF)
     {
-        spi_instances[index].Init.Direction = (spi_io_mode & BSP_SPI_MODE_TX_EN)
-            ? ((spi_io_mode & BSP_SPI_MODE_RX_EN)
-                ? SPI_DIRECTION_2LINES
-                : SPI_DIRECTION_2LINES_TXONLY)
-            : SPI_DIRECTION_2LINES_RXONLY;
+        spi_instances[index].Init.Direction = SPI_DIRECTION_2LINES;
+        
+        // (spi_io_mode & BSP_SPI_MODE_TX_EN)
+        //     ? ((spi_io_mode & BSP_SPI_MODE_RX_EN)
+        //         ? SPI_DIRECTION_2LINES
+        //         : SPI_DIRECTION_2LINES_TXONLY)
+        //     : SPI_DIRECTION_1LINE;
 
         spi_instances[index].Init.NSS = (spi_io_mode & BSP_SPI_MODE_CS_EN)
             ? ((spi_io_mode & BSP_SPI_MODE_CS_IN)

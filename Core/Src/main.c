@@ -205,7 +205,7 @@ int main(void)
         ad7616_reg_write(&adc, 0x2F, 0x11);
         //ad7616_reg_write(&adc, 0x3F, 0x122);
 
-        //  volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
+        volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
         //   volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
 
 

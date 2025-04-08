@@ -456,7 +456,9 @@ __FORCEINLINE uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
     else
     {
         /* SER */
-        // TODO IMPL
+        while (hspi1.State == HAL_BUSY);
+        bsp_spi_write(adc->spi_a, (uint8_t*)&wr_cmd, 1);
+        bsp_spi_read(adc->spi_a, (uint8_t*)&rd_data, 1);
     }
 
     return rd_data;
