@@ -51,18 +51,39 @@ extern "C"
                 R: RX EN
                 T: TX EN
     */
+    typedef enum bsp_spi_io_mode {
+        /* BSP_SPI_IO_MODE_OFF when not use spi perh */
+        BSP_SPI_IO_MODE_OFF = 0,
+        /* BSP_SPI_IO_MODE_CRT when use spi cs, sck, rx, tx */
+        BSP_SPI_IO_MODE_CRT = BSP_SPI_MODE_CS_EN | BSP_SPI_MODE_RX_EN | BSP_SPI_MODE_TX_EN,
+        /* BSP_SPI_IO_MODE_CR_CSIN_SCKIN when use spi cs(in), sck(in), rx */
+        BSP_SPI_IO_MODE_CR_CSIN_SCKIN = BSP_SPI_MODE_CS_EN | BSP_SPI_MODE_RX_EN | BSP_SPI_MODE_CS_IN | BSP_SPI_MODE_SCK_IN,
+    } bsp_spi_io_mode;
+
+
+    /*
+    SPI_CFG2_MASTER         SPI_MODE_SLAVE      SPI_CFG2_MASTER
+    SPI_CFG2_CPHA           SPI_PHASE_1EDGE     SPI_PHASE_2EDGE
+    SPI_CFG2_CPOL           SPI_POLARITY_LOW    SPI_POLARITY_HIGH
+    */
     typedef enum bsp_spi_mode {
-        /* BSP_SPI_MODE_OFF when not use spi perh */
-        BSP_SPI_MODE_OFF = 0,
-        /* BSP_SPI_MODE_CRT when use spi cs, sck, rx, tx */
-        BSP_SPI_MODE_CRT = BSP_SPI_MODE_CS_EN | BSP_SPI_MODE_RX_EN | BSP_SPI_MODE_TX_EN,
-        /* BSP_SPI_MODE_CR_CSIN_SCKIN when use spi cs(in), sck(in), rx */
-        BSP_SPI_MODE_CR_CSIN_SCKIN = BSP_SPI_MODE_CS_EN | BSP_SPI_MODE_RX_EN | BSP_SPI_MODE_CS_IN | BSP_SPI_MODE_SCK_IN,
+        BSP_SPI_MODE_SLAVE = SPI_MODE_SLAVE,
+        BSP_SPI_MODE_MASTER = SPI_MODE_MASTER
     } bsp_spi_mode;
 
+    typedef enum bsp_spi_cpha {
+        BSP_SPI_CPHA_0 = SPI_PHASE_1EDGE,
+        BSP_SPI_CPHA_1 = SPI_PHASE_2EDGE
+    } bsp_spi_cpha;
+
+    typedef enum bsp_spi_cpol {
+        BSP_SPI_CPOL_0 = SPI_POLARITY_LOW,
+        BSP_SPI_CPOL_1 = SPI_POLARITY_HIGH
+    } bsp_spi_cpol;
+
     spi_t* bsp_get_spi_instance(uint8_t index);
-    void bsp_spi_init(uint8_t index, bsp_spi_mode spi_mode);
-    void bsp_spi_init_all(bsp_spi_mode spi_mode);
+    void bsp_spi_init(uint8_t index, bsp_spi_io_mode spi_io_mode, bsp_spi_mode master, bsp_spi_cpha cpha, bsp_spi_cpol cpol);
+    void bsp_spi_init_all(bsp_spi_io_mode spi_io_mode, bsp_spi_mode master, bsp_spi_cpha cpha, bsp_spi_cpol cpol);
 
 
     #ifdef __cplusplus

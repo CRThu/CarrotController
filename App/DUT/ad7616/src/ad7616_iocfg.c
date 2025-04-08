@@ -215,8 +215,8 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         adc->par_db = NULL;
 
         /* PERH IOCFG */
-        bsp_spi_init(0, BSP_SPI_MODE_CRT);
-        bsp_spi_init(1, BSP_SPI_MODE_CR_CSIN_SCKIN);
+        bsp_spi_init(0, BSP_SPI_IO_MODE_CRT, BSP_SPI_MODE_MASTER, BSP_SPI_CPHA_0, BSP_SPI_CPOL_1);
+        bsp_spi_init(1, BSP_SPI_IO_MODE_CR_CSIN_SCKIN, BSP_SPI_MODE_SLAVE, BSP_SPI_CPHA_0, BSP_SPI_CPOL_1);
     }
 
     if (adc->mode == AD7616_PAR_SW)
@@ -486,14 +486,14 @@ __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
         uint8_t wr_cmd_arr[2];
         wr_cmd_arr[0] = wr_cmd >> 8;
         wr_cmd_arr[1] = wr_cmd;
-        
-        
+
+
         //HAL_SPI_Transmit(&hspi1,wr_cmd_arr,sizeof(wr_cmd_arr),100);
-        while(hspi1.State == HAL_BUSY) ;
-        BSP_IO_WRITE(&(adc->convst),1);
+        while (hspi1.State == HAL_BUSY);
+        BSP_IO_WRITE(&(adc->convst), 1);
         //HAL_SPI_Transmit(adc->spi_a,wr_cmd_arr,sizeof(wr_cmd_arr),100);
-        bsp_spi_write((spi_t*)(adc->spi_a), wr_cmd_arr, sizeof(wr_cmd_arr));
-        BSP_IO_WRITE(&(adc->convst),0);
+        bsp_spi_write(adc->spi_a, wr_cmd_arr, sizeof(wr_cmd_arr));
+        BSP_IO_WRITE(&(adc->convst), 0);
     }
 
 }
