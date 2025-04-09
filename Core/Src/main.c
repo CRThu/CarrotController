@@ -169,6 +169,7 @@ int main(void)
     // initial bsp perh
     bsp_clock_init();
     bsp_gpio_init();
+    bsp_comm_uart_init_by_cubemx(&huart4);
     bsp_ft_init();
     bsp_spi_io_config_all(BSP_SPI_IO_MODE_OFF);
     bsp_switch_init(BSPMUX_DEFAULT);
@@ -187,7 +188,6 @@ int main(void)
     //bsp_pwm_callback(read_data);
     //bsp_pwm_start();
 
-
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
@@ -202,6 +202,12 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
+        /* COMM UART TEST */
+        char test_frame[] = "STM32H563 TEST";
+        bsp_uart_t* uart = get_comm_uart();
+        bsp_uart_write(uart, (uint8_t*)&test_frame[0], sizeof(test_frame));
+
+
         /* REG COMM TEST */
         //ad7616_reg_write(&adc, 0x2F, 0x11);
         //ad7616_reg_write(&adc, 0x3F, 0x122);
@@ -218,6 +224,7 @@ int main(void)
         //ad7616_sample_start(&adc, 0x00, 16);
 
         delay_us(1000);
+        delay_ms(1000);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */

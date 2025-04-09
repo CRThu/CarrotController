@@ -39,6 +39,7 @@ extern "C"
     #include "bsp_dut.h"
     #include "bsp_mux.h"
     #include "bsp_ft.h"
+    #include "bsp_uart.h"
 
     /* DELAY IMPL */ 
     #ifdef USE_CDELAY_IMPL
