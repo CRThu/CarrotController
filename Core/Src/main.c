@@ -163,7 +163,7 @@ int main(void)
     MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-      // initial cdelay module
+        // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
@@ -194,8 +194,11 @@ int main(void)
 
     */
 
+    bsp_tim_set(&htim5, 10000);
+    bsp_pwm_set(&htim5, TIM_CHANNEL_2, 0.1);
     BSP_TIM_REGISTER_CALLBACK(&htim5, set_flag);
     bsp_tim_start(&htim5);
+    bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
     /* USER CODE END 2 */
 
@@ -206,11 +209,9 @@ int main(void)
         /* COMM UART TEST */
         if (flag)
         {
+            BSP_IO_WRITE(&(adc.csn), flag);
             flag = 0;
-
-            char test_frame[] = "STM32H563 TEST";
-            bsp_uart_t* uart = get_comm_uart();
-            bsp_uart_write(uart, (uint8_t*)&test_frame[0], sizeof(test_frame));
+            BSP_IO_WRITE(&(adc.csn), flag);
         }
         //char test_frame[] = "STM32H563 TEST";
         //bsp_uart_t* uart = get_comm_uart();
@@ -336,7 +337,7 @@ void PeriphCommonClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                                    /* User can add his own implementation to report the HAL error return state */
+                                      /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -355,8 +356,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                                    /* User can add his own implementation to report the file name and line number,
-                                       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                                       /* USER CODE END 6 */
+                                      /* User can add his own implementation to report the file name and line number,
+                                         ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+                                         /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

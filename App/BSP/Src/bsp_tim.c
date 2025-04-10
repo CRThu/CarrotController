@@ -91,6 +91,19 @@
  //    }
  //}
 
+void bsp_tim_set(tim_t* tim, uint32_t freq)
+{
+    uint32_t arr = (double)ST_TIM_MAIN_CLOCK / (double)freq - 1;
+    // arr range check
+    ST_TIM_SET_FREQ(tim, arr);
+}
+
+void bsp_pwm_set(tim_t* pwm, bsp_tim_ch_t ch, double duty)
+{
+    uint32_t ccr = (double)duty * (double)ST_TIM_GET_FREQ(pwm);
+    ST_TIM_SET_DUTY(pwm, ch, ccr);
+}
+
 void bsp_tim_start(tim_t* tim)
 {
     ST_TIM_START(tim);

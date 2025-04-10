@@ -21,10 +21,10 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     ad7616_io_t initial_io;
 
     /* SER/PAR SW/HW Shared IO */
-    COPY_FROM_IO(&(adc->convst), dut_get_io(intf->pin_configs, "CONVST"));
-    BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
-    BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
-    BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
+    //COPY_FROM_IO(&(adc->convst), dut_get_io(intf->pin_configs, "CONVST"));
+    //BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
+    //BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
+    //BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
 
     COPY_FROM_IO(&(adc->busy), dut_get_io(intf->pin_configs, "BUSY"));
     BSP_IO_TYPE(&(adc->busy), IO_TYPE_IN);

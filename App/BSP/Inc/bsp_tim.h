@@ -22,10 +22,19 @@ extern "C"
 
     // STM32 IMPL
     #ifdef USE_STM32H5_HAL_IMPL
+
+    #define ST_TIM_MAIN_CLOCK                                   250000000
+
     typedef TIM_HandleTypeDef tim_t;
     typedef uint32_t bsp_tim_ch_t;
 
     typedef void (*tim_callback_t)(tim_t* htim);
+
+    #define ST_TIM_GET_FREQ                                     __HAL_TIM_GET_AUTORELOAD
+    #define ST_TIM_SET_FREQ                                     __HAL_TIM_SET_AUTORELOAD
+    #define ST_TIM_SET_DUTY                                     __HAL_TIM_SET_COMPARE
+
+
 
     #define BSP_TIM_REGISTER_CALLBACK(__INSTANCE__, __CALLBACK__)   HAL_TIM_RegisterCallback((__INSTANCE__), HAL_TIM_PERIOD_ELAPSED_CB_ID, (__CALLBACK__))
     #define ST_TIM_START                                        HAL_TIM_Base_Start_IT
@@ -34,6 +43,8 @@ extern "C"
     #define ST_PWM_STOP                                         HAL_TIM_PWM_Stop
     #endif
 
+    void bsp_tim_set(tim_t* tim, uint32_t freq);
+    void bsp_pwm_set(tim_t* pwm, bsp_tim_ch_t ch, double duty);
 
     void bsp_tim_start(tim_t* tim);
     void bsp_tim_stop(tim_t* tim);
