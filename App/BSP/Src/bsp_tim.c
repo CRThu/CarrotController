@@ -5,20 +5,6 @@
  *****************************/
 #include "bsp_inc.h"
 
- //typedef void (*BaseCallback)();
- //BaseCallback cb;
-
- //   HAL_TIM_RegisterCallback(&htim6, HAL_TIM_PERIOD_ELAPSED_CB_ID, test);
- //   HAL_TIM_Base_Start_IT(&htim6);
-
-
- // HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, set_flag);
- // HAL_TIM_Base_Start_IT(&htim5);
- // HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
-
- // void bsp_pwm_init_msp_init(TIM_HandleTypeDef* tim_baseHandle)
- // {
- // }
 
 
  /* TIM5 init function */
@@ -83,14 +69,6 @@
  //     }
  // }
 
- //void bsp_pwm_callback_func(TIM_HandleTypeDef* tim_baseHandle)
- //{
- //    if (tim_baseHandle->Instance == TIM5)
- //    {
- //        cb();
- //    }
- //}
-
 void bsp_tim_set(tim_t* tim, uint32_t freq)
 {
     uint32_t arr = (double)ST_TIM_MAIN_CLOCK / (double)freq - 1;
@@ -104,8 +82,9 @@ void bsp_pwm_set(tim_t* pwm, bsp_tim_ch_t ch, double duty)
     ST_TIM_SET_DUTY(pwm, ch, ccr);
 }
 
-void bsp_tim_start(tim_t* tim)
+void bsp_tim_start(tim_t* tim, tim_callback_t callback)
 {
+    ST_TIM_REGISTER_CALLBACK(tim, callback);
     ST_TIM_START(tim);
 }
 
@@ -123,10 +102,3 @@ void bsp_pwm_stop(tim_t* pwm, bsp_tim_ch_t ch)
 {
     ST_PWM_STOP(pwm, ch);
 }
-
-
-// void bsp_pwm_callback(BaseCallback _cb)
-// {
-//     cb = _cb;
-//     HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, bsp_pwm_callback_func);
-// }

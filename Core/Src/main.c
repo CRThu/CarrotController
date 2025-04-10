@@ -194,10 +194,9 @@ int main(void)
 
     */
 
-    bsp_tim_set(&htim5, 10000);
-    bsp_pwm_set(&htim5, TIM_CHANNEL_2, 0.1);
-    BSP_TIM_REGISTER_CALLBACK(&htim5, set_flag);
-    bsp_tim_start(&htim5);
+    bsp_tim_set(&htim5, 100000);
+    bsp_pwm_set(&htim5, TIM_CHANNEL_2, 0.01);
+    bsp_tim_start(&htim5, set_flag);
     bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
     /* USER CODE END 2 */
