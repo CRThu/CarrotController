@@ -5,8 +5,8 @@
  *****************************/
 #include "bsp_inc.h"
 
-typedef void (*BaseCallback)();
-BaseCallback cb;
+//typedef void (*BaseCallback)();
+//BaseCallback cb;
 
 //   HAL_TIM_RegisterCallback(&htim6, HAL_TIM_PERIOD_ELAPSED_CB_ID, test);
 //   HAL_TIM_Base_Start_IT(&htim6);
@@ -83,17 +83,17 @@ void bsp_pwm_init(void)
     }
 }
 
-void bsp_pwm_callback_func(TIM_HandleTypeDef* tim_baseHandle)
-{
-    if (tim_baseHandle->Instance == TIM5)
-    {
-        cb();
-    }
-}
+//void bsp_pwm_callback_func(TIM_HandleTypeDef* tim_baseHandle)
+//{
+//    if (tim_baseHandle->Instance == TIM5)
+//    {
+//        cb();
+//    }
+//}
 
 void bsp_pwm_start()
 {
-    HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, bsp_pwm_callback_func);
+//    HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, bsp_pwm_callback_func);
     HAL_TIM_Base_Start_IT(&htim5);
     HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_2);
 }
@@ -106,8 +106,8 @@ void bsp_pwm_stop()
 }
 
 
-void bsp_pwm_callback(BaseCallback _cb)
-{
-    cb = _cb;
-    HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, bsp_pwm_callback_func);
-}
+// void bsp_pwm_callback(BaseCallback _cb)
+// {
+//     cb = _cb;
+//     HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, bsp_pwm_callback_func);
+// }

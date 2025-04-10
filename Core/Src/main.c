@@ -76,7 +76,11 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t flag = 0;
+void set_flag(TIM_HandleTypeDef* htim)
+{
+    flag = 1;
+}
 /*
 void test(TIM_HandleTypeDef* htim)
 {
@@ -85,10 +89,6 @@ void test(TIM_HandleTypeDef* htim)
     {
         uart_comm_write(comm_pc, recv_bytes, recv_len);
     }
-}
-void set_flag(TIM_HandleTypeDef* htim)
-{
-    flag = 1;
 }
 */
 ad7616_t adc;
@@ -163,7 +163,7 @@ int main(void)
     MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-    // initial cdelay module
+      // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
@@ -192,9 +192,10 @@ int main(void)
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
 
-    HAL_TIM_RegisterCallback(&htim6, HAL_TIM_PERIOD_ELAPSED_CB_ID, test);
-    HAL_TIM_Base_Start_IT(&htim6);
     */
+   
+    BSP_TIM_REGISTER_CALLBACK(&htim5, set_flag);
+    BSP_TIM_START(&htim5);
 
     /* USER CODE END 2 */
 
@@ -203,9 +204,17 @@ int main(void)
     while (1)
     {
         /* COMM UART TEST */
-        char test_frame[] = "STM32H563 TEST";
-        bsp_uart_t* uart = get_comm_uart();
-        bsp_uart_write(uart, (uint8_t*)&test_frame[0], sizeof(test_frame));
+        if (flag)
+        {
+            flag = 0;
+
+            char test_frame[] = "STM32H563 TEST";
+            bsp_uart_t* uart = get_comm_uart();
+            bsp_uart_write(uart, (uint8_t*)&test_frame[0], sizeof(test_frame));
+        }
+        //char test_frame[] = "STM32H563 TEST";
+        //bsp_uart_t* uart = get_comm_uart();
+        //bsp_uart_write(uart, (uint8_t*)&test_frame[0], sizeof(test_frame));
 
 
         /* REG COMM TEST */
@@ -327,7 +336,7 @@ void PeriphCommonClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                                  /* User can add his own implementation to report the HAL error return state */
+                                    /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -346,8 +355,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                                  /* User can add his own implementation to report the file name and line number,
-                                     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                                     /* USER CODE END 6 */
+                                    /* User can add his own implementation to report the file name and line number,
+                                       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+                                       /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

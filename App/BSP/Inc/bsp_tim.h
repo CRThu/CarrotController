@@ -25,14 +25,15 @@ extern "C"
     typedef TIM_HandleTypeDef tim_t;
     typedef void (*tim_callback_t)(tim_t* htim);
 
-    #define TIM_REGISTER_CALLBACK(__INSTANCE__, __CALLBACK__) HAL_TIM_RegisterCallback((__INSTANCE__), HAL_TIM_PERIOD_ELAPSED_CB_ID, (__CALLBACK__))
-
+    #define BSP_TIM_REGISTER_CALLBACK(__INSTANCE__, __CALLBACK__)   HAL_TIM_RegisterCallback((__INSTANCE__), HAL_TIM_PERIOD_ELAPSED_CB_ID, (__CALLBACK__))
+    #define BSP_TIM_START(TIM)                                      HAL_TIM_Base_Start_IT(TIM)
+    #define BSP_TIM_STOP(TIM)                                       HAL_TIM_Base_Stop_IT(TIM)
     #endif
 
     void bsp_pwm_init();
     void bsp_pwm_start();
     void bsp_pwm_stop();
-    void bsp_pwm_callback(pTIM_CallbackTypeDef pCallback);
+    //void bsp_pwm_callback(BaseCallback pCallback);
 
     #ifdef __cplusplus
 }
