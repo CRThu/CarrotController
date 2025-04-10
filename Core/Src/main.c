@@ -193,9 +193,9 @@ int main(void)
     uart_comm_start(comm_pc);
 
     */
-   
+
     BSP_TIM_REGISTER_CALLBACK(&htim5, set_flag);
-    BSP_TIM_START(&htim5);
+    bsp_tim_start(&htim5);
 
     /* USER CODE END 2 */
 
