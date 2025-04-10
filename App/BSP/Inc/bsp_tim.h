@@ -41,6 +41,8 @@ extern "C"
     #define ST_PWM_STOP                                             HAL_TIM_PWM_Stop
     #endif
 
+    void bsp_pwm_io_init(uint8_t idx, uint8_t en);
+
     void bsp_tim_set(tim_t* tim, uint32_t freq);
     void bsp_pwm_set(tim_t* pwm, bsp_tim_ch_t ch, double duty);
 

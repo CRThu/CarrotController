@@ -6,25 +6,43 @@
 
 #include "ad7616_iocfg.h"
 
-// TODO serial_wire only support 1
-__FORCEINLINE void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode, uint8_t serial_wire)
+__FORCEINLINE void ad7616_set_io_convst(ad7616_t* adc, ad7616_convst_mode mode)
 {
-    adc->mode = mode;
-    adc->serial_wire = serial_wire;
+    if (mode == AD7616_CONVST_IO)
+    {
+        bsp_pwm_io_init(0, 0);
+
+        /* SER/PAR SW/HW Shared IO */
+        BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
+        BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
+        BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
+    }
+    else /* AD7616_CONVST_PWM */
+    {
+        bsp_pwm_io_init(0, 1);
+    }
 }
 
 __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
 {
+    ad7616_io_t initial_io;
+
+    /* PERH */
     adc->clk1_pwm = BTB_CLK1_PWM;   // TODO: IMPL OF BTB_CLK1_PWM
     adc->clk2_etr = BTB_CLK2_ETR;   // TODO: IMPL OF BTB_CLK2_ETR
 
-    ad7616_io_t initial_io;
+    /* PERH IOCFG */
+    // default: use CONVST PWM MODE
+    //bsp_pwm_io_init(0, 1);
 
+    // default: use CONVST PWM MODE
     /* SER/PAR SW/HW Shared IO */
-    //COPY_FROM_IO(&(adc->convst), dut_get_io(intf->pin_configs, "CONVST"));
+    COPY_FROM_IO(&(adc->convst), dut_get_io(intf->pin_configs, "CONVST"));
     //BSP_IO_TYPE(&(adc->convst), IO_TYPE_OUT);
     //BSP_IO_SPEED(&(adc->convst), IO_SPEED_NORMAL);
     //BSP_IO_WRITE(&(adc->convst), IO_STATE_LOW);
+
+    ad7616_set_io_convst(adc, AD7616_CONVST_PWM);
 
     COPY_FROM_IO(&(adc->busy), dut_get_io(intf->pin_configs, "BUSY"));
     BSP_IO_TYPE(&(adc->busy), IO_TYPE_IN);

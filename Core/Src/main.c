@@ -76,11 +76,11 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t flag = 0;
-void set_flag(TIM_HandleTypeDef* htim)
-{
-    flag = 1;
-}
+//uint8_t flag = 0;
+//void set_flag(TIM_HandleTypeDef* htim)
+//{
+//    flag = 1;
+//}
 /*
 void test(TIM_HandleTypeDef* htim)
 {
@@ -92,11 +92,6 @@ void test(TIM_HandleTypeDef* htim)
 }
 */
 ad7616_t adc;
-
-void read_data()
-{
-    ad7616_sample_callback(&adc);
-}
 
 void bsp_clock_init()
 {
@@ -163,7 +158,7 @@ int main(void)
     MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-        // initial cdelay module
+          // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
@@ -175,18 +170,17 @@ int main(void)
     bsp_switch_init(BSPMUX_DEFAULT);
 
     // initial dut ad7616 board
-    /* PAR SW*/
-    //ad7616_set_mode(&adc, AD7616_PAR_SW, 0);
-    /* SER SW*/
-    ad7616_set_mode(&adc, AD7616_SER_SW, 1);
-    //ad7616_set_mode(&adc, AD7616_SER_SW, 2);
+
+    /* PAR SW */
+    //adc.mode = AD7616_PAR_SW;
+    /* SER SW */
+    adc.mode = AD7616_SER_SW;
+    adc.serial_wire = 1;
+    adc.convst_freq = 100000;
+    //adc.serial_wire = 2;
 
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
-
-    //bsp_pwm_init();
-    //bsp_pwm_callback(read_data);
-    //bsp_pwm_start();
 
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
@@ -194,11 +188,12 @@ int main(void)
 
     */
 
-    bsp_tim_set(&htim5, 100000);
-    bsp_pwm_set(&htim5, TIM_CHANNEL_2, 0.01);
-    bsp_tim_start(&htim5, set_flag);
-    bsp_pwm_start(&htim5, TIM_CHANNEL_2);
+    //bsp_tim_set(&htim5, 100000);
+    //bsp_pwm_set(&htim5, TIM_CHANNEL_2, 0.01);
+    //bsp_tim_start(&htim5, set_flag);
+    //bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
+    ad7616_sample_by_pwm(&adc, 0x00, 16);
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -206,12 +201,12 @@ int main(void)
     while (1)
     {
         /* COMM UART TEST */
-        if (flag)
-        {
-            BSP_IO_WRITE(&(adc.csn), flag);
-            flag = 0;
-            BSP_IO_WRITE(&(adc.csn), flag);
-        }
+        //if (flag)
+        //{
+        //    BSP_IO_WRITE(&(adc.csn), flag);
+        //    flag = 0;
+        //    BSP_IO_WRITE(&(adc.csn), flag);
+        //}
         //char test_frame[] = "STM32H563 TEST";
         //bsp_uart_t* uart = get_comm_uart();
         //bsp_uart_write(uart, (uint8_t*)&test_frame[0], sizeof(test_frame));
@@ -230,7 +225,6 @@ int main(void)
 
         /* REG COMM TEST */
 
-        //ad7616_sample_start(&adc, 0x00, 16);
 
         delay_us(1000);
         delay_ms(1000);
@@ -336,7 +330,7 @@ void PeriphCommonClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                                      /* User can add his own implementation to report the HAL error return state */
+                                        /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -355,8 +349,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                                      /* User can add his own implementation to report the file name and line number,
-                                         ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                                         /* USER CODE END 6 */
+                                        /* User can add his own implementation to report the file name and line number,
+                                           ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+                                           /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

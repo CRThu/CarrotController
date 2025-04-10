@@ -12,7 +12,7 @@
 #include "ad7616_def.h"
 #include "bsp_inc.h"
 
-void ad7616_set_mode(ad7616_t* adc, ad7616_mode mode, uint8_t serial_wire);
+void ad7616_set_io_convst(ad7616_t* adc, ad7616_convst_mode mode);
 void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf);
 
 void ad7616_full_reset(ad7616_t* adc);

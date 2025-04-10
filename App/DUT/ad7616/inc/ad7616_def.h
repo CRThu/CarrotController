@@ -49,7 +49,6 @@ typedef struct ad7616_t
 {
     /* config */
     ad7616_mode mode;
-    ad7616_convst_mode convst_mode;
     uint32_t convst_freq;
     uint8_t serial_wire;
 
