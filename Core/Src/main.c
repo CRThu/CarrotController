@@ -193,7 +193,7 @@ int main(void)
     //bsp_tim_start(&htim5, set_flag);
     //bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
-    ad7616_set_channel(&adc, 0x7, 0x7);
+    ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
     ad7616_sample_by_pwm(&adc, 16);
 
     bsp_uart_t* uart = get_comm_uart();

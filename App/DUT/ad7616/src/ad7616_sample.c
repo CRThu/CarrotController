@@ -12,21 +12,15 @@ uint32_t adc_data_count = 0;
 
 __FORCEINLINE void ad7616_set_channel(ad7616_t* adc, uint8_t adc_ch_a, uint8_t adc_ch_b)
 {
-    adc->adc_ch_a = adc_ch_a;
-    adc->adc_ch_b = adc_ch_b;
-    adc->adc_ch_a_en = 1;
-    adc->adc_ch_b_en = 1;
+    adc->adc_ch_a_en = (adc_ch_a != AD7616_CHANNEL_OFF);
+    adc->adc_ch_b_en = (adc_ch_b != AD7616_CHANNEL_OFF);
+    adc->adc_ch_a = (adc_ch_a != AD7616_CHANNEL_OFF) ? adc_ch_a : 0x00;
+    adc->adc_ch_b = (adc_ch_b != AD7616_CHANNEL_OFF) ? adc_ch_b : 0x00;
 
     if (adc->mode == AD7616_SER_SW
         || adc->mode == AD7616_PAR_SW)
     {
-        ad7616_reg_write(adc, 0x03, adc_ch_b << 4 | adc_ch_a << 0);
-
-
-        if (adc->mode == AD7616_SER_SW && adc->serial_wire == 1)
-        {
-            ad7616_data_read(adc);
-        }
+        ad7616_reg_write(adc, AD7616_REG_CHANNEL, adc_ch_b << 4 | adc_ch_a << 0);
 
     }
     else
@@ -85,11 +79,11 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
     // for first isr
     while (!flag);
     flag = 0;
-    
+
     // ad7616 update
     while (!flag);
     flag = 0;
-    
+
     for (uint32_t i = 0; i < count; i++)
     {
         // wait for convst

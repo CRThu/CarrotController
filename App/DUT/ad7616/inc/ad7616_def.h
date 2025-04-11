@@ -15,6 +15,18 @@
 #define AD7616_PAR_WR                   1
 #define AD7616_PAR_RD                   0
 
+#define AD7616_REG_CHANNEL              0x03
+
+#define AD7616_CHANNEL_OFF              0xFF
+#define AD7616_CHANNEL_0                0x00
+#define AD7616_CHANNEL_1                0x01
+#define AD7616_CHANNEL_2                0x02
+#define AD7616_CHANNEL_3                0x03
+#define AD7616_CHANNEL_4                0x04
+#define AD7616_CHANNEL_5                0x05
+#define AD7616_CHANNEL_6                0x06
+#define AD7616_CHANNEL_7                0x07
+
 typedef enum ad7616_mode {
     AD7616_SER_SW,
     AD7616_PAR_SW,
@@ -85,7 +97,7 @@ typedef struct ad7616_t
     ad7616_io_t os2;        /*         */
 
     /* perh */
-    void* clk1_pwm;         /*         */
+    void* pwm1;             /*         */
     void* clk2_etr;         /*         */
     spi_t* spi_a;           /*         */
     spi_t* spi_b;           /*         */

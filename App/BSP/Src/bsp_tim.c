@@ -13,6 +13,12 @@ io_t tim_io_cfg[] =
     {.btb_pin = IO_ARR_END_ID }
 };
 
+tim_t* bsp_tim[] =
+{
+    &htim5
+};
+
+
 void bsp_pwm_io_init(uint8_t idx, uint8_t en)
 {
     /* IO INITIAL */
@@ -35,7 +41,7 @@ void bsp_pwm_io_init(uint8_t idx, uint8_t en)
         BSP_IO_SPEED(io, IO_SPEED_NORMAL);
         BSP_IO_WRITE(io, IO_STATE_LOW);
     }
-    
+
 }
 
 /* TIM5 init function */
