@@ -18,6 +18,10 @@ tim_t* bsp_tim[] =
     &htim5
 };
 
+tim_t* bsp_get_tim_instance(uint8_t index)
+{
+    return bsp_tim[index];
+}
 
 void bsp_pwm_io_init(uint8_t idx, uint8_t en)
 {
