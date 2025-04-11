@@ -477,9 +477,9 @@ __FORCEINLINE uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr)
     else
     {
         /* SER */
-        while (hspi1.State == HAL_BUSY);
+        while (hspi1.State != HAL_SPI_STATE_READY);
         bsp_spi_write(adc->spi_a, (uint8_t*)&regcmd[0], 1);
-        while (hspi1.State == HAL_BUSY);
+        while (hspi1.State != HAL_SPI_STATE_READY);
         bsp_spi_read(adc->spi_a, (uint8_t*)&regcmd[1], 1);
         //bsp_spi_readwrite(adc->spi_a, (uint8_t*)regcmd, (uint8_t*)regcmd, 2);
     }
@@ -516,7 +516,7 @@ __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
 
 
         //HAL_SPI_Transmit(&hspi1,wr_cmd_arr,sizeof(wr_cmd_arr),100);
-        while (hspi1.State == HAL_BUSY);
+        while (hspi1.State != HAL_SPI_STATE_READY);
         //BSP_IO_WRITE(&(adc->convst), 1);
         //HAL_SPI_Transmit(adc->spi_a,wr_cmd_arr,sizeof(wr_cmd_arr),100);
         //bsp_spi_write(adc->spi_a, wr_cmd_arr, sizeof(wr_cmd_arr));
@@ -564,7 +564,7 @@ __FORCEINLINE uint16_t ad7616_data_read(ad7616_t* adc)
     else
     {
         /* SER: READ ONLY CHA */
-        while (hspi1.State == HAL_BUSY);
+        while (hspi1.State != HAL_SPI_STATE_READY);
         bsp_spi_read(adc->spi_a, (uint8_t*)&rd_data, 1);
     }
 
@@ -607,17 +607,20 @@ __FORCEINLINE void ad7616_data_read_two(ad7616_t* adc, uint16_t* pa, uint16_t* p
         /* SER: READ ONLY CHA */
         if (adc->serial_wire == 1)
         {
-            while ((adc->spi_a)->State == HAL_BUSY);
-            bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
-            while ((adc->spi_a)->State == HAL_BUSY);
-            bsp_spi_read(adc->spi_a, (uint8_t*)pb, 1);
+            uint16_t data[2] = { 0 };
+
+            while ((adc->spi_a)->State != HAL_SPI_STATE_READY);
+            bsp_spi_read(adc->spi_a, (uint8_t*)data, 2);
+
+            *pa = data[0];
+            *pb = data[1];
         }
         else
         {
             // TODO
-            while ((adc->spi_a)->State == HAL_BUSY);
-            //while ((adc->spi_b)->State == HAL_BUSY);
-            //HAL_SPI_Receive_IT(adc->spi_b, (uint8_t*)pb, 1);
+            while ((adc->spi_a)->State != HAL_SPI_STATE_READY);
+            while ((adc->spi_b)->State != HAL_SPI_STATE_READY);
+            HAL_SPI_Receive_IT(adc->spi_b, (uint8_t*)pb, 1);
             bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
         }
     }
