@@ -82,6 +82,14 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
     bsp_tim_start(&htim5, set_flag);
     bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
+    // for first isr
+    while (!flag);
+    flag = 0;
+    
+    // ad7616 update
+    while (!flag);
+    flag = 0;
+    
     for (uint32_t i = 0; i < count; i++)
     {
         // wait for convst
