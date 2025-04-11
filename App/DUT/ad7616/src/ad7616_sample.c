@@ -9,6 +9,32 @@
 uint16_t adc_data_buffer[AD7616_CONV_BUFFER_LEN] = { 0 };
 uint32_t adc_data_count = 0;
 
+
+__FORCEINLINE void ad7616_set_channel(ad7616_t* adc, uint8_t adc_ch_a, uint8_t adc_ch_b)
+{
+    adc->adc_ch_a = adc_ch_a;
+    adc->adc_ch_b = adc_ch_b;
+    adc->adc_ch_a_en = 1;
+    adc->adc_ch_b_en = 1;
+
+    if (adc->mode == AD7616_SER_SW
+        || adc->mode == AD7616_PAR_SW)
+    {
+        ad7616_reg_write(adc, 0x03, adc_ch_b << 4 | adc_ch_a << 0);
+
+
+        if (adc->mode == AD7616_SER_SW && adc->serial_wire == 1)
+        {
+            ad7616_data_read(adc);
+        }
+
+    }
+    else
+    {
+        // TODO
+    }
+}
+
 __FORCEINLINE void ad7616_convst_generate_by_io(ad7616_t* adc)
 {
     ad7616_set_io_convst(adc, AD7616_CONVST_IO);
@@ -22,11 +48,10 @@ __FORCEINLINE void ad7616_convst_generate_by_pwm(ad7616_t* adc)
     ad7616_set_io_convst(adc, AD7616_CONVST_PWM);
 }
 
-__FORCEINLINE void ad7616_sample_by_io(ad7616_t* adc, uint16_t channel_mask, uint32_t count)
+__FORCEINLINE void ad7616_sample_by_io(ad7616_t* adc, uint32_t count)
 {
     adc_data_count = 0;
 
-    // TODO: channel_mask
     for (uint32_t i = 0; i < count; i++)
     {
         ad7616_convst_generate_by_io(adc);
@@ -44,8 +69,10 @@ void set_flag(TIM_HandleTypeDef* htim)
     flag = 1;
 }
 
-__FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint16_t channel_mask, uint32_t count)
+__FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
 {
+    adc_data_count = 0;
+
     ad7616_convst_generate_by_pwm(adc);
 
     // TODO重构
@@ -55,16 +82,6 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint16_t channel_mask, ui
     bsp_tim_start(&htim5, set_flag);
     bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
-    while (!flag);
-    flag = 0;
-    while (!flag);
-    flag = 0;
-    while (!flag);
-    flag = 0;
-
-    adc_data_count = 0;
-
-    // TODO: channel_mask
     for (uint32_t i = 0; i < count; i++)
     {
         // wait for convst
@@ -80,6 +97,18 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint16_t channel_mask, ui
 
 __FORCEINLINE void ad7616_sample_read_adc(ad7616_t* adc)
 {
-    ad7616_data_read_two(adc, &adc_data_buffer[adc_data_count], &adc_data_buffer[adc_data_count + 1]);
-    adc_data_count += 2;
+    uint16_t adc_data_temp_a = 0;
+    uint16_t adc_data_temp_b = 0;
+    ad7616_data_read_two(adc, &adc_data_temp_a, &adc_data_temp_b);
+
+    if (adc->adc_ch_a_en)
+    {
+        adc_data_buffer[adc_data_count] = adc_data_temp_a;
+        adc_data_count += 1;
+    }
+    if (adc->adc_ch_b_en)
+    {
+        adc_data_buffer[adc_data_count] = adc_data_temp_b;
+        adc_data_count += 1;
+    }
 }

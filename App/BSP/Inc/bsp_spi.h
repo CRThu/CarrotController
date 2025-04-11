@@ -23,8 +23,8 @@ extern "C"
     typedef SPI_HandleTypeDef spi_t;
 
     #define __SPI_TIMEOUT__                                             (100)
-    #define BSP_SPI_WRITE(__INSTANCE__, __BUF__, __SIZE__)              HAL_SPI_Transmit((__INSTANCE__), __BUF__, __SIZE__, __SPI_TIMEOUT__)
-    #define BSP_SPI_READ(__INSTANCE__, __BUF__, __SIZE__)               HAL_SPI_Receive((__INSTANCE__), __BUF__, __SIZE__, __SPI_TIMEOUT__)
+    #define BSP_SPI_WRITE(__INSTANCE__, __BUF__, __SIZE__)              HAL_SPI_TransmitReceive((__INSTANCE__), __BUF__, __BUF__, __SIZE__, __SPI_TIMEOUT__)
+    #define BSP_SPI_READ(__INSTANCE__, __BUF__, __SIZE__)               HAL_SPI_TransmitReceive((__INSTANCE__), __BUF__, __BUF__, __SIZE__, __SPI_TIMEOUT__)
     #define BSP_SPI_RW(__INSTANCE__, __WRBUF__, __RDBUF__, __SIZE__)    HAL_SPI_TransmitReceive((__INSTANCE__), __WRBUF__, __RDBUF__, __SIZE__, __SPI_TIMEOUT__)
 
     #endif

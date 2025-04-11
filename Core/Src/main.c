@@ -176,8 +176,8 @@ int main(void)
     /* SER SW */
     adc.mode = AD7616_SER_SW;
     adc.serial_wire = 1;
-    adc.convst_freq = 100000;
     //adc.serial_wire = 2;
+    adc.convst_freq = 100000;
 
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
@@ -193,7 +193,12 @@ int main(void)
     //bsp_tim_start(&htim5, set_flag);
     //bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
-    ad7616_sample_by_pwm(&adc, 0x00, 16);
+    ad7616_set_channel(&adc, 0x7, 0x7);
+    ad7616_sample_by_pwm(&adc, 16);
+
+    bsp_uart_t* uart = get_comm_uart();
+    bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
+
     /* USER CODE END 2 */
 
     /* Infinite loop */

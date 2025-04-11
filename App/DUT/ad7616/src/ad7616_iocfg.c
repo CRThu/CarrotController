@@ -525,7 +525,6 @@ __FORCEINLINE void ad7616_reg_write(ad7616_t* adc, uint32_t addr, uint32_t data)
         //bsp_spi_write(adc->spi_a, wr_cmd_arr, sizeof(wr_cmd_arr));
         // DATASIZE=16
         bsp_spi_write(adc->spi_a, (uint8_t*)&wr_cmd, 1);
-
         //BSP_IO_WRITE(&(adc->convst), 0);
     }
 
@@ -616,11 +615,10 @@ __FORCEINLINE void ad7616_data_read_two(ad7616_t* adc, uint16_t* pa, uint16_t* p
         else
         {
             // TODO
-            // while ((adc->spi_a)->State == HAL_BUSY);
-            // while ((adc->spi_b)->State == HAL_BUSY);
-            // HAL_SPI_Receive_IT(adc->spi_b, (uint8_t*)pb, 1);
-            // bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
-            // while (hspi1.State == HAL_BUSY);
+            while ((adc->spi_a)->State == HAL_BUSY);
+            //while ((adc->spi_b)->State == HAL_BUSY);
+            //HAL_SPI_Receive_IT(adc->spi_b, (uint8_t*)pb, 1);
+            bsp_spi_read(adc->spi_a, (uint8_t*)pa, 1);
         }
     }
 }
