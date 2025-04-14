@@ -65,6 +65,9 @@ void set_flag(TIM_HandleTypeDef* htim)
 
 __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
 {
+    if(count >= sizeof(adc_data_buffer))
+        Error_Handler();
+
     adc_data_count = 0;
 
     ad7616_convst_generate_by_pwm(adc);

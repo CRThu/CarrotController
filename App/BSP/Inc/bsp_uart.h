@@ -30,7 +30,7 @@ extern "C"
     void bsp_comm_uart_init();
     void bsp_comm_uart_init_by_cubemx(bsp_uart_handle_t* handle);
     bsp_uart_t* get_comm_uart();
-    void bsp_uart_write(bsp_uart_t* uart, uint8_t* data, uint16_t size);
+    void bsp_uart_write(bsp_uart_t* uart, uint8_t* data, uint32_t size);
 
 
     #ifdef __cplusplus

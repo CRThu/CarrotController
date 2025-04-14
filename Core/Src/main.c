@@ -194,7 +194,7 @@ int main(void)
     //bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
     ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
-    ad7616_sample_by_pwm(&adc, 16);
+    ad7616_sample_by_pwm(&adc, 65536);
 
     bsp_uart_t* uart = get_comm_uart();
     bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
