@@ -28,6 +28,13 @@ extern "C"
     typedef TIM_HandleTypeDef tim_t;
     typedef uint32_t bsp_tim_ch_t;
 
+    typedef struct bsp_pwm_t
+    {
+        tim_t* tim;
+        bsp_tim_ch_t ch;
+    } bsp_pwm_t;
+
+
     typedef void (*tim_callback_t)(tim_t* htim);
 
     #define ST_TIM_GET_FREQ                                     __HAL_TIM_GET_AUTORELOAD
@@ -42,17 +49,17 @@ extern "C"
     #endif
 
     tim_t* bsp_get_tim_instance(uint8_t index);
+    bsp_pwm_t* bsp_get_pwm_instance(uint8_t index);
     void bsp_pwm_io_init(uint8_t idx, uint8_t en);
 
     void bsp_tim_set(tim_t* tim, uint32_t freq);
-    void bsp_pwm_set(tim_t* pwm, bsp_tim_ch_t ch, double duty);
-
     void bsp_tim_start(tim_t* tim, tim_callback_t callback);
     void bsp_tim_stop(tim_t* tim);
 
     //void bsp_pwm_init();
-    void bsp_pwm_start(tim_t* pwm, bsp_tim_ch_t ch);
-    void bsp_pwm_stop(tim_t* pwm, bsp_tim_ch_t ch);
+    void bsp_pwm_set(bsp_pwm_t* pwm, double duty);
+    void bsp_pwm_start(bsp_pwm_t* pwm);
+    void bsp_pwm_stop(bsp_pwm_t* pwm);
     //void bsp_pwm_callback(BaseCallback pCallback);
 
     #ifdef __cplusplus

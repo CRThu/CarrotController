@@ -69,12 +69,11 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
 
     ad7616_convst_generate_by_pwm(adc);
 
-    // TODO重构
-    bsp_tim_set((tim_t*)(adc->pwm1), 100000);
-    bsp_pwm_set((tim_t*)(adc->pwm1), TIM_CHANNEL_2, 0.01);
+    bsp_tim_set(adc->pwm1->tim, 100000);
+    bsp_pwm_set(adc->pwm1, 0.01);
 
-    bsp_tim_start((tim_t*)(adc->pwm1), set_flag);
-    bsp_pwm_start((tim_t*)(adc->pwm1), TIM_CHANNEL_2);
+    bsp_tim_start(adc->pwm1->tim, set_flag);
+    bsp_pwm_start(adc->pwm1);
 
     // for first isr
     while (!flag);
@@ -93,8 +92,8 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
         ad7616_sample_read_adc(adc);
     }
 
-    bsp_tim_stop((tim_t*)(adc->pwm1));
-    bsp_pwm_stop((tim_t*)(adc->pwm1), TIM_CHANNEL_2);
+    bsp_tim_stop(adc->pwm1->tim);
+    bsp_pwm_stop(adc->pwm1);
 }
 
 __FORCEINLINE void ad7616_sample_read_adc(ad7616_t* adc)

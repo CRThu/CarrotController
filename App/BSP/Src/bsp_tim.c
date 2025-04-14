@@ -18,9 +18,19 @@ tim_t* bsp_tim[] =
     &htim5
 };
 
+bsp_pwm_t bsp_pwm[] =
+{
+    {.tim = &htim5, .ch = TIM_CHANNEL_2}
+};
+
 tim_t* bsp_get_tim_instance(uint8_t index)
 {
     return bsp_tim[index];
+}
+
+bsp_pwm_t* bsp_get_pwm_instance(uint8_t index)
+{
+    return &bsp_pwm[index];
 }
 
 void bsp_pwm_io_init(uint8_t idx, uint8_t en)
@@ -117,12 +127,6 @@ void bsp_tim_set(tim_t* tim, uint32_t freq)
     ST_TIM_SET_FREQ(tim, arr);
 }
 
-void bsp_pwm_set(tim_t* pwm, bsp_tim_ch_t ch, double duty)
-{
-    uint32_t ccr = (double)duty * (double)ST_TIM_GET_FREQ(pwm);
-    ST_TIM_SET_DUTY(pwm, ch, ccr);
-}
-
 void bsp_tim_start(tim_t* tim, tim_callback_t callback)
 {
     ST_TIM_REGISTER_CALLBACK(tim, callback);
@@ -134,12 +138,18 @@ void bsp_tim_stop(tim_t* tim)
     ST_TIM_STOP(tim);
 }
 
-void bsp_pwm_start(tim_t* pwm, bsp_tim_ch_t ch)
+void bsp_pwm_set(bsp_pwm_t* pwm, double duty)
 {
-    ST_PWM_START(pwm, ch);
+    uint32_t ccr = (double)duty * (double)ST_TIM_GET_FREQ(pwm->tim);
+    ST_TIM_SET_DUTY(pwm->tim, pwm->ch, ccr);
 }
 
-void bsp_pwm_stop(tim_t* pwm, bsp_tim_ch_t ch)
+void bsp_pwm_start(bsp_pwm_t* pwm)
 {
-    ST_PWM_STOP(pwm, ch);
+    ST_PWM_START(pwm->tim, pwm->ch);
+}
+
+void bsp_pwm_stop(bsp_pwm_t* pwm)
+{
+    ST_PWM_STOP(pwm->tim, pwm->ch);
 }

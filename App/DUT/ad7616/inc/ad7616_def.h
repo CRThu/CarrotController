@@ -97,11 +97,11 @@ typedef struct ad7616_t
     ad7616_io_t os2;        /*         */
 
     /* perh */
-    void* pwm1;             /*         */
+    bsp_pwm_t* pwm1;        /* + + + + */
     void* etr2;             /*         */
-    spi_t* spi_a;           /*         */
+    spi_t* spi_a;           /* +       */
     spi_t* spi_b;           /*         */
-    gpio_port_t* par_db;    /*         */
+    gpio_port_t* par_db;    /*   +     */
 } ad7616_t;
 
 /* T (ns) */

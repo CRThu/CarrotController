@@ -28,7 +28,7 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     ad7616_io_t initial_io;
 
     /* PERH */
-    adc->pwm1 = bsp_get_tim_instance(0);
+    adc->pwm1 = bsp_get_pwm_instance(0);
     adc->etr2 = BTB_CLK2_ETR;   // TODO: IMPL OF BTB_CLK2_ETR
 
     /* PERH IOCFG */
