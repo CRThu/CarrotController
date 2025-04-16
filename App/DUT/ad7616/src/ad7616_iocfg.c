@@ -52,12 +52,13 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     COPY_FROM_IO(&(adc->refsel), dut_get_io(intf->pin_configs, "REFSEL"));
     BSP_IO_TYPE(&(adc->refsel), IO_TYPE_OUT);
     BSP_IO_SPEED(&(adc->refsel), IO_SPEED_NORMAL);
-    BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
+    //BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
 
     COPY_FROM_IO(&(adc->resetn), dut_get_io(intf->pin_configs, "nRESET"));
     BSP_IO_TYPE(&(adc->resetn), IO_TYPE_OUT);
     BSP_IO_SPEED(&(adc->resetn), IO_SPEED_NORMAL);
-    BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
+    BSP_IO_WRITE(&(adc->resetn), IO_STATE_LOW);
+    //BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
 
     if (adc->mode == AD7616_SER_SW)
     {
@@ -632,7 +633,7 @@ int8_t ad7616_comm_test(ad7616_t* adc)
 
     for (uint8_t reg = 0x04; reg <= 0x07; reg++)
     {
-        txdata = 0x00;
+        txdata = 0x01;
         rxdata = 0xCC;
 
         ad7616_reg_write(adc, reg, txdata);
@@ -666,4 +667,23 @@ int8_t ad7616_comm_test(ad7616_t* adc)
     }
 
     return 0;
+}
+
+
+volatile uint8_t regwr_test_count = 0;
+__FORCEINLINE int8_t ad7616_regwr_test(ad7616_t* adc)
+{
+    volatile uint8_t reg = 0x3F;
+    volatile uint16_t txdata, rxdata;
+
+    ++regwr_test_count;
+    if(regwr_test_count == 0xFF)  regwr_test_count = 0x01;
+
+    txdata = regwr_test_count;
+    rxdata = 0xFFFF;
+
+
+    ad7616_reg_write(adc, reg, txdata);
+    rxdata = ad7616_reg_read(adc, reg);
+    return ((rxdata&0xFF) == (txdata&0xFF));
 }

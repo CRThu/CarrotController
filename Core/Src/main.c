@@ -193,11 +193,13 @@ int main(void)
     //bsp_tim_start(&htim5, set_flag);
     //bsp_pwm_start(&htim5, TIM_CHANNEL_2);
 
-    ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
-    ad7616_sample_by_pwm(&adc, 65536);
+    //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
+    //ad7616_sample_by_pwm(&adc, 65536);
 
-    bsp_uart_t* uart = get_comm_uart();
-    bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
+    //bsp_uart_t* uart = get_comm_uart();
+    //bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
+
+    //ad7616_sample_by_pwm(&adc, 16);
 
     /* USER CODE END 2 */
 
@@ -223,16 +225,13 @@ int main(void)
 
         //volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
         //   volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
-
-
-        //volatile uint8_t result = ad7616_comm_test(&adc);
-        //BSP_IO_WRITE(&(adc.convst),result==0?1:0);
-
+        
+        delay_us(2);
         /* REG COMM TEST */
 
 
         delay_us(1000);
-        delay_ms(1000);
+        //delay_ms(1000);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
