@@ -65,14 +65,14 @@ void set_flag(TIM_HandleTypeDef* htim)
 
 __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
 {
-    if(count >= sizeof(adc_data_buffer))
+    if (count > sizeof(adc_data_buffer) / sizeof(uint16_t))
         Error_Handler();
 
     adc_data_count = 0;
 
     ad7616_convst_generate_by_pwm(adc);
 
-    bsp_tim_set(adc->pwm1->tim, 100000);
+    bsp_tim_set(adc->pwm1->tim, adc->convst_freq);
     bsp_pwm_set(adc->pwm1, 0.01);
 
     bsp_tim_start(adc->pwm1->tim, set_flag);
@@ -91,7 +91,8 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
         // wait for convst
         while (!flag);
         flag = 0;
-
+        
+        delay_ns(200);
         ad7616_sample_read_adc(adc);
     }
 
