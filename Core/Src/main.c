@@ -172,10 +172,10 @@ int main(void)
     // initial dut ad7616 board
 
     /* PAR SW */
-    adc.mode = AD7616_PAR_SW;
+    //adc.mode = AD7616_PAR_SW;
     /* SER SW */
-    //adc.mode = AD7616_SER_SW;
-    //adc.serial_wire = 1;
+    adc.mode = AD7616_SER_SW;
+    adc.serial_wire = 1;
     //adc.serial_wire = 2;
     adc.convst_freq = 500000;
 
@@ -187,19 +187,12 @@ int main(void)
     uart_comm_start(comm_pc);
 
     */
+    
+    //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
+    //ad7616_sample_by_pwm(&adc, 65536);
 
-    //bsp_tim_set(&htim5, 100000);
-    //bsp_pwm_set(&htim5, TIM_CHANNEL_2, 0.01);
-    //bsp_tim_start(&htim5, set_flag);
-    //bsp_pwm_start(&htim5, TIM_CHANNEL_2);
-
-    ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
-    ad7616_sample_by_pwm(&adc, 65536);
-
-    bsp_uart_t* uart = get_comm_uart();
-    bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
-
-    //ad7616_sample_by_pwm(&adc, 16);
+    //bsp_uart_t* uart = get_comm_uart();
+    //bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
 
     //delay_ms(2000);
     //BSP_IO_WRITE(&(adc.resetn), IO_STATE_LOW);
@@ -229,7 +222,7 @@ int main(void)
 
         //volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
         //   volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
-        
+
         delay_us(2);
         /* REG COMM TEST */
 

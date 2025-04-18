@@ -432,6 +432,14 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     */
 }
 
+__FORCEINLINE void ad7616_partial_reset(ad7616_t* adc)
+{
+    BSP_IO_WRITE(&(adc->resetn), IO_STATE_LOW);
+    delay_ns(100);     // partial reset = 40-500ns
+    BSP_IO_WRITE(&(adc->resetn), IO_STATE_HIGH);
+    delay_ns(100);       // partial reset = >50ns
+}
+
 __FORCEINLINE void ad7616_full_reset(ad7616_t* adc)
 {
     BSP_IO_WRITE(&(adc->resetn), IO_STATE_LOW);

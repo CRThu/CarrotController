@@ -15,6 +15,7 @@
 void ad7616_set_io_convst(ad7616_t* adc, ad7616_convst_mode mode);
 void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf);
 
+void ad7616_partial_reset(ad7616_t* adc);
 void ad7616_full_reset(ad7616_t* adc);
 
 uint16_t ad7616_reg_read(ad7616_t* adc, uint32_t addr);
