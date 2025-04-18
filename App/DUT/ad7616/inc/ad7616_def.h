@@ -27,11 +27,19 @@
 #define AD7616_CHANNEL_6                0x06
 #define AD7616_CHANNEL_7                0x07
 
+
+#define AD7616_MODE_SER_PAR_MASK        (0x1 << 0)
+#define AD7616_MODE_PAR_FLAG            (0x0 << 0)
+#define AD7616_MODE_SER_FLAG            AD7616_MODE_SER_PAR_MASK
+#define AD7616_MODE_SW_HW_MASK          (0x1 << 1)
+#define AD7616_MODE_SW_FLAG             (0x0 << 1)
+#define AD7616_MODE_HW_FLAG             AD7616_MODE_SW_HW_MASK
+
 typedef enum ad7616_mode {
-    AD7616_SER_SW,
-    AD7616_PAR_SW,
-    AD7616_SER_HW,
-    AD7616_PAR_HW
+    AD7616_SER_SW = AD7616_MODE_SER_FLAG | AD7616_MODE_SW_FLAG,
+    AD7616_PAR_SW = AD7616_MODE_PAR_FLAG | AD7616_MODE_SW_FLAG,
+    AD7616_SER_HW = AD7616_MODE_SER_FLAG | AD7616_MODE_HW_FLAG,
+    AD7616_PAR_HW = AD7616_MODE_PAR_FLAG | AD7616_MODE_HW_FLAG
 } ad7616_mode;
 
 typedef enum ad7616_convst_mode {
@@ -75,33 +83,32 @@ typedef struct ad7616_t
     /* S:Software, H:Hardware  S S H H */
     ad7616_io_t convst;     /* + + + + */
     ad7616_io_t busy;       /* + + + + */
-    ad7616_io_t csn;        /*         */
-    ad7616_io_t rdn;        /*         */
-    ad7616_io_t wrn;        /*         */
+    ad7616_io_t csn;        /*   +   + */
+    ad7616_io_t rdn;        /*   +   + */
+    ad7616_io_t wrn;        /*   +     */
 
-    ad7616_io_t chsel0;     /*         */
-    ad7616_io_t chsel1;     /*         */
-    ad7616_io_t chsel2;     /*         */
-    ad7616_io_t seqen;      /*         */
-    ad7616_io_t rngsel1;    /*         */
-    ad7616_io_t rngsel0;    /*         */
-    ad7616_io_t sersel;     /*         */
+    ad7616_io_t chsel0;     /*     + + */
+    ad7616_io_t chsel1;     /*     + + */
+    ad7616_io_t chsel2;     /*     + + */
+    ad7616_io_t seqen;      /*     + + */
+    ad7616_io_t rngsel1;    /*     + + */
+    ad7616_io_t rngsel0;    /*     + + */
     ad7616_io_t refsel;     /* + + + + */
     ad7616_io_t resetn;     /* + + + + */
 
-    ad7616_io_t burst;      /*         */
-    ad7616_io_t ser1wn;     /*         */
-    ad7616_io_t crcen;      /*         */
-    ad7616_io_t os0;        /*         */
-    ad7616_io_t os1;        /*         */
-    ad7616_io_t os2;        /*         */
+    ad7616_io_t burst;      /*     + + */
+    ad7616_io_t ser1wn;     /* +   +   */
+    ad7616_io_t crcen;      /*     +   */
+    ad7616_io_t os0;        /*     +   */
+    ad7616_io_t os1;        /*     +   */
+    ad7616_io_t os2;        /*     +   */
 
     /* perh */
     bsp_pwm_t* pwm1;        /* + + + + */
     void* etr2;             /*         */
-    spi_t* spi_a;           /* +       */
-    spi_t* spi_b;           /*         */
-    gpio_port_t* par_db;    /*   +     */
+    spi_t* spi_a;           /* +   +   */
+    spi_t* spi_b;           /* +   +   */
+    gpio_port_t* par_db;    /*   +   + */
 } ad7616_t;
 
 /* T (ns) */

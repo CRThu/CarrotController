@@ -171,13 +171,11 @@ int main(void)
 
     // initial dut ad7616 board
 
-    /* PAR SW */
     //adc.mode = AD7616_PAR_SW;
-    /* SER SW */
     adc.mode = AD7616_SER_SW;
     adc.serial_wire = 1;
     //adc.serial_wire = 2;
-    adc.convst_freq = 500000;
+    adc.convst_freq = 100000;
 
     ad7616_set_io(&adc, &ad7616_profiles[0]);
     ad7616_full_reset(&adc);
@@ -188,8 +186,8 @@ int main(void)
 
     */
     
-    //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
-    //ad7616_sample_by_pwm(&adc, 65536);
+    ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
+    ad7616_sample_by_pwm(&adc, 16);
 
     //bsp_uart_t* uart = get_comm_uart();
     //bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
