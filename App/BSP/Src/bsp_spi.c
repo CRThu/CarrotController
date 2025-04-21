@@ -34,71 +34,51 @@ void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode)
     io = dut_get_io_id(spi_io_cfg, index, "SCK");
     if (spi_io_mode == BSP_SPI_IO_MODE_OFF)
     {
-        BSP_IO_TYPE(io, IO_TYPE_IN);
-        BSP_IO_SPEED(io, IO_SPEED_NORMAL);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_unused(io);
     }
     else
     {
-        BSP_IO_SET_AF(io);
-        BSP_IO_TYPE(io, IO_TYPE_PERH);
-        BSP_IO_SPEED(io, IO_SPEED_FAST);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_af(io, io->af, IO_SPEED_FAST);
     }
 
     /* NSSx io initial */
     io = dut_get_io_id(spi_io_cfg, index, "NSS");
     if ((spi_io_mode == BSP_SPI_IO_MODE_OFF) || (~spi_io_mode & BSP_SPI_MODE_CS_EN))
     {
-        BSP_IO_TYPE(io, IO_TYPE_IN);
-        BSP_IO_SPEED(io, IO_SPEED_NORMAL);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_unused(io);
     }
     else
     {
-        BSP_IO_SET_AF(io);
-        BSP_IO_TYPE(io, IO_TYPE_PERH);
-        BSP_IO_SPEED(io, IO_SPEED_FAST);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_af(io, io->af, IO_SPEED_FAST);
     }
 
     /* SDOx io initial */
     io = dut_get_io_id(spi_io_cfg, index, "SDO");
     if ((spi_io_mode == BSP_SPI_IO_MODE_OFF) || (~spi_io_mode & BSP_SPI_MODE_RX_EN))
     {
-        BSP_IO_TYPE(io, IO_TYPE_IN);
-        BSP_IO_SPEED(io, IO_SPEED_NORMAL);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_unused(io);
     }
     else
     {
-        BSP_IO_SET_AF(io);
-        BSP_IO_TYPE(io, IO_TYPE_PERH);
-        BSP_IO_SPEED(io, IO_SPEED_FAST);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_af(io, io->af, IO_SPEED_FAST);
     }
 
     /* SDIx io initial */
     io = dut_get_io_id(spi_io_cfg, index, "SDI");
     if ((spi_io_mode == BSP_SPI_IO_MODE_OFF) || (~spi_io_mode & BSP_SPI_MODE_TX_EN))
     {
-        BSP_IO_TYPE(io, IO_TYPE_IN);
-        BSP_IO_SPEED(io, IO_SPEED_NORMAL);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_unused(io);
     }
     else
     {
-        BSP_IO_SET_AF(io);
-        BSP_IO_TYPE(io, IO_TYPE_PERH);
-        BSP_IO_SPEED(io, IO_SPEED_FAST);
-        BSP_IO_WRITE(io, IO_STATE_LOW);
+        bsp_io_setup_af(io, io->af, IO_SPEED_FAST);
     }
 
     /* PERH initial */
     if (spi_io_mode != BSP_SPI_IO_MODE_OFF)
     {
         spi_instances[index].Init.Direction = SPI_DIRECTION_2LINES;
-        
+
         // (spi_io_mode & BSP_SPI_MODE_TX_EN)
         //     ? ((spi_io_mode & BSP_SPI_MODE_RX_EN)
         //         ? SPI_DIRECTION_2LINES

@@ -74,14 +74,13 @@ extern "C"
     // BTB IMPL
     #define BTB_DB_PORT                 GPIO_PORT(D)
 
-    #define BSP_IO_RESET_AF(IO)         IO_SET_AF((IO)->port, (IO)->pin, 0)
-    #define BSP_IO_SET_AF(IO)           IO_SET_AF((IO)->port, (IO)->pin, (IO)->af)
+    #define BSP_IO_SET_AF(IO, AF)       IO_SET_AF((IO)->port, (IO)->pin, AF)
     #define BSP_IO_TYPE(IO, TYPE)       IO_SET_MODE((IO)->port, (IO)->pin, TYPE)
     #define BSP_IO_SPEED(IO, SPEED)     IO_SET_SPEED((IO)->port, (IO)->pin, SPEED)
     #define BSP_IO_WRITE(IO, STATE)     IO_WRITE((IO)->port, (IO)->pin, ((STATE) == IO_STATE_HIGH) ? GPIO_PIN_SET : GPIO_PIN_RESET)
     #define BSP_IO_READ(IO)             ((IO_READ((IO)->port, (IO)->pin) == GPIO_PIN_SET) ? IO_STATE_HIGH : IO_STATE_LOW)
 
-    // DB OPER
+    // DB OPER(DB实现无法重置AF寄存器)
     #define BSP_DB_TYPE(PORT, TYPE)     DB_SET_MODE(PORT, TYPE)
     #define BSP_DB_SPEED(PORT, SPEED)   DB_SET_SPEED(PORT, SPEED)
     #define BSP_DB_WRITE(PORT, DATA)    DB_WRITE(PORT, DATA)
@@ -94,9 +93,12 @@ extern "C"
     #define db_read                     BSP_DB_READ
 
     void bsp_gpio_init();
-    void io_setup(io_t* gpio, io_type type, io_speed speed, io_state state);
-    void db_setup(db_t* db, io_type type, io_speed speed, io_state state);
-    int8_t bsp_io_init(io_t* gpio);
+    void bsp_io_setup_impl(io_t* gpio, io_type type, uint32_t af, io_speed speed, io_state state);
+    void bsp_db_setup_impl(db_t* gpio, io_type type, io_speed speed, io_state state);
+    int8_t bsp_io_preset(io_t* gpio);
+    void bsp_io_setup(io_t* gpio, io_type type, io_speed speed, io_state state);
+    void bsp_io_setup_unused(io_t* gpio);
+    void bsp_io_setup_af(io_t* gpio, uint32_t af, io_speed speed);
 
     #ifdef __cplusplus
 }

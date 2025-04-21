@@ -41,7 +41,7 @@ extern "C"
     #include "bsp_ft.h"
     #include "bsp_uart.h"
 
-    /* DELAY IMPL */ 
+    /* DELAY IMPL */
     #ifdef USE_CDELAY_IMPL
     #define delay_ns                                cdelay_ns
     #define delay_us                                cdelay_us
@@ -52,12 +52,12 @@ extern "C"
     #define DELAY_MS                                delay_ms
     #endif
 
-    /* PRINTF IMPL */ 
+    /* PRINTF IMPL */
     #ifdef USE_PRINTF_IMPL
     #define PRINTF                                  printf
     #endif
 
-    /* INLINE IMPL */ 
+    /* INLINE IMPL */
     /* from cmsis_armclang.h */
     #ifndef   __INLINE
     #define __INLINE                                __inline
@@ -66,7 +66,7 @@ extern "C"
     #define __FORCEINLINE                           __attribute__((always_inline)) __inline
     #endif
 
-    /* BREAKPOINT IMPL */ 
+    /* BREAKPOINT IMPL */
     /* for debug */
     #ifndef   __DBG_BREAKPOINT
     #define __DBG_BREAKPOINT                        __NOP

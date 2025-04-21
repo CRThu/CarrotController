@@ -7,7 +7,7 @@ int8_t dut_init(dut_interface_t* dut)
     while ((dut->pin_configs[i]).btb_pin != IO_ARR_END_ID)
     {
 
-        bsp_io_init(&(dut->pin_configs[i]));
+        bsp_io_preset(&(dut->pin_configs[i]));
         i++;
     }
 

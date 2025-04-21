@@ -43,14 +43,14 @@ void bsp_pwm_io_init(uint8_t idx, uint8_t en)
 
     if (en)
     {
-        BSP_IO_SET_AF(io);
+        BSP_IO_SET_AF(io, io->af);
         BSP_IO_TYPE(io, IO_TYPE_PERH);
         BSP_IO_SPEED(io, IO_SPEED_NORMAL);
         BSP_IO_WRITE(io, IO_STATE_LOW);
     }
     else
     {
-        BSP_IO_RESET_AF(io);
+        BSP_IO_SET_AF(io,0);
         BSP_IO_TYPE(io, IO_TYPE_IN);
         BSP_IO_SPEED(io, IO_SPEED_NORMAL);
         BSP_IO_WRITE(io, IO_STATE_LOW);

@@ -29,7 +29,7 @@ int8_t switch_init(io_switch_t* switch_configs)
     uint16_t i = 0;
     while (switch_configs[i].id != IO_SWITCH_ARR_END_ID)
     {
-        bsp_io_init(&(switch_configs[i].sw_sel));
+        bsp_io_preset(&(switch_configs[i].sw_sel));
         i++;
     }
     return 0;
