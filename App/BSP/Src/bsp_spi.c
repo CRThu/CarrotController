@@ -1,5 +1,8 @@
 #include "bsp_inc.h"
 
+__weak SPI_HandleTypeDef hspi1;
+__weak SPI_HandleTypeDef hspi3;
+
 io_t spi_io_cfg[] =
 {
     {.btb_pin = 17, .pin_name = "NSS[0]", .port = GPIO_PORT(A), .pin = GPIO_PIN(4) , .af = GPIO_AF5_SPI1 },

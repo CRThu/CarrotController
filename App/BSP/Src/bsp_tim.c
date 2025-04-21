@@ -5,6 +5,8 @@
  *****************************/
 #include "bsp_inc.h"
 
+__weak TIM_HandleTypeDef htim4;
+__weak TIM_HandleTypeDef htim5;
 
 io_t tim_io_cfg[] =
 {
