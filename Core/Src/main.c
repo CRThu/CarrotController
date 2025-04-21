@@ -158,7 +158,7 @@ int main(void)
     MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-          // initial cdelay module
+    // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh

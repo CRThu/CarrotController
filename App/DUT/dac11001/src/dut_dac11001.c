@@ -19,22 +19,22 @@ dut_interface_t dac11001_profile =
     .pin_configs = (io_t[]) {
     #ifndef PWM_LDAC
     #ifdef SHARED_LDAC
-        {.btb_pin = 11, .pin_name = "#LDAC",       .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 11, .pin_name = "#LDAC",       .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .type = IO_TYPE_OUT,      .state = IO_STATE_HIGH     },
     #else
-        {.btb_pin = 11, .pin_name = "#LDAC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 12, .pin_name = "#LDAC[1]",    .port = GPIO_PORT(C), .pin = GPIO_PIN(2),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 11, .pin_name = "#LDAC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(1),  .type = IO_TYPE_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 12, .pin_name = "#LDAC[1]",    .port = GPIO_PORT(C), .pin = GPIO_PIN(2),  .type = IO_TYPE_OUT,      .state = IO_STATE_HIGH     },
     #endif
     #endif
-        //{.btb_pin = 17, .pin_name = "#SYNC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        //{.btb_pin = 19, .pin_name = "#SYNC[1]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,      .state = IO_STATE_HIGH     },
-        {.btb_pin = 23, .pin_name = "SPI_SCK[0]",  .port = GPIO_PORT(B), .pin = GPIO_PIN(3),  .func = BSP_IO_FUNC_PERH, .state = IO_STATE_RESERVED },
-        {.btb_pin = 25, .pin_name = "SPI_MOSI[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(5),  .func = BSP_IO_FUNC_PERH, .state = IO_STATE_RESERVED },
-        {.btb_pin = 27, .pin_name = "SPI_MISO[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(4),  .func = BSP_IO_FUNC_PERH, .state = IO_STATE_RESERVED },
-        {.btb_pin = 24, .pin_name = "SPI_SCK[1]",  .port = GPIO_PORT(C), .pin = GPIO_PIN(10), .func = BSP_IO_FUNC_PERH, .state = IO_STATE_RESERVED },
-        {.btb_pin = 26, .pin_name = "SPI_MOSI[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(12), .func = BSP_IO_FUNC_PERH, .state = IO_STATE_RESERVED },
-        {.btb_pin = 28, .pin_name = "SPI_MISO[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(11), .func = BSP_IO_FUNC_PERH, .state = IO_STATE_RESERVED },
-        {.btb_pin = 51, .pin_name = "#CLR[0]",     .port = GPIO_PORT(E), .pin = GPIO_PIN(14), .func = BSP_IO_FUNC_OUT,  .state = IO_STATE_HIGH     },
-        {.btb_pin = 52, .pin_name = "#CLR[1]",     .port = GPIO_PORT(E), .pin = GPIO_PIN(15), .func = BSP_IO_FUNC_OUT,  .state = IO_STATE_HIGH     },
+        //{.btb_pin = 17, .pin_name = "#SYNC[0]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(4),  .type = IO_TYPE_OUT,      .state = IO_STATE_HIGH     },
+        //{.btb_pin = 19, .pin_name = "#SYNC[1]",    .port = GPIO_PORT(A), .pin = GPIO_PIN(15), .type = IO_TYPE_OUT,      .state = IO_STATE_HIGH     },
+        {.btb_pin = 23, .pin_name = "SPI_SCK[0]",  .port = GPIO_PORT(B), .pin = GPIO_PIN(3),  .type = IO_TYPE_PERH, .state = IO_STATE_LOW },
+        {.btb_pin = 25, .pin_name = "SPI_MOSI[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(5),  .type = IO_TYPE_PERH, .state = IO_STATE_LOW },
+        {.btb_pin = 27, .pin_name = "SPI_MISO[0]", .port = GPIO_PORT(B), .pin = GPIO_PIN(4),  .type = IO_TYPE_PERH, .state = IO_STATE_LOW },
+        {.btb_pin = 24, .pin_name = "SPI_SCK[1]",  .port = GPIO_PORT(C), .pin = GPIO_PIN(10), .type = IO_TYPE_PERH, .state = IO_STATE_LOW },
+        {.btb_pin = 26, .pin_name = "SPI_MOSI[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(12), .type = IO_TYPE_PERH, .state = IO_STATE_LOW },
+        {.btb_pin = 28, .pin_name = "SPI_MISO[1]", .port = GPIO_PORT(C), .pin = GPIO_PIN(11), .type = IO_TYPE_PERH, .state = IO_STATE_LOW },
+        {.btb_pin = 51, .pin_name = "#CLR[0]",     .port = GPIO_PORT(E), .pin = GPIO_PIN(14), .type = IO_TYPE_OUT,  .state = IO_STATE_HIGH     },
+        {.btb_pin = 52, .pin_name = "#CLR[1]",     .port = GPIO_PORT(E), .pin = GPIO_PIN(15), .type = IO_TYPE_OUT,  .state = IO_STATE_HIGH     },
         {.btb_pin = IO_ARR_END_ID}
     },
 

@@ -66,8 +66,8 @@ extern "C"
 
     void bsp_switch_init(uint16_t swval);
 
-    gpio_config_status_t switch_init(io_switch_t* switch_configs);
-    gpio_config_status_t switch_set(io_switch_t* switch_configs, uint16_t value);
+    int8_t switch_init(io_switch_t* switch_configs);
+    int8_t switch_set(io_switch_t* switch_configs, uint16_t value);
     uint32_t switch_get(io_switch_t* switch_configs);
 
     #ifdef __cplusplus

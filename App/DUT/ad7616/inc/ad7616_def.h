@@ -105,7 +105,7 @@ typedef struct ad7616_t
 
     /* perh */
     bsp_pwm_t* pwm1;        /* + + + + */
-    void* etr2;             /*         */
+    void* etr2;             /* + + + + */
     spi_t* spi_a;           /* +   +   */
     spi_t* spi_b;           /* +   +   */
     gpio_port_t* par_db;    /*   +   + */
