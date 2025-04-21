@@ -16,18 +16,13 @@ extern "C"
     #include "bsp_inc.h"
 
     #include "spi.h"
-    //#include "stm32h5xx_hal_spi.h"
 
-    // STM32 IMPL
-    #ifdef USE_STM32H5_HAL_IMPL
     typedef SPI_HandleTypeDef spi_t;
 
     #define __SPI_TIMEOUT__                                             (100)
     #define BSP_SPI_WRITE(__INSTANCE__, __BUF__, __SIZE__)              HAL_SPI_TransmitReceive((__INSTANCE__), __BUF__, __BUF__, __SIZE__, __SPI_TIMEOUT__)
     #define BSP_SPI_READ(__INSTANCE__, __BUF__, __SIZE__)               HAL_SPI_TransmitReceive((__INSTANCE__), __BUF__, __BUF__, __SIZE__, __SPI_TIMEOUT__)
     #define BSP_SPI_RW(__INSTANCE__, __WRBUF__, __RDBUF__, __SIZE__)    HAL_SPI_TransmitReceive((__INSTANCE__), __WRBUF__, __RDBUF__, __SIZE__, __SPI_TIMEOUT__)
-
-    #endif
 
     #define bsp_spi_write                   BSP_SPI_WRITE
     #define bsp_spi_read                    BSP_SPI_READ
@@ -100,9 +95,10 @@ extern "C"
     } bsp_spi_cpol;
 
     spi_t* bsp_get_spi_instance(uint8_t index);
-    void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode);
+    int8_t bsp_get_spi_index(spi_t* spi);
+    void bsp_spi_io_config(spi_t* spi,bsp_spi_io_mode spi_io_mode);
     void bsp_spi_io_config_all(bsp_spi_io_mode spi_io_mode);
-    void bsp_spi_perh_config(uint8_t index, bsp_spi_mode master, bsp_spi_data_size datasize, bsp_spi_clk_psc psc, bsp_spi_cpha cpha, bsp_spi_cpol cpol);
+    void bsp_spi_perh_config(spi_t* spi, bsp_spi_mode master, bsp_spi_data_size datasize, bsp_spi_clk_psc psc, bsp_spi_cpha cpha, bsp_spi_cpol cpol);
 
 
     #ifdef __cplusplus

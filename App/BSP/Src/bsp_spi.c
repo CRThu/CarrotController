@@ -17,19 +17,31 @@ io_t spi_io_cfg[] =
     {.btb_pin = IO_ARR_END_ID }
 };
 
-spi_t spi_instances[] =
+spi_t* bsp_spi[] =
 {
-    {.Instance = SPI1},
-    {.Instance = SPI3}
+    &hspi1,
+    &hspi3
 };
 
 __FORCEINLINE spi_t* bsp_get_spi_instance(uint8_t index)
 {
-    return &spi_instances[index];
+    return bsp_spi[index];
 }
 
-void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode)
+__FORCEINLINE int8_t bsp_get_spi_index(spi_t* spi)
 {
+    for (int i = 0;i < sizeof(bsp_spi) / sizeof(spi_t*); i++)
+    {
+        if (spi == bsp_spi[i])
+            return i;
+    }
+    return -1;
+}
+
+void bsp_spi_io_config(spi_t* spi, bsp_spi_io_mode spi_io_mode)
+{
+    int8_t index = bsp_get_spi_index(spi);
+
     /* IO INITIAL */
     io_t* io;
 
@@ -80,7 +92,7 @@ void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode)
     /* PERH initial */
     if (spi_io_mode != BSP_SPI_IO_MODE_OFF)
     {
-        spi_instances[index].Init.Direction = SPI_DIRECTION_2LINES;
+        (spi->Init).Direction = SPI_DIRECTION_2LINES;
 
         // (spi_io_mode & BSP_SPI_MODE_TX_EN)
         //     ? ((spi_io_mode & BSP_SPI_MODE_RX_EN)
@@ -88,7 +100,7 @@ void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode)
         //         : SPI_DIRECTION_2LINES_TXONLY)
         //     : SPI_DIRECTION_1LINE;
 
-        spi_instances[index].Init.NSS = (spi_io_mode & BSP_SPI_MODE_CS_EN)
+        (spi->Init).NSS = (spi_io_mode & BSP_SPI_MODE_CS_EN)
             ? ((spi_io_mode & BSP_SPI_MODE_CS_IN)
                 ? SPI_NSS_HARD_INPUT
                 : SPI_NSS_HARD_OUTPUT)
@@ -98,14 +110,16 @@ void bsp_spi_io_config(uint8_t index, bsp_spi_io_mode spi_io_mode)
 
 void bsp_spi_io_config_all(bsp_spi_io_mode spi_io_mode)
 {
-    for (int i = 0; i < sizeof(spi_instances) / sizeof(spi_t); i++)
+    for (int i = 0; i < sizeof(bsp_spi) / sizeof(spi_t*); i++)
     {
-        bsp_spi_io_config(i, spi_io_mode);
+        bsp_spi_io_config(bsp_spi[i], spi_io_mode);
     }
 }
 
-void bsp_spi_perh_config(uint8_t index, bsp_spi_mode master, bsp_spi_data_size datasize, bsp_spi_clk_psc psc, bsp_spi_cpha cpha, bsp_spi_cpol cpol)
+void bsp_spi_perh_config(spi_t* spi, bsp_spi_mode master, bsp_spi_data_size datasize, bsp_spi_clk_psc psc, bsp_spi_cpha cpha, bsp_spi_cpol cpol)
 {
+    int8_t index = bsp_get_spi_index(spi);
+
     /* CLOCK CONFIG */
     switch (index)
     {
@@ -121,34 +135,34 @@ void bsp_spi_perh_config(uint8_t index, bsp_spi_mode master, bsp_spi_data_size d
     }
 
     /* PERH initial */
-    //spi_instances[index].Instance = SPI1;
-    //spi_instances[index].Init.Mode = SPI_MODE_MASTER;
-    spi_instances[index].Init.Mode = master;
-    //spi_instances[index].Init.Direction = SPI_DIRECTION_2LINES;
-    //spi_instances[index].Init.DataSize = SPI_DATASIZE_16BIT;
-    spi_instances[index].Init.DataSize = datasize;
-    //spi_instances[index].Init.CLKPolarity = SPI_POLARITY_LOW;
-    spi_instances[index].Init.CLKPolarity = cpol;
-    //spi_instances[index].Init.CLKPhase = SPI_PHASE_1EDGE;
-    spi_instances[index].Init.CLKPhase = cpha;
-    //spi_instances[index].Init.NSS = SPI_NSS_HARD_OUTPUT;
-    //spi_instances[index].Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
-    spi_instances[index].Init.BaudRatePrescaler = (master == BSP_SPI_MODE_MASTER) ? psc : SPI_BAUDRATEPRESCALER_BYPASS;
-    spi_instances[index].Init.FirstBit = SPI_FIRSTBIT_MSB;
-    spi_instances[index].Init.TIMode = SPI_TIMODE_DISABLE;
-    spi_instances[index].Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-    spi_instances[index].Init.CRCPolynomial = 0x7;
-    spi_instances[index].Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
-    spi_instances[index].Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
-    spi_instances[index].Init.FifoThreshold = SPI_FIFO_THRESHOLD_01DATA;
-    spi_instances[index].Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
-    spi_instances[index].Init.MasterInterDataIdleness = SPI_MASTER_INTERDATA_IDLENESS_00CYCLE;
-    spi_instances[index].Init.MasterReceiverAutoSusp = SPI_MASTER_RX_AUTOSUSP_DISABLE;
-    spi_instances[index].Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_ENABLE;
-    spi_instances[index].Init.IOSwap = (master == BSP_SPI_MODE_MASTER) ? SPI_IO_SWAP_DISABLE : SPI_IO_SWAP_ENABLE;
-    spi_instances[index].Init.ReadyMasterManagement = SPI_RDY_MASTER_MANAGEMENT_INTERNALLY;
-    spi_instances[index].Init.ReadyPolarity = SPI_RDY_POLARITY_HIGH;
-    if (HAL_SPI_Init(&spi_instances[index]) != HAL_OK)
+    //spi->Instance = SPI1;
+    //spi->Init.Mode = SPI_MODE_MASTER;
+    spi->Init.Mode = master;
+    //sspi->Init.Direction = SPI_DIRECTION_2LINES;
+    //sspi->Init.DataSize = SPI_DATASIZE_16BIT;
+    spi->Init.DataSize = datasize;
+    //spi->Init.CLKPolarity = SPI_POLARITY_LOW;
+    spi->Init.CLKPolarity = cpol;
+    //spi->Init.CLKPhase = SPI_PHASE_1EDGE;
+    spi->Init.CLKPhase = cpha;
+    //spi->Init.NSS = SPI_NSS_HARD_OUTPUT;
+    //spi->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+    spi->Init.BaudRatePrescaler = (master == BSP_SPI_MODE_MASTER) ? psc : SPI_BAUDRATEPRESCALER_BYPASS;
+    spi->Init.FirstBit = SPI_FIRSTBIT_MSB;
+    spi->Init.TIMode = SPI_TIMODE_DISABLE;
+    spi->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+    spi->Init.CRCPolynomial = 0x7;
+    spi->Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+    spi->Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
+    spi->Init.FifoThreshold = SPI_FIFO_THRESHOLD_01DATA;
+    spi->Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
+    spi->Init.MasterInterDataIdleness = SPI_MASTER_INTERDATA_IDLENESS_00CYCLE;
+    spi->Init.MasterReceiverAutoSusp = SPI_MASTER_RX_AUTOSUSP_DISABLE;
+    spi->Init.MasterKeepIOState = SPI_MASTER_KEEP_IO_STATE_ENABLE;
+    spi->Init.IOSwap = (master == BSP_SPI_MODE_MASTER) ? SPI_IO_SWAP_DISABLE : SPI_IO_SWAP_ENABLE;
+    spi->Init.ReadyMasterManagement = SPI_RDY_MASTER_MANAGEMENT_INTERNALLY;
+    spi->Init.ReadyPolarity = SPI_RDY_POLARITY_HIGH;
+    if (HAL_SPI_Init(spi) != HAL_OK)
     {
         Error_Handler();
     }

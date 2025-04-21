@@ -181,10 +181,10 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         adc->par_db = NULL;
 
         /* PERH IOCFG */
-        bsp_spi_io_config(0, BSP_SPI_IO_MODE_CRT);
-        bsp_spi_perh_config(0, BSP_SPI_MODE_MASTER, BSP_SPI_DATA_SIZE_16B, BSP_SPI_CLK_PSC_8, BSP_SPI_CPHA_0, BSP_SPI_CPOL_1);
-        bsp_spi_io_config(1, BSP_SPI_IO_MODE_CR_CSIN_SCKIN);
-        bsp_spi_perh_config(1, BSP_SPI_MODE_SLAVE, BSP_SPI_DATA_SIZE_16B, BSP_SPI_CLK_PSC_8, BSP_SPI_CPHA_0, BSP_SPI_CPOL_1);
+        bsp_spi_io_config(adc->spi_a, BSP_SPI_IO_MODE_CRT);
+        bsp_spi_perh_config(adc->spi_a, BSP_SPI_MODE_MASTER, BSP_SPI_DATA_SIZE_16B, BSP_SPI_CLK_PSC_8, BSP_SPI_CPHA_0, BSP_SPI_CPOL_1);
+        bsp_spi_io_config(adc->spi_b, BSP_SPI_IO_MODE_CR_CSIN_SCKIN);
+        bsp_spi_perh_config(adc->spi_b, BSP_SPI_MODE_SLAVE, BSP_SPI_DATA_SIZE_16B, BSP_SPI_CLK_PSC_8, BSP_SPI_CPHA_0, BSP_SPI_CPOL_1);
 
     }
     else
