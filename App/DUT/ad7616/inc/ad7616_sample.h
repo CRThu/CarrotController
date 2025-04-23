@@ -16,6 +16,8 @@
 extern uint16_t adc_data_buffer[AD7616_CONV_BUFFER_LEN];
 extern uint32_t adc_data_count;
 
+uint8_t ad7616_hw_set_seq(ad7616_t* adc, uint8_t seq);
+uint8_t ad7616_hw_set_seq_chsel(ad7616_t* adc, uint8_t chseq);
 void ad7616_set_channel(ad7616_t* adc, uint8_t adc_ch_a, uint8_t adc_ch_b);
 void ad7616_convst_generate_by_io(ad7616_t* adc);
 void ad7616_convst_generate_by_pwm(ad7616_t* adc);

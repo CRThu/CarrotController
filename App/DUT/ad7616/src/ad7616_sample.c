@@ -10,6 +10,39 @@ uint16_t adc_data_buffer[AD7616_CONV_BUFFER_LEN] = { 0 };
 uint32_t adc_data_count = 0;
 
 
+__FORCEINLINE uint8_t ad7616_hw_set_seq(ad7616_t* adc, uint8_t seq)
+{
+    if (adc->mode & AD7616_MODE_HW_FLAG)
+    {
+        /* HW */
+        BSP_IO_WRITE(&(adc->seqen), seq ? IO_STATE_HIGH : IO_STATE_LOW);
+
+        return 0;
+    }
+    else
+        return -1;
+}
+
+__FORCEINLINE uint8_t ad7616_hw_set_seq_chsel(ad7616_t* adc, uint8_t chseq)
+{
+    if (adc->mode & AD7616_MODE_HW_FLAG)
+    {
+        /* HW */
+        /* AD7616 手册chsel错误 */
+        uint8_t chsel2 = (chseq >> 2) & 0x01;
+        uint8_t chsel1 = (chseq >> 1) & 0x01;
+        uint8_t chsel0 = (chseq >> 0) & 0x01;
+
+        BSP_IO_WRITE(&(adc->chsel2), chsel2 ? IO_STATE_HIGH : IO_STATE_LOW);
+        BSP_IO_WRITE(&(adc->chsel1), chsel1 ? IO_STATE_HIGH : IO_STATE_LOW);
+        BSP_IO_WRITE(&(adc->chsel0), chsel0 ? IO_STATE_HIGH : IO_STATE_LOW);
+
+        return 0;
+    }
+    else
+        return -1;
+}
+
 __FORCEINLINE void ad7616_set_channel(ad7616_t* adc, uint8_t adc_ch_a, uint8_t adc_ch_b)
 {
     adc->adc_ch_a_en = (adc_ch_a != AD7616_CHANNEL_OFF);
@@ -91,7 +124,7 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
         // wait for convst
         while (!flag);
         flag = 0;
-        
+
         delay_ns(200);
         ad7616_sample_read_adc(adc);
     }
