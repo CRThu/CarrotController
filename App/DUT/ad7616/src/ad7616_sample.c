@@ -133,6 +133,52 @@ __FORCEINLINE void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count)
     bsp_pwm_stop(adc->pwm1);
 }
 
+
+/* generate convst by pwm and sample with seq+burst, set sample_stack=0 when using stack0 or without seq+burst */
+__FORCEINLINE void ad7616_sample_by_pwm_poll_burst(ad7616_t* adc, uint32_t count, uint8_t sample_stack)
+{
+    if (count > sizeof(adc_data_buffer) / sizeof(uint16_t))
+        Error_Handler();
+
+    adc_data_count = 0;
+
+    ad7616_convst_generate_by_pwm(adc);
+
+    bsp_tim_set(adc->pwm1->tim, adc->convst_freq);
+    bsp_pwm_set(adc->pwm1, 0.01);
+
+    bsp_pwm_start(adc->pwm1);
+
+    // for first isr
+    while (BSP_IO_READ(&(adc->busy)));  // LOW
+    while (!BSP_IO_READ(&(adc->busy))); // POSEDGE
+    while (BSP_IO_READ(&(adc->busy)));  // NEGEDGE
+
+    // ad7616 update
+    while (BSP_IO_READ(&(adc->busy)));  // LOW
+    while (!BSP_IO_READ(&(adc->busy))); // POSEDGE
+    while (BSP_IO_READ(&(adc->busy)));  // NEGEDGE
+
+    for (uint32_t i = 0; i < count; i++)
+    {
+        // wait for convst
+        while (BSP_IO_READ(&(adc->busy)));  // LOW
+        while (!BSP_IO_READ(&(adc->busy))); // POSEDGE
+        while (BSP_IO_READ(&(adc->busy)));  // NEGEDGE
+
+        uint16_t adc_data_temp_a = 0;
+        uint16_t adc_data_temp_b = 0;
+        for (uint8_t stack = 0; stack < sample_stack; stack++)
+        {
+            ad7616_data_read_two(adc, &adc_data_temp_a, &adc_data_temp_b);
+        }
+
+        ad7616_sample_read_adc(adc);
+    }
+
+    bsp_pwm_stop(adc->pwm1);
+}
+
 __FORCEINLINE void ad7616_sample_read_adc(ad7616_t* adc)
 {
     uint16_t adc_data_temp_a = 0;

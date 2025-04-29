@@ -23,6 +23,7 @@ void ad7616_convst_generate_by_io(ad7616_t* adc);
 void ad7616_convst_generate_by_pwm(ad7616_t* adc);
 void ad7616_sample_by_io(ad7616_t* adc, uint32_t count);
 void ad7616_sample_by_pwm(ad7616_t* adc, uint32_t count);
+void ad7616_sample_by_pwm_poll_burst(ad7616_t* adc, uint32_t count, uint8_t sample_stack);
 void ad7616_sample_read_adc(ad7616_t* adc);
 
 #endif // _AD7616_SAMPLE_H_
