@@ -158,7 +158,7 @@ int main(void)
     MX_SPI3_Init();
     /* USER CODE BEGIN 2 */
 
-    // initial cdelay module
+      // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
@@ -176,22 +176,25 @@ int main(void)
     //adc.mode = AD7616_SER_HW;
     adc.serial_wire = 1;
     //adc.serial_wire = 2;
-    adc.convst_freq = 350000;
+    adc.convst_freq = 100000;
 
     ad7616_set_io(&adc, &ad7616_profiles[0]);
+    delay_ms(20);
     ad7616_full_reset(&adc);
     ad7616_set_channel(&adc, AD7616_CHANNEL_0, AD7616_CHANNEL_0);
+    delay_us(200);
     /*
     comm_pc = uart_comm_create(&huart4, 2048);
     uart_comm_start(comm_pc);
 
     */
+    ad7616_set_io_convst(&adc, AD7616_CONVST_IO);
 
     //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
     //ad7616_sample_by_pwm(&adc, 16);
 
-    bsp_uart_t* uart = get_comm_uart();
-    bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
+    // bsp_uart_t* uart = get_comm_uart();
+    //bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
 
     //delay_ms(2000);
     //BSP_IO_WRITE(&(adc.resetn), IO_STATE_LOW);
@@ -228,9 +231,9 @@ int main(void)
 
         delay_us(1000);
         //delay_ms(1000);
-        /* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
-        /* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
 }
@@ -330,7 +333,7 @@ void PeriphCommonClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                                        /* User can add his own implementation to report the HAL error return state */
+                                          /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -349,8 +352,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                                        /* User can add his own implementation to report the file name and line number,
-                                           ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                                           /* USER CODE END 6 */
+                                          /* User can add his own implementation to report the file name and line number,
+                                             ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+                                             /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

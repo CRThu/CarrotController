@@ -446,7 +446,7 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
         BSP_IO_TYPE(&(adc->crcen), IO_TYPE_OUT);
         BSP_IO_SPEED(&(adc->crcen), IO_SPEED_FAST);
         BSP_IO_WRITE(&(adc->crcen), IO_STATE_LOW);
-        
+
         COPY_FROM_IO(&(adc->os0), dut_get_io(intf->pin_configs, "DB13"));
         BSP_IO_TYPE(&(adc->os0), IO_TYPE_OUT);
         BSP_IO_SPEED(&(adc->os0), IO_SPEED_FAST);
