@@ -12,4 +12,8 @@
 #include "ad7616_iocfg.h"
 #include "ad7616_sample.h"
 
+#include "dyncall.h"
+
+extern function_group_t ad7616_func_group;
+
 #endif // _AD7616_CONTROL_H_

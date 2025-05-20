@@ -25,7 +25,7 @@ extern "C"
 
     #define DYNCALL_VERSION		        "1.1.1"
 
-    #define DYNCALL_DEBUG               1
+    #define DYNCALL_DEBUG               0
     #define DYNCALL_FUNC_SIG            0
 
 

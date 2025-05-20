@@ -31,9 +31,11 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "uart_comm.h"
+#include "dynpool.h"
 
 #include "ad7616_iocfg.h"
 #include "ad7616_sample.h"
+#include "ad7616_control.h"
 
 #include "bsp_inc.h"
 /* USER CODE END Includes */
@@ -164,7 +166,7 @@ int main(void)
     // initial bsp perh
     bsp_clock_init();
     bsp_gpio_init();
-    bsp_comm_uart_init_by_cubemx(&huart4);
+    bsp_uart_init_by_cubemx(&huart4);
     bsp_ft_init();
     bsp_spi_io_config_all(BSP_SPI_IO_MODE_OFF);
     bsp_switch_init(BSPMUX_DEFAULT);
@@ -183,18 +185,17 @@ int main(void)
     ad7616_full_reset(&adc);
     ad7616_set_channel(&adc, AD7616_CHANNEL_0, AD7616_CHANNEL_0);
     delay_us(200);
-    /*
-    comm_pc = uart_comm_create(&huart4, 2048);
-    uart_comm_start(comm_pc);
 
-    */
-    ad7616_set_io_convst(&adc, AD7616_CONVST_IO);
+    // serial service
+    uart_t* uart_comm = get_comm_uart();
+    uart_comm_t* comm_pc = uart_comm_create(uart_comm, 2048);
+    uart_comm_start(comm_pc);
 
     //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
     //ad7616_sample_by_pwm(&adc, 16);
 
-    // bsp_uart_t* uart = get_comm_uart();
-    //bsp_uart_write(uart, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
+
+    //uart_comm_write(comm_pc, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
 
     //delay_ms(2000);
     //BSP_IO_WRITE(&(adc.resetn), IO_STATE_LOW);
@@ -207,27 +208,31 @@ int main(void)
     while (1)
     {
         /* COMM UART TEST */
-        //if (flag)
-        //{
-        //    BSP_IO_WRITE(&(adc.csn), flag);
-        //    flag = 0;
-        //    BSP_IO_WRITE(&(adc.csn), flag);
-        //}
         //char test_frame[] = "STM32H563 TEST";
-        //bsp_uart_t* uart = get_comm_uart();
-        //bsp_uart_write(uart, (uint8_t*)&test_frame[0], sizeof(test_frame));
+        //uart_comm_write(comm_pc, (uint8_t*)&test_frame[0], sizeof(test_frame));
 
+        uint8_t recv_bytes[256];
+        uint16_t recv_len = 0;
 
-        /* REG COMM TEST */
-        //ad7616_reg_write(&adc, 0x2F, 0x11);
-        //ad7616_reg_write(&adc, 0x3F, 0x122);
+        dynpool_t pool;
 
-        //volatile uint16_t reg2f = ad7616_reg_read(&adc, 0x2F);
-        //   volatile uint16_t reg3f = ad7616_reg_read(&adc, 0x3F);
-
-        delay_us(2);
-        /* REG COMM TEST */
-
+        //bsp_uart_printf("[INFO]: waiting for command\r\n");
+        recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
+        if (recv_len != 0)
+        {
+            char* cmd = (char*)recv_bytes;
+            if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
+            {
+                bsp_uart_printf("[INFO]: cmdparse from string ok.\r\n");
+                uart_comm_write(comm_pc, recv_bytes, recv_len);
+                invoke_by_cmd(&ad7616_func_group, &pool);
+            }
+            else
+            {
+                bsp_uart_printf("[ERROR]: cmdparse from string err.\r\n");
+                uart_comm_write(comm_pc, recv_bytes, recv_len);
+            }
+        }
 
         delay_us(1000);
         //delay_ms(1000);
