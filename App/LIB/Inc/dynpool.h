@@ -4,11 +4,6 @@
 * 2025.03.18
 *****************************/
 #pragma once
-#include <inttypes.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #ifndef _DYNPOOL_H_
 #define _DYNPOOL_H_
 
@@ -21,8 +16,16 @@ extern "C"
 {
     #endif
 
-    #define DYNPOOL_VERSION             "1.1.0"
+    #include <inttypes.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
 
+    #include "bsp_uart.h"
+
+    #define DYNPOOL_VERSION             "1.1.2"
+
+    #define DYNPOOL_PRINTF              bsp_uart_printf
 
     #define DYNPOOL_MAX_BYTES           1024
     #define DYNPOOL_MAX_VARS            4
