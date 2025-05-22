@@ -32,6 +32,7 @@
 /* USER CODE BEGIN Includes */
 #include "uart_comm.h"
 #include "dynpool.h"
+#include "cevent.h"
 
 #include "ad7616_iocfg.h"
 #include "ad7616_sample.h"
@@ -78,21 +79,6 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//uint8_t flag = 0;
-//void set_flag(TIM_HandleTypeDef* htim)
-//{
-//    flag = 1;
-//}
-/*
-void test(TIM_HandleTypeDef* htim)
-{
-    recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
-    if (recv_len != 0)
-    {
-        uart_comm_write(comm_pc, recv_bytes, recv_len);
-    }
-}
-*/
 ad7616_t adc;
 
 void bsp_clock_init()
@@ -115,6 +101,28 @@ void bsp_clock_init()
             Error_Handler();
         }
     }
+}
+
+
+volatile uint32_t cnt = 0;
+void tim_callback(TIM_HandleTypeDef* htim)
+{
+    cnt++;
+    if (cevent_raise(&global_event, 0))
+        bsp_uart_printf("QUENE FULL\r\n");
+    if (cnt % 10 == 0)
+    {
+        if (cevent_raise(&global_event, 1))
+            bsp_uart_printf("QUENE FULL\r\n");
+    }
+}
+void send_event()
+{
+    bsp_uart_printf("%ld\r\n", cnt);
+}
+void send_hello()
+{
+    bsp_uart_printf("hello\r\n");
 }
 /* USER CODE END 0 */
 
@@ -171,6 +179,13 @@ int main(void)
     bsp_spi_io_config_all(BSP_SPI_IO_MODE_OFF);
     bsp_switch_init(BSPMUX_DEFAULT);
 
+    cevent_init(&global_event);
+    cevent_register(&global_event, 0, send_event);
+    cevent_register(&global_event, 1, send_hello);
+
+    bsp_tim_set(&htim5, 10);
+    bsp_tim_start(&htim5, tim_callback);
+
     // initial dut ad7616 board
 
     //adc.mode = AD7616_PAR_SW;
@@ -201,44 +216,49 @@ int main(void)
     //BSP_IO_WRITE(&(adc.resetn), IO_STATE_LOW);
     delay_ms(10);
 
-    /* USER CODE END 2 */
+    /* COMM UART TEST */
+    //char test_frame[] = "STM32H563 TEST";
+    //uart_comm_write(comm_pc, (uint8_t*)&test_frame[0], sizeof(test_frame));
 
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
+/* USER CODE END 2 */
+
+/* Infinite loop */
+/* USER CODE BEGIN WHILE */
+
     while (1)
     {
-        /* COMM UART TEST */
-        //char test_frame[] = "STM32H563 TEST";
-        //uart_comm_write(comm_pc, (uint8_t*)&test_frame[0], sizeof(test_frame));
+        cevent_run(&global_event);
+        // uint8_t recv_bytes[256];
+        // uint16_t recv_len = 0;
 
-        uint8_t recv_bytes[256];
-        uint16_t recv_len = 0;
+        // dynpool_t pool;
 
-        dynpool_t pool;
+        // //bsp_uart_printf("[INFO]: waiting for command\r\n");
+        // recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
+        // if (recv_len != 0)
+        // {
+        //     char* cmd = (char*)recv_bytes;
+        //     if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
+        //     {
+        //         bsp_uart_printf("[INFO]: cmdparse from string ok.\r\n");
+        //         uart_comm_write(comm_pc, recv_bytes, recv_len);
+        //         invoke_by_cmd(&ad7616_func_group, &pool);
+        //     }
+        //     else
+        //     {
+        //         bsp_uart_printf("[ERROR]: cmdparse from string err.\r\n");
+        //         uart_comm_write(comm_pc, recv_bytes, recv_len);
+        //     }
+        // }
 
-        //bsp_uart_printf("[INFO]: waiting for command\r\n");
-        recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
-        if (recv_len != 0)
-        {
-            char* cmd = (char*)recv_bytes;
-            if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
-            {
-                bsp_uart_printf("[INFO]: cmdparse from string ok.\r\n");
-                uart_comm_write(comm_pc, recv_bytes, recv_len);
-                invoke_by_cmd(&ad7616_func_group, &pool);
-            }
-            else
-            {
-                bsp_uart_printf("[ERROR]: cmdparse from string err.\r\n");
-                uart_comm_write(comm_pc, recv_bytes, recv_len);
-            }
-        }
-
-        delay_us(1000);
+        //delay_us(1000);
         //delay_ms(1000);
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+        // bsp_uart_printf("%ld\r\n", cnt);
+        // cnt = 0;
+        /* USER CODE END WHILE */
+
+        /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
 }
