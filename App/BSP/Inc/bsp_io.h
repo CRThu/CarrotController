@@ -81,10 +81,11 @@ extern "C"
     #define BSP_IO_READ(IO)             ((IO_READ((IO)->port, (IO)->pin) == GPIO_PIN_SET) ? IO_STATE_HIGH : IO_STATE_LOW)
 
     // DB OPER(DB实现无法重置AF寄存器)
-    #define BSP_DB_TYPE(PORT, TYPE)     DB_SET_MODE(PORT, TYPE)
-    #define BSP_DB_SPEED(PORT, SPEED)   DB_SET_SPEED(PORT, SPEED)
-    #define BSP_DB_WRITE(PORT, DATA)    DB_WRITE(PORT, DATA)
-    #define BSP_DB_READ(PORT)           DB_READ(PORT)
+    #define BSP_DB_TYPE(PORT, TYPE)             DB_SET_MODE(PORT, TYPE)
+    #define BSP_DB_SPEED(PORT, SPEED)           DB_SET_SPEED(PORT, SPEED)
+    #define BSP_DB_WRITE(PORT, DATA)            DB_WRITE(PORT, DATA)
+    #define BSP_DB_WRITE_MASK(PORT, DATA, MASK) DB_WRITE_MASK(PORT, DATA, MASK)
+    #define BSP_DB_READ(PORT)                   DB_READ(PORT)
 
     // alias
     #define io_write                    BSP_IO_WRITE
