@@ -105,16 +105,16 @@ void bsp_clock_init()
 
 
 volatile uint32_t cnt = 0;
-void tim_callback(TIM_HandleTypeDef* htim)
+void tim5_callback(TIM_HandleTypeDef* htim)
 {
     cnt++;
     if (cevent_raise(&global_event, 0))
         bsp_uart_printf("QUENE FULL\r\n");
-    if (cnt % 10 == 0)
-    {
-        if (cevent_raise(&global_event, 1))
-            bsp_uart_printf("QUENE FULL\r\n");
-    }
+}
+void tim6_callback(TIM_HandleTypeDef* htim)
+{
+    if (cevent_raise(&global_event, 1))
+        bsp_uart_printf("QUENE FULL\r\n");
 }
 void send_event()
 {
@@ -166,9 +166,10 @@ int main(void)
     MX_TIM5_Init();
     MX_SPI1_Init();
     MX_SPI3_Init();
+    MX_TIM6_Init();
     /* USER CODE BEGIN 2 */
 
-      // initial cdelay module
+        // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
     // initial bsp perh
@@ -183,8 +184,9 @@ int main(void)
     cevent_register(&global_event, 0, send_event);
     cevent_register(&global_event, 1, send_hello);
 
-    bsp_tim_set(&htim5, 10);
-    bsp_tim_start(&htim5, tim_callback);
+    bsp_tim_set(&htim5, 2);
+    bsp_tim_start(&htim5, tim5_callback);
+    bsp_tim_start(&htim6, tim6_callback);
 
     // initial dut ad7616 board
 
@@ -200,6 +202,7 @@ int main(void)
     ad7616_full_reset(&adc);
     ad7616_set_channel(&adc, AD7616_CHANNEL_0, AD7616_CHANNEL_0);
     delay_us(200);
+
 
     // serial service
     uart_t* uart_comm = get_comm_uart();
@@ -220,10 +223,10 @@ int main(void)
     //char test_frame[] = "STM32H563 TEST";
     //uart_comm_write(comm_pc, (uint8_t*)&test_frame[0], sizeof(test_frame));
 
-/* USER CODE END 2 */
+  /* USER CODE END 2 */
 
-/* Infinite loop */
-/* USER CODE BEGIN WHILE */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
 
     while (1)
     {
@@ -256,9 +259,9 @@ int main(void)
 
         // bsp_uart_printf("%ld\r\n", cnt);
         // cnt = 0;
-        /* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
-        /* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
 }
@@ -358,7 +361,7 @@ void PeriphCommonClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                                          /* User can add his own implementation to report the HAL error return state */
+                                            /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -377,8 +380,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                                          /* User can add his own implementation to report the file name and line number,
-                                             ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                                             /* USER CODE END 6 */
+                                            /* User can add his own implementation to report the file name and line number,
+                                               ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+                                               /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

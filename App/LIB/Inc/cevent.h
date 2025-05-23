@@ -15,6 +15,7 @@ extern "C"
 
     #include <stdint.h>
     #include <string.h>
+    #include "stm32h5xx_hal.h"
 
     /*
         EVENT IMPL:
@@ -61,6 +62,9 @@ extern "C"
     #define CEVENT_ERR_QUENE_FULL           -1
     #define CEVENT_ERR_ID_OUT_OF_RANGE      -2
     #define CEVENT_ERR_HANDLER_FULL         -3
+
+    #define CEVENT_CRITICAL_BEGIN()         uint32_t __cevent_primask = __get_PRIMASK(); __disable_irq()
+    #define CEVENT_CRITICAL_END()           __set_PRIMASK(__cevent_primask)
 
     typedef uint8_t cevent_size_t;
     typedef void (*cevent_handler_t)();
