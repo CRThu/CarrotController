@@ -56,7 +56,7 @@ extern "C"
     #define CEVNET_MAX_EVENT_HANDLER_NUM    16
     #define CEVNET_QUENE_SIZE               4
 
-    #define CEVENT_IDLE                     do{} while(0)
+    #define CEVENT_IDLE                     __NOP
 
     #define CEVENT_NO_ERR                   0
     #define CEVENT_ERR_QUENE_FULL           -1

@@ -48,7 +48,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define EVENT_ID_1MS_TICK   0
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -80,6 +80,7 @@ void PeriphCommonClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 ad7616_t adc;
+uart_comm_t* comm_pc;
 
 void bsp_clock_init()
 {
@@ -103,26 +104,36 @@ void bsp_clock_init()
     }
 }
 
-
-volatile uint32_t cnt = 0;
-void tim5_callback(TIM_HandleTypeDef* htim)
-{
-    cnt++;
-    if (cevent_raise(&global_event, 0))
-        bsp_uart_printf("QUENE FULL\r\n");
-}
 void tim6_callback(TIM_HandleTypeDef* htim)
 {
-    if (cevent_raise(&global_event, 1))
+    if (cevent_raise(&global_event, EVENT_ID_1MS_TICK))
         bsp_uart_printf("QUENE FULL\r\n");
 }
-void send_event()
+
+void command_proc()
 {
-    bsp_uart_printf("%ld\r\n", cnt);
-}
-void send_hello()
-{
-    bsp_uart_printf("hello\r\n");
+    uint8_t recv_bytes[256];
+    uint16_t recv_len = 0;
+
+    dynpool_t pool;
+
+    //bsp_uart_printf("[INFO]: waiting for command\r\n");
+    recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
+    if (recv_len != 0)
+    {
+        char* cmd = (char*)recv_bytes;
+        if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
+        {
+            bsp_uart_printf("[INFO]: cmdparse from string ok.\r\n");
+            uart_comm_write(comm_pc, recv_bytes, recv_len);
+            invoke_by_cmd(&ad7616_func_group, &pool);
+        }
+        else
+        {
+            bsp_uart_printf("[ERROR]: cmdparse from string err.\r\n");
+            uart_comm_write(comm_pc, recv_bytes, recv_len);
+        }
+    }
 }
 /* USER CODE END 0 */
 
@@ -180,13 +191,10 @@ int main(void)
     bsp_spi_io_config_all(BSP_SPI_IO_MODE_OFF);
     bsp_switch_init(BSPMUX_DEFAULT);
 
-    cevent_init(&global_event);
-    cevent_register(&global_event, 0, send_event);
-    cevent_register(&global_event, 1, send_hello);
-
-    bsp_tim_set(&htim5, 2);
-    bsp_tim_start(&htim5, tim5_callback);
-    bsp_tim_start(&htim6, tim6_callback);
+    // serial service
+    uart_t* uart_comm = get_comm_uart();
+    comm_pc = uart_comm_create(uart_comm, 2048);
+    uart_comm_start(comm_pc);
 
     // initial dut ad7616 board
 
@@ -204,11 +212,6 @@ int main(void)
     delay_us(200);
 
 
-    // serial service
-    uart_t* uart_comm = get_comm_uart();
-    uart_comm_t* comm_pc = uart_comm_create(uart_comm, 2048);
-    uart_comm_start(comm_pc);
-
     //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
     //ad7616_sample_by_pwm(&adc, 16);
 
@@ -223,37 +226,19 @@ int main(void)
     //char test_frame[] = "STM32H563 TEST";
     //uart_comm_write(comm_pc, (uint8_t*)&test_frame[0], sizeof(test_frame));
 
-  /* USER CODE END 2 */
+    cevent_init(&global_event);
+    cevent_register(&global_event, EVENT_ID_1MS_TICK, command_proc);
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+    bsp_tim_start(&htim6, tim6_callback);
+
+    /* USER CODE END 2 */
+
+    /* Infinite loop */
+    /* USER CODE BEGIN WHILE */
 
     while (1)
     {
         cevent_run(&global_event);
-        // uint8_t recv_bytes[256];
-        // uint16_t recv_len = 0;
-
-        // dynpool_t pool;
-
-        // //bsp_uart_printf("[INFO]: waiting for command\r\n");
-        // recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
-        // if (recv_len != 0)
-        // {
-        //     char* cmd = (char*)recv_bytes;
-        //     if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
-        //     {
-        //         bsp_uart_printf("[INFO]: cmdparse from string ok.\r\n");
-        //         uart_comm_write(comm_pc, recv_bytes, recv_len);
-        //         invoke_by_cmd(&ad7616_func_group, &pool);
-        //     }
-        //     else
-        //     {
-        //         bsp_uart_printf("[ERROR]: cmdparse from string err.\r\n");
-        //         uart_comm_write(comm_pc, recv_bytes, recv_len);
-        //     }
-        // }
-
         //delay_us(1000);
         //delay_ms(1000);
 

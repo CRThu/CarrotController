@@ -70,6 +70,6 @@ void cevent_runloop(cevent_t* e)
     while (1)
     {
         cevent_run(e);
-        CEVENT_IDLE;
+        CEVENT_IDLE();
     }
 }
