@@ -1,30 +1,54 @@
 #include "bsp_inc.h"
 
-
-io_t* ft_io = (io_t[]){
-    {.pin_name = "FT_D[0]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(0),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_D[1]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(1),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_D[2]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(2),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_D[3]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(3),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_D[4]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(4),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_D[5]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(5),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_D[6]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(6),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_D[7]",  .port = GPIO_PORT(F), .pin = GPIO_PIN(7),  .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_RXFN",  .port = GPIO_PORT(F), .pin = GPIO_PIN(11), .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_TXEN",  .port = GPIO_PORT(F), .pin = GPIO_PIN(12), .type = IO_TYPE_IN, .state = IO_STATE_LOW },
-    {.pin_name = "FT_RDN",   .port = GPIO_PORT(F), .pin = GPIO_PIN(13), .type = IO_TYPE_OUT, .speed =IO_SPEED_FAST, .state = IO_STATE_HIGH },
-    {.pin_name = "FT_WRN",   .port = GPIO_PORT(F), .pin = GPIO_PIN(14), .type = IO_TYPE_OUT, .speed =IO_SPEED_FAST, .state = IO_STATE_HIGH },
-    {.pin_name = "FT_WIWUA", .port = GPIO_PORT(F), .pin = GPIO_PIN(15), .type = IO_TYPE_OUT, .speed =IO_SPEED_FAST, .state = IO_STATE_HIGH },
-    {.btb_pin = IO_ARR_END_ID}
-};
-
 void bsp_ft_init()
 {
-    uint16_t i = 0;
-    while (ft_io[i].btb_pin != IO_ARR_END_ID)
-    {
-        bsp_io_preset(&(ft_io[i]));
-        i++;
-    }
+    BSP_FT_WRITE_RDN(1);
+    BSP_FT_WRITE_WRN(1);
+    BSP_FT_IO_SPEED();
+    BSP_FT_DDIR_IN();
+}
 
+uint16_t bsp_ft_read(uint8_t* buffer, uint16_t size)
+{
+    uint16_t recv_len = 0;
+    BSP_FT_DDIR_IN();
+    // read when ft2232h rxfn=0 and buffer is not end
+    while (BSP_FT_READ_RXFN() == 0 && recv_len < size)
+    {
+        // rdn=0
+        BSP_FT_WRITE_RDN(0);
+        // wait t3, t4, read byte, rdn=1
+        BSP_FT_DELAY(BSP_FT_T_RD_D);
+        buffer[recv_len] = BSP_FT_READ_D();
+        BSP_FT_WRITE_RDN(1);
+        recv_len++;
+        // wait t1, t3, until rxfn is valid to check next byte
+        BSP_FT_DELAY(BSP_FT_T_RD_RXF);
+    }
+    return recv_len;
+}
+
+void bsp_ft_write(uint8_t* buffer, uint16_t size)
+{
+    uint16_t send_len = 0;
+    BSP_FT_DDIR_OUT();
+    // write until buffer is end
+    while (send_len < size)
+    {
+        // wait until ft2232h txen=0
+        while (BSP_FT_READ_TXEN() != 0)
+        {
+            ;
+        }
+        // wrn=0, write byte
+        BSP_FT_WRITE_D(buffer[send_len]);
+        BSP_FT_WRITE_WRN(0);
+        // wait t10 then wrn=1
+        BSP_FT_DELAY(BSP_FT_T_WR);
+        BSP_FT_WRITE_WRN(1);
+        send_len++;
+        // wait t6,t7, until txen is valid to check next byte
+        BSP_FT_DELAY(BSP_FT_T_WR_TXE);
+    }
+    BSP_FT_DDIR_IN();
 }

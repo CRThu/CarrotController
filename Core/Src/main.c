@@ -222,14 +222,10 @@ int main(void)
     //BSP_IO_WRITE(&(adc.resetn), IO_STATE_LOW);
     delay_ms(10);
 
-    /* COMM UART TEST */
-    //char test_frame[] = "STM32H563 TEST";
-    //uart_comm_write(comm_pc, (uint8_t*)&test_frame[0], sizeof(test_frame));
+    //cevent_init(&global_event);
+    //cevent_register(&global_event, EVENT_ID_1MS_TICK, command_proc);
 
-    cevent_init(&global_event);
-    cevent_register(&global_event, EVENT_ID_1MS_TICK, command_proc);
-
-    bsp_tim_start(&htim6, tim6_callback);
+    //bsp_tim_start(&htim6, tim6_callback);
 
     /* USER CODE END 2 */
 
@@ -238,9 +234,16 @@ int main(void)
 
     while (1)
     {
-        cevent_run(&global_event);
+
+        /* COMM UART TEST */
+        char test_frame[] = "TEST\r\n";
+        bsp_ft_write((uint8_t*)&test_frame[0], strlen(test_frame));
+
+        //cevent_run(&global_event);
+
+
         //delay_us(1000);
-        //delay_ms(1000);
+        delay_ms(1000);
 
         // bsp_uart_printf("%ld\r\n", cnt);
         // cnt = 0;
