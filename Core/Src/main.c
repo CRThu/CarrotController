@@ -206,11 +206,10 @@ int main(void)
     adc.convst_freq = 100000;
 
     ad7616_set_io(&adc, &ad7616_profiles[0]);
-    delay_ms(20);
+    delay_ms(2500);
     ad7616_full_reset(&adc);
     ad7616_set_channel(&adc, AD7616_CHANNEL_0, AD7616_CHANNEL_0);
     delay_us(200);
-
 
     //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
     //ad7616_sample_by_pwm(&adc, 16);
@@ -234,16 +233,19 @@ int main(void)
 
     while (1)
     {
-
         /* COMM UART TEST */
-        char test_frame[] = "TEST\r\n";
-        bsp_ft_write((uint8_t*)&test_frame[0], strlen(test_frame));
+        // char test_frame[] = "TEST\r\n";
+        // bsp_ft_write((uint8_t*)&test_frame[0], strlen(test_frame));
 
+        // uint8_t rxbuf[1024];
+        // uint16_t len = bsp_ft_read(rxbuf, 1024);
+        // if (len)
+        //     bsp_ft_write(rxbuf, len);
         //cevent_run(&global_event);
 
 
         //delay_us(1000);
-        delay_ms(1000);
+        //delay_ms(1000);
 
         // bsp_uart_printf("%ld\r\n", cnt);
         // cnt = 0;

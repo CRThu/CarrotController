@@ -49,7 +49,8 @@ __FORCEINLINE void ad7616_set_io(ad7616_t* adc, dut_interface_t* intf)
     BSP_IO_SPEED(&(adc->busy), IO_SPEED_NORMAL);
 
     COPY_FROM_IO(&(adc->refsel), dut_get_io(intf->pin_configs, "REFSEL"));
-    BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
+    //BSP_IO_WRITE(&(adc->refsel), IO_STATE_LOW);
+    BSP_IO_WRITE(&(adc->refsel), IO_STATE_HIGH);
     BSP_IO_TYPE(&(adc->refsel), IO_TYPE_OUT);
     BSP_IO_SPEED(&(adc->refsel), IO_SPEED_NORMAL);
 
