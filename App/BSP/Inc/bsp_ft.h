@@ -63,6 +63,18 @@ extern "C"
     #define BSP_FT_WRITE_RDN(X)     (IO_WRITE(BSP_FT_IO_PORT, BSP_FT_IO_PIN_RDN, ((X) == 0) ? GPIO_PIN_RESET : GPIO_PIN_SET))
     #define BSP_FT_WRITE_WRN(X)     (IO_WRITE(BSP_FT_IO_PORT, BSP_FT_IO_PIN_WRN, ((X) == 0) ? GPIO_PIN_RESET : GPIO_PIN_SET))
 
+    typedef void (*ft_init_t)(void);
+    typedef uint16_t(*ft_read_t)(uint8_t* buffer, uint16_t size);
+    typedef void (*ft_write_t)(uint8_t* buffer, uint16_t size);
+    typedef struct
+    {
+        const char* id;
+        ft_init_t init;
+        ft_read_t read;
+        ft_write_t write;
+    } ft_t;
+
+    ft_t* get_ft_instance();
     void bsp_ft_init();
     uint16_t bsp_ft_read(uint8_t* buffer, uint16_t size);
     void bsp_ft_write(uint8_t* buffer, uint16_t size);

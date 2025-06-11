@@ -1,5 +1,18 @@
 #include "bsp_inc.h"
 
+ft_t default_ft =
+{
+    .id = "FT2232H-CHA",
+    .init = bsp_ft_init,
+    .read = bsp_ft_read,
+    .write = bsp_ft_write
+};
+
+ft_t* get_ft_instance()
+{
+    return &default_ft;
+}
+
 void bsp_ft_init()
 {
     BSP_FT_WRITE_RDN(1);

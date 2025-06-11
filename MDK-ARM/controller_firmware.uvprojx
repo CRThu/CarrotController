@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>5</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -1367,6 +1367,16 @@
               <FileName>dynpool.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\LIB\Src\dynpool.c</FilePath>
+            </File>
+            <File>
+              <FileName>ft_comm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\LIB\Src\ft_comm.c</FilePath>
+            </File>
+            <File>
+              <FileName>commbuf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\LIB\Src\commbuf.c</FilePath>
             </File>
           </Files>
         </Group>
