@@ -74,7 +74,7 @@ extern "C"
         ft_write_t write;
     } ft_t;
 
-    ft_t* get_ft_instance();
+    ft_t* bsp_ft_get_instance();
     void bsp_ft_init();
     uint16_t bsp_ft_read(uint8_t* buffer, uint16_t size);
     void bsp_ft_write(uint8_t* buffer, uint16_t size);

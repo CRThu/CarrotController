@@ -8,7 +8,7 @@ ft_t default_ft =
     .write = bsp_ft_write
 };
 
-ft_t* get_ft_instance()
+ft_t* bsp_ft_get_instance()
 {
     return &default_ft;
 }

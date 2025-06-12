@@ -1,3 +1,9 @@
+/****************************
+ * COMM BUF
+ * CARROT HU
+ * 2025.06.11
+ *****************************/
+#pragma once
 #ifndef __COMMBUF_H__
 #define __COMMBUF_H__
 

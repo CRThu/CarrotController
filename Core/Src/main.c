@@ -31,6 +31,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "uart_comm.h"
+#include "ft_comm.h"
 #include "dynpool.h"
 #include "cevent.h"
 
@@ -214,6 +215,7 @@ int main(void)
     //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
     //ad7616_sample_by_pwm(&adc, 16);
 
+    ad7616_convst_generate_by_io(&adc);
 
     //uart_comm_write(comm_pc, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
 
@@ -226,6 +228,9 @@ int main(void)
 
     //bsp_tim_start(&htim6, tim6_callback);
 
+    char test_frame[] = "TEST\r\n";
+    ft_comm_t* ft = ft_comm_create(bsp_ft_get_instance(), 2048);
+    ft_comm_write(ft, (uint8_t*)test_frame, strlen(test_frame));
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -243,6 +248,11 @@ int main(void)
         //     bsp_ft_write(rxbuf, len);
         //cevent_run(&global_event);
 
+
+        uint8_t rxbuf[1024];
+        uint16_t len = ft_comm_read(ft, rxbuf, 1024);
+        if (len)
+            bsp_ft_write(rxbuf, len);
 
         //delay_us(1000);
         //delay_ms(1000);
