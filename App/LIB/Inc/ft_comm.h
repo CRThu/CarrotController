@@ -32,6 +32,8 @@ extern "C"
     #include "bsp_ft.h"
     #include "commbuf.h"
 
+    #include "carrot_protocol.h"
+
     /*
         USAGE:
 
@@ -62,10 +64,10 @@ extern "C"
     #endif
 
     typedef struct ft_comm_t {
+        comm_func_t func;                       // func for protocol
         ft_t* instance;                         // ft instance
         commbuf_t* rxbuf;                       // ft rx buffer
     } ft_comm_t;
-
 
     ft_comm_t* ft_comm_create(ft_t* hft, uint16_t dmabuf_len);
     void ft_comm_free(ft_comm_t* comm);

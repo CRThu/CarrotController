@@ -6,6 +6,8 @@ uart_comm_t* uart_comm_create(uart_t* huart, uint16_t dmabuf_len)
     if (!comm)
         return NULL;
 
+    comm->func.comm = comm;
+    comm->func.write = uart_comm_write;
     comm->instance = huart;
     comm->dmabuf_len = dmabuf_len;
     comm->rxdma_pos_wr = 0;

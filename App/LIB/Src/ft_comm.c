@@ -9,6 +9,9 @@ ft_comm_t* ft_comm_create(ft_t* hft, uint16_t dmabuf_len)
     if (!comm)
         return NULL;
 
+    comm->func.comm = comm;
+    comm->func.write = ft_comm_write;
+    
     comm->instance = hft;
     comm->rxbuf = commbuf_create(dmabuf_len);
 

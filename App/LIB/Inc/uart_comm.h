@@ -29,6 +29,7 @@ extern "C"
     #include "stm32h5xx_hal.h"
     #endif
 
+    #include "carrot_protocol.h"
     /*
         USAGE:
         SETUP UARTx:
@@ -100,6 +101,7 @@ extern "C"
 
     typedef uint8_t uart_comm_error_t;
     typedef struct uart_comm_t {
+        comm_func_t func;
         uart_t* instance;                       // uart perh instance
         uint8_t* rxdma_buf;                     // uart rxdma buffer
         uint8_t* txdma_buf;                     // uart txdma buffer
