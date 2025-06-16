@@ -8,6 +8,7 @@ uart_comm_t* uart_comm_create(uart_t* huart, uint16_t dmabuf_len)
 
     comm->func.comm = comm;
     comm->func.write = uart_comm_write;
+
     comm->instance = huart;
     comm->dmabuf_len = dmabuf_len;
     comm->rxdma_pos_wr = 0;
@@ -58,20 +59,20 @@ void uart_comm_stop(uart_comm_t* comm)
     UART_STOP(comm);
 }
 
-void uart_comm_write(uart_comm_t* comm, const uint8_t* txcmd, uint16_t size)
+void uart_comm_write(void* comm, const uint8_t* txcmd, uint16_t size)
 {
     // todo txlist
-    while (UART_IS_TX_BUSY(comm))
+    while (UART_IS_TX_BUSY((uart_comm_t*)comm))
     {
         // WAITING FOR AVAILABLE
         __NOP();
     }
 
-    memcpy(comm->txdma_buf, txcmd, size);
-    comm->txdma_cmd_head = 0;
-    comm->txdma_cmd_len = size;
+    memcpy(((uart_comm_t*)comm)->txdma_buf, txcmd, size);
+    ((uart_comm_t*)comm)->txdma_cmd_head = 0;
+    ((uart_comm_t*)comm)->txdma_cmd_len = size;
 
-    while (!UART_TXDMA_START(comm))
+    while (!UART_TXDMA_START(((uart_comm_t*)comm)))
     {
         // ERROR
         __NOP();

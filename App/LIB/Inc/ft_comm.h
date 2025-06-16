@@ -72,7 +72,7 @@ extern "C"
     ft_comm_t* ft_comm_create(ft_t* hft, uint16_t dmabuf_len);
     void ft_comm_free(ft_comm_t* comm);
     void ft_comm_print_info(const ft_comm_t* comm);
-    void ft_comm_write(ft_comm_t* comm, const uint8_t* txcmd, uint16_t size);
+    void ft_comm_write(void* comm, const uint8_t* txcmd, uint16_t size);
     uint16_t ft_comm_read(ft_comm_t* comm, uint8_t* buf, uint16_t size);
 
     #ifdef __cplusplus

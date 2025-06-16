@@ -41,9 +41,9 @@ void ft_comm_print_info(const ft_comm_t* comm)
     }
 }
 
-void ft_comm_write(ft_comm_t* comm, const uint8_t* txcmd, uint16_t size)
+void ft_comm_write(void* comm, const uint8_t* txcmd, uint16_t size)
 {
-    comm->instance->write(txcmd, size);
+    ((ft_comm_t*)comm)->instance->write(txcmd, size);
 }
 
 uint16_t ft_comm_read(ft_comm_t* comm, uint8_t* buf, uint16_t size)

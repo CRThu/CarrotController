@@ -12,7 +12,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include "uart_comm.h"
 
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS

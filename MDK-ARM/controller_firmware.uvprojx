@@ -1383,11 +1383,6 @@
               <FileType>1</FileType>
               <FilePath>..\App\LIB\Src\carrot_protocol.c</FilePath>
             </File>
-            <File>
-              <FileName>carrotxml.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\App\LIB\Src\carrotxml.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

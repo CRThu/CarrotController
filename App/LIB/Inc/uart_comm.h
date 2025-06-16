@@ -30,6 +30,7 @@ extern "C"
     #endif
 
     #include "carrot_protocol.h"
+
     /*
         USAGE:
         SETUP UARTx:
@@ -112,13 +113,12 @@ extern "C"
         uart_comm_error_t error;
     } uart_comm_t;
 
-
     uart_comm_t* uart_comm_create(uart_t* huart, uint16_t dmabuf_len);
     void uart_comm_destory(uart_comm_t* comm);
     void uart_comm_print_info(const uart_comm_t* comm);
     void uart_comm_start(uart_comm_t* comm);
     void uart_comm_stop(uart_comm_t* comm);
-    void uart_comm_write(uart_comm_t* comm, const uint8_t* txcmd, uint16_t size);
+    void uart_comm_write(void* comm, const uint8_t* txcmd, uint16_t size);
     uint16_t uart_comm_read(uart_comm_t* comm, uint8_t* buf, uint16_t size);
 
 
