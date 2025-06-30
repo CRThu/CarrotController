@@ -5,8 +5,8 @@
  *****************************/
 #pragma once
 
-#ifndef _ASCII_PROTOCOL_H_
-#define _ASCII_PROTOCOL_H_
+#ifndef _CARROT_ASCII_PROTOCOL_H_
+#define _CARROT_ASCII_PROTOCOL_H_
 
 #include <stdint.h>
 #include <string.h>
@@ -50,4 +50,4 @@ extern "C"
 }
 #endif
 
-#endif // _ASCII_PROTOCOL_H_
+#endif // _CARROT_ASCII_PROTOCOL_H_

@@ -1379,9 +1379,9 @@
               <FilePath>..\App\LIB\Src\commbuf.c</FilePath>
             </File>
             <File>
-              <FileName>carrot_protocol.c</FileName>
+              <FileName>carrot_ascii_protocol.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\App\LIB\Src\carrot_protocol.c</FilePath>
+              <FilePath>..\App\LIB\Src\carrot_ascii_protocol.c</FilePath>
             </File>
           </Files>
         </Group>

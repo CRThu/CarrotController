@@ -29,7 +29,7 @@ extern "C"
     #include "stm32h5xx_hal.h"
     #endif
 
-    #include "carrot_protocol.h"
+    #include "carrot_ascii_protocol.h"
 
     /*
         USAGE:

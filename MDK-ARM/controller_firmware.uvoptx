@@ -935,8 +935,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\App\LIB\Src\carrot_protocol.c</PathWithFileName>
-      <FilenameWithoutPath>carrot_protocol.c</FilenameWithoutPath>
+      <PathWithFileName>..\App\LIB\Src\carrot_ascii_protocol.c</PathWithFileName>
+      <FilenameWithoutPath>carrot_ascii_protocol.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

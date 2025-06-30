@@ -32,7 +32,7 @@ extern "C"
     #include "bsp_ft.h"
     #include "commbuf.h"
 
-    #include "carrot_protocol.h"
+    #include "carrot_ascii_protocol.h"
 
     /*
         USAGE:
