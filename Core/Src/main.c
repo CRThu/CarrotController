@@ -1,22 +1,22 @@
 /* USER CODE BEGIN Header */
 /**
- ******************************************************************************
- * @file           : main.c
- * @brief          : Main program body
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2025 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
- /* USER CODE END Header */
- /* Includes ------------------------------------------------------------------*/
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2025 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+  /* USER CODE END Header */
+  /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cordic.h"
 #include "gpdma.h"
@@ -30,16 +30,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "uart_comm.h"
-#include "ft_comm.h"
-#include "dynpool.h"
-#include "cevent.h"
-
-#include "ad7616_iocfg.h"
-#include "ad7616_sample.h"
-#include "ad7616_control.h"
-
-#include "bsp_inc.h"
+#include "cdelay.h"
+#include "io_utils.h"
+#include "bsp_sw.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,7 +42,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define EVENT_ID_1MS_TICK   0
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -60,15 +53,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-/*
-uart_comm_t* comm_pc = NULL;
 
-volatile uint8_t flag = 0;
-volatile double cnt = 0;
-
-uint8_t recv_bytes[256];
-uint16_t recv_len = 0;
-*/
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -80,62 +65,7 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-ad7616_t adc;
-uart_comm_t* comm_pc;
 
-void bsp_clock_init()
-{
-    RCC_PLL2InitTypeDef pll2;
-    if (~RCC->CR & RCC_CR_PLL2ON)
-    {
-        pll2.PLL2Source = RCC_PLL2_SOURCE_HSE;
-        pll2.PLL2M = 5;
-        pll2.PLL2N = 80;
-        pll2.PLL2P = 2;
-        pll2.PLL2Q = 2;
-        pll2.PLL2R = 2;
-        pll2.PLL2RGE = RCC_PLL2_VCIRANGE_2;
-        pll2.PLL2VCOSEL = RCC_PLL2_VCORANGE_WIDE;
-        pll2.PLL2FRACN = 0;
-        pll2.PLL2ClockOut = RCC_PLL2_DIVP;
-        if (HAL_RCCEx_EnablePLL2(&pll2) != HAL_OK)
-        {
-            Error_Handler();
-        }
-    }
-}
-
-void tim6_callback(TIM_HandleTypeDef* htim)
-{
-    if (cevent_raise(&global_event, EVENT_ID_1MS_TICK))
-        bsp_uart_printf("QUENE FULL\r\n");
-}
-
-void command_proc()
-{
-    uint8_t recv_bytes[256];
-    uint16_t recv_len = 0;
-
-    dynpool_t pool;
-
-    //bsp_uart_printf("[INFO]: waiting for command\r\n");
-    recv_len = uart_comm_read(comm_pc, recv_bytes, sizeof(recv_bytes));
-    if (recv_len != 0)
-    {
-        char* cmd = (char*)recv_bytes;
-        if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
-        {
-            bsp_uart_printf("[INFO]: cmdparse from string ok.\r\n");
-            uart_comm_write(comm_pc, recv_bytes, recv_len);
-            invoke_by_cmd(&ad7616_func_group, &pool);
-        }
-        else
-        {
-            bsp_uart_printf("[ERROR]: cmdparse from string err.\r\n");
-            uart_comm_write(comm_pc, recv_bytes, recv_len);
-        }
-    }
-}
 /* USER CODE END 0 */
 
 /**
@@ -181,87 +111,22 @@ int main(void)
     MX_TIM6_Init();
     /* USER CODE BEGIN 2 */
 
-        // initial cdelay module
+    // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
-    // initial bsp perh
-    bsp_clock_init();
-    bsp_gpio_init();
-    bsp_uart_init_by_cubemx(&huart4);
-    bsp_ft_init();
-    bsp_spi_io_config_all(BSP_SPI_IO_MODE_OFF);
-    bsp_switch_init(BSPMUX_DEFAULT);
+    // set board switches
+    bsp_sw_default();
+    uint16_t sw_status = bsp_sw_get_status();
 
-    // serial service
-    uart_t* uart_comm = get_comm_uart();
-    comm_pc = uart_comm_create(uart_comm, 2048);
-    uart_comm_start(comm_pc);
-
-    // initial dut ad7616 board
-
-    //adc.mode = AD7616_PAR_SW;
-    adc.mode = AD7616_SER_SW;
-    //adc.mode = AD7616_SER_HW;
-    adc.serial_wire = 1;
-    //adc.serial_wire = 2;
-    adc.convst_freq = 100000;
-
-    ad7616_set_io(&adc, &ad7616_profiles[0]);
-    delay_ms(2500);
-    ad7616_full_reset(&adc);
-    ad7616_set_channel(&adc, AD7616_CHANNEL_0, AD7616_CHANNEL_0);
-    delay_us(200);
-
-    //ad7616_set_channel(&adc, AD7616_CHANNEL_7, AD7616_CHANNEL_OFF);
-    //ad7616_sample_by_pwm(&adc, 16);
-
-    ad7616_convst_generate_by_io(&adc);
-
-    //uart_comm_write(comm_pc, (uint8_t*)&adc_data_buffer[0], adc_data_count * sizeof(uint16_t));
-
-    //delay_ms(2000);
-    //BSP_IO_WRITE(&(adc.resetn), IO_STATE_LOW);
-    delay_ms(10);
-
-    //cevent_init(&global_event);
-    //cevent_register(&global_event, EVENT_ID_1MS_TICK, command_proc);
-
-    //bsp_tim_start(&htim6, tim6_callback);
-
-    char test_frame[] = "TEST\r\n";
-    ft_comm_t* ft = ft_comm_create(bsp_ft_get_instance(), 2048);
-    ft_comm_write(ft, (uint8_t*)test_frame, strlen(test_frame));
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-
     while (1)
     {
-        /* COMM UART TEST */
-        // char test_frame[] = "TEST\r\n";
-        // bsp_ft_write((uint8_t*)&test_frame[0], strlen(test_frame));
+        /* USER CODE END WHILE */
 
-        // uint8_t rxbuf[1024];
-        // uint16_t len = bsp_ft_read(rxbuf, 1024);
-        // if (len)
-        //     bsp_ft_write(rxbuf, len);
-        //cevent_run(&global_event);
-
-
-        uint8_t rxbuf[1024];
-        uint16_t len = ft_comm_read(ft, rxbuf, 1024);
-        if (len)
-            bsp_ft_write(rxbuf, len);
-
-        //delay_us(1000);
-        //delay_ms(1000);
-
-        // bsp_uart_printf("%ld\r\n", cnt);
-        // cnt = 0;
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+        /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
 }
@@ -352,6 +217,7 @@ void PeriphCommonClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 /* USER CODE END 4 */
 
 /**
@@ -361,7 +227,7 @@ void PeriphCommonClock_Config(void)
 void Error_Handler(void)
 {
     /* USER CODE BEGIN Error_Handler_Debug */
-                                            /* User can add his own implementation to report the HAL error return state */
+    /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
@@ -380,8 +246,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
-                                            /* User can add his own implementation to report the file name and line number,
-                                               ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-                                               /* USER CODE END 6 */
+    /* User can add his own implementation to report the file name and line number,
+       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+       /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
