@@ -32,7 +32,9 @@
 /* USER CODE BEGIN Includes */
 #include "cdelay.h"
 #include "io_utils.h"
+#include "io_retarget.h"
 #include "bsp_sw.h"
+#include "bsp_uart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -114,16 +116,31 @@ int main(void)
     // initial cdelay module
     if (cdelay_init() == 0)      Error_Handler();
 
-    // set board switches
+    // set board default switches
     bsp_sw_default();
     uint16_t sw_status = bsp_sw_get_status();
 
+    // initial uart4 with ringbuf
+    comm_t* uart4_ringbuf = bsp_uart_ringbuf_create(&huart4);
+    uart4_ringbuf->init(uart4_ringbuf->handle);
+
+    // printf test
+    printf("[DEBUG]: IO RETARGET TEST\r\n");
+        
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
     {
+        uint8_t recv_bytes[256];
+        uint16_t recv_len = 0;
+
+        recv_len = uart4_ringbuf->read(uart4_ringbuf->handle, recv_bytes, sizeof(recv_bytes));
+        if (recv_len != 0)
+        {
+            uart4_ringbuf->write(uart4_ringbuf->handle, recv_bytes, recv_len);
+        }
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
