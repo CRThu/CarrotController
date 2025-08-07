@@ -33,8 +33,14 @@
 #include "cdelay.h"
 #include "io_utils.h"
 #include "io_retarget.h"
+
 #include "bsp_sw.h"
 #include "bsp_uart.h"
+
+#include "dyncall.h"
+#include "cmdparse.h"
+
+#include "template_func.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,7 +73,37 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int8_t command_proc(comm_t* comm)
+{
+    if (comm == NULL)
+        return -128;
 
+    uint8_t recv_bytes[256];
+    uint16_t recv_len = 0;
+
+    dynpool_t pool;
+
+    //printf("[INFO]: waiting for command\r\n");
+    recv_len = comm->read(comm->handle, recv_bytes, sizeof(recv_bytes));
+    if (recv_len != 0)
+    {
+        char* cmd = (char*)recv_bytes;
+        if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
+        {
+            //printf("[INFO]: cmdparse from string ok.\r\n");
+            //comm->write(comm->handle, recv_bytes, recv_len);
+            dyncall_status_t status = invoke_by_cmd(&template_func_group, &pool);
+            return status;
+        }
+        else
+        {
+            printf("[ERROR]: cmdparse from string err.\r\n");
+            //comm->write(comm->handle, recv_bytes, recv_len);
+            return -127;
+        }
+    }
+    return 0;
+}
 /* USER CODE END 0 */
 
 /**
@@ -126,13 +162,17 @@ int main(void)
 
     // printf test
     printf("[DEBUG]: IO RETARGET TEST\r\n");
-        
+    printf("[INFO]: --- STM32H563ZIT6 TESTING CONTROL PROGRAM ---\r\n");
+    printf("[INFO]: FIRMWARE COMPILE TIME: %s %s\r\n", __DATE__, __TIME__);
+
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
     {
+        command_proc(uart4_ringbuf);
+        /*
         uint8_t recv_bytes[256];
         uint16_t recv_len = 0;
 
@@ -141,6 +181,7 @@ int main(void)
         {
             uart4_ringbuf->write(uart4_ringbuf->handle, recv_bytes, recv_len);
         }
+        */
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
@@ -248,6 +289,8 @@ void Error_Handler(void)
     __disable_irq();
     while (1)
     {
+        printf("[ERROR]: Error_Handler() called");
+        HAL_Delay(1000);
     }
     /* USER CODE END Error_Handler_Debug */
 }

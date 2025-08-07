@@ -18,6 +18,7 @@ extern "C"
 
     #define COMM_VERSION "1.0.0"
 
+    /* NOTE: MicroLIB SHOULD BE CHECKED*/
     #define IO_RETARGET_UART_INSTANCE huart4
 
 

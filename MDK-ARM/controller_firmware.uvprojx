@@ -583,6 +583,13 @@
         </Group>
         <Group>
           <GroupName>APP</GroupName>
+          <Files>
+            <File>
+              <FileName>template_func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\Src\template_func.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>BSP</GroupName>
@@ -601,6 +608,21 @@
               <FileName>uart_ringbuf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\LIB\Src\uart_ringbuf.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmdparse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\LIB\Src\cmdparse.c</FilePath>
+            </File>
+            <File>
+              <FileName>dyncall.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\LIB\Src\dyncall.c</FilePath>
+            </File>
+            <File>
+              <FileName>dynpool.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\LIB\Src\dynpool.c</FilePath>
             </File>
           </Files>
         </Group>
