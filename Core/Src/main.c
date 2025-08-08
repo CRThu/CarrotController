@@ -35,6 +35,7 @@
 #include "bsp_sw.h"
 #include "bsp_uart.h"
 
+#include "carrot_ascii_protocol.h"
 #include "dyncall.h"
 #include "cmdparse.h"
 
@@ -73,7 +74,9 @@ void PeriphCommonClock_Config(void);
 /* USER CODE BEGIN 0 */
 void tim5_callback(TIM_HandleTypeDef* htim)
 {
-    printf("tim5_callback() called.\r\n");
+    // printf("tim5_callback() called.\r\n");
+
+    write_msg("tim5_callback() called.\r\n");
 }
 
 int8_t command_proc(comm_t* comm)
@@ -162,6 +165,9 @@ int main(void)
     // initial uart4 with ringbuf
     comm_t* uart4_ringbuf = bsp_uart_ringbuf_create(&huart4);
     uart4_ringbuf->init(uart4_ringbuf->handle);
+
+    // set protocol comm
+    carrot_ascii_protocol_config.comm = uart4_ringbuf;
 
     // printf test
     printf("[DEBUG]: IO RETARGET TEST\r\n");
