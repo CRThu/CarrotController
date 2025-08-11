@@ -169,14 +169,37 @@ int main(void)
     // set protocol comm
     carrot_ascii_protocol_config.comm = uart4_ringbuf;
 
+    // set protocol data type
+    carrot_ascii_protocol_config.data_protocol.data_width = CARROT_BINARY_PROTOCOL_DATA_WIDTH_16B;
+    carrot_ascii_protocol_config.data_protocol.data_encoding = CARROT_BINARY_PROTOCOL_DATA_ENCODING_OFFSET;
+    carrot_ascii_protocol_config.data_protocol.data_endian = CARROT_BINARY_PROTOCOL_DATA_ENDIAN_LITTLE;
+    // use this when has one channel data
+    carrot_ascii_protocol_config.data_protocol.data_interleaved = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_NOT_USED;
+    carrot_ascii_protocol_config.data_protocol.data_channel = 0x0;
+    // use this when has multichannels data
+    // carrot_ascii_protocol_config.data_protocol.data_interleaved = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_USED;
+    // carrot_ascii_protocol_config.data_protocol.data_interleaved_channel_mask = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_CHANNEL_MASK_16CH;
+
     // printf test
-    printf("[DEBUG]: IO RETARGET TEST\r\n");
-    printf("[INFO]: --- STM32H563ZIT6 TESTING CONTROL PROGRAM ---\r\n");
-    printf("[INFO]: FIRMWARE COMPILE TIME: %s %s\r\n", __DATE__, __TIME__);
+    //printf("[DEBUG]: IO RETARGET TEST\r\n");
+    //printf("[INFO]: --- STM32H563ZIT6 TESTING CONTROL PROGRAM ---\r\n");
+    //printf("[INFO]: FIRMWARE COMPILE TIME: %s %s\r\n", __DATE__, __TIME__);
+
+    uint16_t test_data[300];
+    for (int i = 0;i < 300;i++)
+        test_data[i] = i + 1;
+
+    carrot_ascii_protocol_config.data_protocol.data_interleaved = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_NOT_USED;
+    carrot_ascii_protocol_config.data_protocol.data_channel = 0xAA;
+    write_data((uint8_t*)test_data, sizeof(uint16_t) * 300);
+
+    carrot_ascii_protocol_config.data_protocol.data_interleaved = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_USED;
+    carrot_ascii_protocol_config.data_protocol.data_interleaved_channel_mask = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_CHANNEL_MASK_4CH;
+    write_data((uint8_t*)test_data, sizeof(uint16_t) * 300);
 
     // tim callback resigter and open
-    HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, tim5_callback);
-    HAL_TIM_Base_Start_IT(&htim5);
+    //HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, tim5_callback);
+    //HAL_TIM_Base_Start_IT(&htim5);
 
     /* USER CODE END 2 */
 
