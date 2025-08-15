@@ -34,6 +34,7 @@
 
 #include "bsp_sw.h"
 #include "bsp_uart.h"
+#include "bsp_ft.h"
 
 #include "carrot_ascii_protocol.h"
 #include "dyncall.h"
@@ -96,8 +97,8 @@ int8_t command_proc(comm_t* comm)
         char* cmd = (char*)recv_bytes;
         if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
         {
-            //printf("[INFO]: cmdparse from string ok.\r\n");
-            //comm->write(comm->handle, recv_bytes, recv_len);
+            printf("[INFO]: cmdparse from string ok.\r\n");
+            comm->write(comm->handle, recv_bytes, recv_len);
             dyncall_status_t status = invoke_by_cmd(&template_func_group, &pool);
             return status;
         }
@@ -166,8 +167,13 @@ int main(void)
     comm_t* uart4_ringbuf = bsp_uart_ringbuf_create(&huart4);
     uart4_ringbuf->init(uart4_ringbuf->handle);
 
+    // initial ft2232h
+    comm_t* ft = bsp_ft_create(FT_D0_GPIO_Port);
+    ft->init(ft->handle);
+
     // set protocol comm
-    carrot_ascii_protocol_config.comm = uart4_ringbuf;
+    //carrot_ascii_protocol_config.comm = uart4_ringbuf;
+    carrot_ascii_protocol_config.comm = ft;
 
     // set protocol data type
     carrot_ascii_protocol_config.data_protocol.data_width = CARROT_BINARY_PROTOCOL_DATA_WIDTH_16B;
@@ -180,11 +186,16 @@ int main(void)
     // carrot_ascii_protocol_config.data_protocol.data_interleaved = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_USED;
     // carrot_ascii_protocol_config.data_protocol.data_interleaved_channel_mask = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_CHANNEL_MASK_16CH;
 
+    write_msg("helloworld\r\n");
+
     // printf test
     //printf("[DEBUG]: IO RETARGET TEST\r\n");
     //printf("[INFO]: --- STM32H563ZIT6 TESTING CONTROL PROGRAM ---\r\n");
     //printf("[INFO]: FIRMWARE COMPILE TIME: %s %s\r\n", __DATE__, __TIME__);
 
+
+    // protocol test
+    /*
     uint16_t test_data[300];
     for (int i = 0;i < 300;i++)
         test_data[i] = i + 1;
@@ -196,6 +207,7 @@ int main(void)
     carrot_ascii_protocol_config.data_protocol.data_interleaved = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_USED;
     carrot_ascii_protocol_config.data_protocol.data_interleaved_channel_mask = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_CHANNEL_MASK_4CH;
     write_data((uint8_t*)test_data, sizeof(uint16_t) * 300);
+    */
 
     // tim callback resigter and open
     //HAL_TIM_RegisterCallback(&htim5, HAL_TIM_PERIOD_ELAPSED_CB_ID, tim5_callback);
@@ -207,7 +219,8 @@ int main(void)
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        command_proc(uart4_ringbuf);
+        //command_proc(uart4_ringbuf);
+        command_proc(ft);
         /*
         uint8_t recv_bytes[256];
         uint16_t recv_len = 0;

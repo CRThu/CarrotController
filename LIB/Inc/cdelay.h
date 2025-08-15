@@ -83,7 +83,7 @@ extern "C"
     #define cdelay_nops_safe                CDELAY_NOPS_SAFE
     #define cdelay_ticks                    CDELAY_TICKS
 
-    #define cdelay_init()                   CDELAY_INIT()
+    #define cdelay_init                     CDELAY_INIT
     #define cdelay_ns(ns)                   CDELAY_NS(ns)
     #define cdelay_us(us)                   CDELAY_TICKS(CDELAY_US2TICK(us))
     #define cdelay_ms(ms)                   CDELAY_TICKS(CDELAY_MS2TICK(ms))
