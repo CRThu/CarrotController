@@ -62,6 +62,9 @@ void TIM6_IRQHandler(void);
 void SPI1_IRQHandler(void);
 void SPI3_IRQHandler(void);
 void UART4_IRQHandler(void);
+void SPI4_IRQHandler(void);
+void GPDMA2_Channel0_IRQHandler(void);
+void GPDMA2_Channel1_IRQHandler(void);
 void CORDIC_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 

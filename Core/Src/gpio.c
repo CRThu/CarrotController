@@ -52,7 +52,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, SPI4_NSS2_Pin|SPI4_NSS1_Pin|MUX_SEL10_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, SPI4_NSS2_Pin|SPI4_NSS1_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, MUX_SEL09_Pin|MUX_SEL12_Pin|MUX_SEL11_Pin|MUX_SEL07_Pin
@@ -67,6 +67,9 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, MUX_SEL05_Pin|MUX_SEL06_Pin|MUX_SEL01_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(MUX_SEL10_GPIO_Port, MUX_SEL10_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : SPI4_NSS2_Pin SPI4_NSS1_Pin */
   GPIO_InitStruct.Pin = SPI4_NSS2_Pin|SPI4_NSS1_Pin;
