@@ -57,6 +57,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define CARROT_CONTROLLER_HW STM32H563_CONTROLLER
 #define SPI4_NSS2_Pin GPIO_PIN_3
 #define SPI4_NSS2_GPIO_Port GPIOE
 #define SPI4_NSS1_Pin GPIO_PIN_4

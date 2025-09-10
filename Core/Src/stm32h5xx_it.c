@@ -55,13 +55,9 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern CORDIC_HandleTypeDef hcordic;
 extern DMA_HandleTypeDef handle_GPDMA2_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA2_Channel0;
-extern SPI_HandleTypeDef hspi1;
-extern SPI_HandleTypeDef hspi3;
 extern SPI_HandleTypeDef hspi4;
-extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim6;
 extern DMA_NodeTypeDef Node_GPDMA1_Channel1;
 extern DMA_QListTypeDef List_GPDMA1_Channel1;
@@ -239,20 +235,6 @@ void GPDMA1_Channel1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM5 global interrupt.
-  */
-void TIM5_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM5_IRQn 0 */
-
-  /* USER CODE END TIM5_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim5);
-  /* USER CODE BEGIN TIM5_IRQn 1 */
-
-  /* USER CODE END TIM5_IRQn 1 */
-}
-
-/**
   * @brief This function handles TIM6 global interrupt.
   */
 void TIM6_IRQHandler(void)
@@ -264,34 +246,6 @@ void TIM6_IRQHandler(void)
   /* USER CODE BEGIN TIM6_IRQn 1 */
 
   /* USER CODE END TIM6_IRQn 1 */
-}
-
-/**
-  * @brief This function handles SPI1 global interrupt.
-  */
-void SPI1_IRQHandler(void)
-{
-  /* USER CODE BEGIN SPI1_IRQn 0 */
-
-  /* USER CODE END SPI1_IRQn 0 */
-  HAL_SPI_IRQHandler(&hspi1);
-  /* USER CODE BEGIN SPI1_IRQn 1 */
-
-  /* USER CODE END SPI1_IRQn 1 */
-}
-
-/**
-  * @brief This function handles SPI3 global interrupt.
-  */
-void SPI3_IRQHandler(void)
-{
-  /* USER CODE BEGIN SPI3_IRQn 0 */
-
-  /* USER CODE END SPI3_IRQn 0 */
-  HAL_SPI_IRQHandler(&hspi3);
-  /* USER CODE BEGIN SPI3_IRQn 1 */
-
-  /* USER CODE END SPI3_IRQn 1 */
 }
 
 /**
@@ -348,20 +302,6 @@ void GPDMA2_Channel1_IRQHandler(void)
   /* USER CODE BEGIN GPDMA2_Channel1_IRQn 1 */
 
   /* USER CODE END GPDMA2_Channel1_IRQn 1 */
-}
-
-/**
-  * @brief This function handles CORDIC global interrupt.
-  */
-void CORDIC_IRQHandler(void)
-{
-  /* USER CODE BEGIN CORDIC_IRQn 0 */
-
-  /* USER CODE END CORDIC_IRQn 0 */
-  HAL_CORDIC_IRQHandler(&hcordic);
-  /* USER CODE BEGIN CORDIC_IRQn 1 */
-
-  /* USER CODE END CORDIC_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
