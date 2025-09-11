@@ -1,7 +1,7 @@
 /****************************
  * BSP PSRAM DRIVER
  * CRTHu
- * 2025.08.20
+ * 2025.09.11
  *****************************/
 #pragma once
 #ifndef _BSP_PSRAM_H_
@@ -11,26 +11,16 @@
 extern "C"
 {
     #endif
-    #define BSP_PSRAM_VERSION "1.0.0"
+    #define BSP_PSRAM_VERSION "1.1.0"
 
     #include <stdint.h>
     #include <stdlib.h>
     #include "main.h"
-    #include "spi.h"
     #include "gpio.h"
-
-    // #define BSP_PSRAM_U7_EN
-    #define BSP_PSRAM_U8_EN
-
-    #ifdef BSP_PSRAM_U7_EN
-    #define BSP_PSRAM_SPI       hspi4
-    #define BSP_PSRAM_NSS_PORT  SPI4_NSS1_GPIO_Port
-    #define BSP_PSRAM_NSS_PIN   SPI4_NSS1_Pin
-    #endif
-    #ifdef BSP_PSRAM_U8_EN
-    #define BSP_PSRAM_SPI       hspi4
-    #define BSP_PSRAM_NSS_PORT  SPI4_NSS2_GPIO_Port
-    #define BSP_PSRAM_NSS_PIN   SPI4_NSS2_Pin
+    #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
+        #include "spi.h"
+    #elif(CARROT_CONTROLLER_HW == STM32H563_MINI)
+        #include "octospi.h"
     #endif
 
     #define BSP_PSRAM_TIMEOUT   100

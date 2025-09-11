@@ -1,7 +1,7 @@
 /****************************
  * BSP SW
  * CARROT HU
- * 2025.08.06
+ * 2025.09.11
  *****************************/
 #pragma once
 #ifndef _BSP_SW_H_
@@ -12,11 +12,13 @@ extern "C"
 {
     #endif
 
-    #define BSP_SW_VERSION "1.0.0"
+    #define BSP_SW_VERSION "1.0.1"
 
     #include <stdint.h>
     #include "io_utils.h"
     #include "main.h"
+
+    #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
 
     /*
         USAGE:
@@ -99,18 +101,18 @@ extern "C"
 
     static inline void bsp_sw_set(uint16_t mask)
     {
-        IO_WRITE(MUX_SEL01_GPIO_Port, MUX_SEL01_Pin, (mask & BSP_SW01) ? 1 : 0 );
-        IO_WRITE(MUX_SEL02_GPIO_Port, MUX_SEL02_Pin, (mask & BSP_SW02) ? 1 : 0 );
-        IO_WRITE(MUX_SEL03_GPIO_Port, MUX_SEL03_Pin, (mask & BSP_SW03) ? 1 : 0 );
-        IO_WRITE(MUX_SEL04_GPIO_Port, MUX_SEL04_Pin, (mask & BSP_SW04) ? 1 : 0 );
-        IO_WRITE(MUX_SEL05_GPIO_Port, MUX_SEL05_Pin, (mask & BSP_SW05) ? 1 : 0 );
-        IO_WRITE(MUX_SEL06_GPIO_Port, MUX_SEL06_Pin, (mask & BSP_SW06) ? 1 : 0 );
-        IO_WRITE(MUX_SEL07_GPIO_Port, MUX_SEL07_Pin, (mask & BSP_SW07) ? 1 : 0 );
-        IO_WRITE(MUX_SEL08_GPIO_Port, MUX_SEL08_Pin, (mask & BSP_SW08) ? 1 : 0 );
-        IO_WRITE(MUX_SEL09_GPIO_Port, MUX_SEL09_Pin, (mask & BSP_SW09) ? 1 : 0 );
-        IO_WRITE(MUX_SEL10_GPIO_Port, MUX_SEL10_Pin, (mask & BSP_SW10) ? 1 : 0 );
-        IO_WRITE(MUX_SEL11_GPIO_Port, MUX_SEL11_Pin, (mask & BSP_SW11) ? 1 : 0 );
-        IO_WRITE(MUX_SEL12_GPIO_Port, MUX_SEL12_Pin, (mask & BSP_SW12) ? 1 : 0 );
+        IO_WRITE(MUX_SEL01_GPIO_Port, MUX_SEL01_Pin, (mask & BSP_SW01) ? 1 : 0);
+        IO_WRITE(MUX_SEL02_GPIO_Port, MUX_SEL02_Pin, (mask & BSP_SW02) ? 1 : 0);
+        IO_WRITE(MUX_SEL03_GPIO_Port, MUX_SEL03_Pin, (mask & BSP_SW03) ? 1 : 0);
+        IO_WRITE(MUX_SEL04_GPIO_Port, MUX_SEL04_Pin, (mask & BSP_SW04) ? 1 : 0);
+        IO_WRITE(MUX_SEL05_GPIO_Port, MUX_SEL05_Pin, (mask & BSP_SW05) ? 1 : 0);
+        IO_WRITE(MUX_SEL06_GPIO_Port, MUX_SEL06_Pin, (mask & BSP_SW06) ? 1 : 0);
+        IO_WRITE(MUX_SEL07_GPIO_Port, MUX_SEL07_Pin, (mask & BSP_SW07) ? 1 : 0);
+        IO_WRITE(MUX_SEL08_GPIO_Port, MUX_SEL08_Pin, (mask & BSP_SW08) ? 1 : 0);
+        IO_WRITE(MUX_SEL09_GPIO_Port, MUX_SEL09_Pin, (mask & BSP_SW09) ? 1 : 0);
+        IO_WRITE(MUX_SEL10_GPIO_Port, MUX_SEL10_Pin, (mask & BSP_SW10) ? 1 : 0);
+        IO_WRITE(MUX_SEL11_GPIO_Port, MUX_SEL11_Pin, (mask & BSP_SW11) ? 1 : 0);
+        IO_WRITE(MUX_SEL12_GPIO_Port, MUX_SEL12_Pin, (mask & BSP_SW12) ? 1 : 0);
     }
 
     static inline uint16_t bsp_sw_get_status()
@@ -138,6 +140,7 @@ extern "C"
         bsp_sw_set(BSP_SW_DEFAULT);
     }
 
+    #endif
 
     #ifdef __cplusplus
 }

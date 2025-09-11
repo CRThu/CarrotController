@@ -1,27 +1,6 @@
 #include "bsp_ft.h"
 
-comm_t* bsp_ft_create(GPIO_TypeDef* GPIOx)
-{
-    comm_t* comm = (comm_t*)malloc(sizeof(comm_t));
-    if (!comm)
-        return NULL;
-
-    comm->id = "FT-A-ASYNC-FIFO";
-    comm->handle = GPIOx;
-    comm->init = bsp_ft_init;
-    comm->read = bsp_ft_read;
-    comm->write = bsp_ft_write;
-
-    return comm;
-}
-
-void bsp_ft_destory(comm_t* comm)
-{
-    if (comm)
-    {
-        free(comm);
-    }
-}
+#if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
 
 void bsp_ft_init(comm_handle handle)
 {
@@ -75,3 +54,28 @@ void bsp_ft_write(comm_handle handle, uint8_t* buffer, uint16_t size)
     }
     BSP_FT_DDIR_IN(handle);
 }
+
+comm_t* bsp_ft_create(GPIO_TypeDef* GPIOx)
+{
+    comm_t* comm = (comm_t*)malloc(sizeof(comm_t));
+    if (!comm)
+        return NULL;
+
+    comm->id = "FT-A-ASYNC-FIFO";
+    comm->handle = GPIOx;
+    comm->init = bsp_ft_init;
+    comm->read = bsp_ft_read;
+    comm->write = bsp_ft_write;
+
+    return comm;
+}
+
+void bsp_ft_destory(comm_t* comm)
+{
+    if (comm)
+    {
+        free(comm);
+    }
+}
+
+#endif

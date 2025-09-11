@@ -1,7 +1,7 @@
 /****************************
  * BSP FT DRIVER
  * CRTHu
- * 2025.08.15
+ * 2025.09.11
  *****************************/
 #pragma once
 #ifndef _BSP_FT_H_
@@ -11,7 +11,7 @@
 extern "C"
 {
     #endif
-    #define BSP_FT_VERSION "1.1.0"
+    #define BSP_FT_VERSION "1.1.1"
 
     #include <stdint.h>
     #include <stdlib.h>
@@ -19,6 +19,9 @@ extern "C"
     #include "io_utils.h"
     #include "cdelay.h"
     #include "comm.h"
+
+    #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
+
 
     #define BSP_FT_DELAY            cdelay_ns
 
@@ -61,6 +64,8 @@ extern "C"
     void bsp_ft_init(comm_handle handle);
     uint16_t bsp_ft_read(comm_handle handle, uint8_t* buffer, uint16_t size);
     void bsp_ft_write(comm_handle handle, uint8_t* buffer, uint16_t size);
+
+    #endif
 
     #ifdef __cplusplus
 }
