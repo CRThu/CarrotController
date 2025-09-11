@@ -16,6 +16,7 @@ extern "C"
     #include <stdint.h>
     #include <stdlib.h>
     #include "main.h"
+    #include "bsp_def.h"
     #include "gpio.h"
     #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
         #include "spi.h"
@@ -163,6 +164,28 @@ extern "C"
         return -1;
         #endif
     }
+
+    // void psram_test()
+    // {
+    //     uint32_t psram_test[2000] = { 0 };
+
+    //     uint8_t psram_status = bsp_psram_ping();
+    //     write_msg("psram status: %d\r\n", psram_status);
+        
+    //     for (int i = 0; i < sizeof(psram_test) / sizeof(uint32_t); i++)
+    //     psram_test[i] = i;
+    //     psram_status = bsp_psram_write(100, (uint8_t*)psram_test, sizeof(psram_test));
+    //     if (psram_status != 0) write_msg("bsp_psram_write error code: %d\r\n", psram_status);
+    //     memset(psram_test, 0, sizeof(psram_test));
+    //     psram_status = bsp_psram_read(100, (uint8_t*)psram_test, sizeof(psram_test));
+    //     if (psram_status != 0) write_msg("bsp_psram_write error code: %d\r\n", psram_status);
+        
+    //     uint32_t err = 0;
+    //     for (int i = 0; i < sizeof(psram_test) / sizeof(uint32_t); i++)
+    //     if (psram_test[i] != i)
+    //         err++;
+    //     write_msg("psram test error num: %d\r\n", err);
+    // }
 
     #ifdef __cplusplus
     }

@@ -15,7 +15,7 @@ extern "C"
 
     #include <stdint.h>
     #include <stdlib.h>
-    #include "main.h"
+    #include "bsp_def.h"
     #include "io_utils.h"
     #include "cdelay.h"
     #include "comm.h"

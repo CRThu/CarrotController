@@ -8,6 +8,7 @@ extern "C"
     #endif
 
     #include <stdint.h>
+    #include "stm32h5xx_hal.h"
     
     #define CDELAY_VERSION                  "2.0.0"             // Library version
 
@@ -83,25 +84,25 @@ extern "C"
     #define cdelay_nops_safe                CDELAY_NOPS_SAFE
     #define cdelay_ticks                    CDELAY_TICKS
 
-    #define cdelay_init                     CDELAY_INIT
     #define cdelay_ns(ns)                   CDELAY_NS(ns)
     #define cdelay_us(us)                   CDELAY_TICKS(CDELAY_US2TICK(us))
     #define cdelay_ms(ms)                   CDELAY_TICKS(CDELAY_MS2TICK(ms))
 
-    #define CDELAY_INIT() ({                                    \
-        if (!(CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk))   \
-        {                                                       \
-            CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;     \
-        }                                                       \
-        __DSB();                                                \
-                                                                \
-        DWT->CYCCNT = 0;                                        \
-        __DSB();                                                \
-        DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;                    \
-        __DSB();                                                \
-                                                                \
-        (DWT->CYCCNT) ? 1 : 0;                                  \
-    })
+    static inline uint8_t cdelay_init()
+    {
+        if (!(CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk))
+        {
+            CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+        }
+        __DSB();
+
+        DWT->CYCCNT = 0;
+        __DSB();
+        DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+        __DSB();
+
+        return (DWT->CYCCNT) ? 1 : 0;
+    }
 
     #define CDELAY_NOPS(n)  do {                                \
         _Pragma("unroll")                                       \

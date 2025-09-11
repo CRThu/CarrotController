@@ -17,6 +17,7 @@ extern "C"
     #include <stdint.h>
     #include "io_utils.h"
     #include "main.h"
+    #include "bsp_def.h"
 
     #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
 

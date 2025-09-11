@@ -11,17 +11,23 @@
 extern "C"
 {
     #endif
+    #define BSP_DEF_VERSION "1.0.0"
 
-    #include "main.h"
-
-    /* MODIFY HERE WHEN USING STM32H563_CONTROLLER */
+    /* MODIFY HERE*/
+    /* USING STM32H563_CONTROLLER BOARD */
     /* PSRAM */
     // #define BSP_PSRAM_U7_EN
     #define BSP_PSRAM_U8_EN
 
 
-    /* MODIFY HERE WHEN USING STM32H563_MINI */
+    /* USING STM32H563_MINI BOARD */
 
+
+    /* USING LIBRARY */
+    #define USING_BSP_DRIVER
+    #define USING_REMOTE_CONTROL
+
+    #include "main.h"
 
     /* BOARD VERSION */
     #define STM32H563_CONTROLLER    (20250107UL)
@@ -43,6 +49,7 @@ extern "C"
         // OCTOSPI
         #define BSP_PSRAM_OCTOSPI   hospi1
     #endif
+
 
     #ifdef __cplusplus
 }
