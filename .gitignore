@@ -81,3 +81,6 @@
 
 # vscode keil assistant
 .vscode/
+
+# idf build
+build/
