@@ -8,8 +8,8 @@ STM32H563ZIT6核心控制板，主要用于DUT测试与上位机交互，项目�
 |文件|链接| 
 |-|-|   
 |原始工程 Ver.A|[LCEDA](https://oshwhub.com/hardware-technology-research/stm32h563_controller) |  
-|SCH PDF Ver.A|[SCH PDF](https://github.com/CRThu/CarrotController/blob/main/PCB/SCH.stm32h563_controller.Ver.A.pdf) |  
-|PCB PDF Ver.A|[PCB PDF](https://github.com/CRThu/CarrotController/blob/main/PCB/PCB.stm32h563_controller.Ver.A.pdf) |  
+|SCH PDF Ver.A|[SCH PDF](https://github.com/CRThu/CarrotController/blob/v3/PCB/SCH.stm32h563_controller.Ver.A.pdf) |  
+|PCB PDF Ver.A|[PCB PDF](https://github.com/CRThu/CarrotController/blob/v3/PCB/PCB.stm32h563_controller.Ver.A.pdf) |  
 
 ### stm32h563_controller_mini    
 主控：STM32H563ZIT6核心板   
@@ -17,8 +17,8 @@ STM32H563ZIT6核心控制板，主要用于DUT测试与上位机交互，项目�
 |文件|链接| 
 |-|-|   
 |原始工程 Ver.A|[LCEDA](https://oshwhub.com/hardware-technology-research/stm32h563_controller_mini) |    
-|SCH PDF Ver.A|[SCH PDF](https://github.com/CRThu/CarrotController/blob/main/PCB/SCH.stm32h563_controller_mini.Ver.A.pdf) |  
-|PCB PDF Ver.A|[PCB PDF](https://github.com/CRThu/CarrotController/blob/main/PCB/PCB.stm32h563_controller_mini.Ver.A.pdf) |  
+|SCH PDF Ver.A|[SCH PDF](https://github.com/CRThu/CarrotController/blob/v3/PCB/SCH.stm32h563_controller_mini.Ver.A.pdf) |  
+|PCB PDF Ver.A|[PCB PDF](https://github.com/CRThu/CarrotController/blob/v3/PCB/PCB.stm32h563_controller_mini.Ver.A.pdf) |  
 
 ## 使用说明 
 - 首次使用根据boot.md进行初始化配置方可正常运行 
