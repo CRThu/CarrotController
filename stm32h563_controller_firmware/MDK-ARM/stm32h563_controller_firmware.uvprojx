@@ -1042,6 +1042,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\LIB\Src\carrot_ascii_protocol.c</FilePath>
             </File>
+            <File>
+              <FileName>io_retarget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\LIB\Src\io_retarget.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

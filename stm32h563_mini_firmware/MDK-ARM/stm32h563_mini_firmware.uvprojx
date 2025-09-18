@@ -1119,6 +1119,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\bsp_ft.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\bsp_init.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1148,6 +1153,11 @@
               <FileName>carrot_ascii_protocol.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\LIB\Src\carrot_ascii_protocol.c</FilePath>
+            </File>
+            <File>
+              <FileName>io_retarget.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\LIB\Src\io_retarget.c</FilePath>
             </File>
           </Files>
         </Group>

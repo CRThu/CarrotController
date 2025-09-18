@@ -25,10 +25,6 @@ extern "C"
     #include "cdelay.h"
     #endif
 
-    #ifdef USE_PRINTF_IMPL
-    #include "io_retarget.h"
-    #endif
-
     #ifdef USE_IO_IMPL
     #include "io_utils.h"
     #endif
@@ -42,11 +38,6 @@ extern "C"
     #define delay_ns                                cdelay_ns
     #define delay_us                                cdelay_us
     #define delay_ms                                cdelay_ms
-    #endif
-
-    /* PRINTF IMPL */
-    #ifdef USE_PRINTF_IMPL
-    #define PRINTF                                  printf
     #endif
 
     /* INLINE IMPL */

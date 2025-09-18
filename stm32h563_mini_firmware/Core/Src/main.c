@@ -29,8 +29,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "bsp_def.h"
+#include "bsp_init.h"
 #include "template_func.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
