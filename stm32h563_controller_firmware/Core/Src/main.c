@@ -86,7 +86,8 @@ int8_t command_proc(comm_t* comm)
     if (recv_len != 0)
     {
         char* cmd = (char*)recv_bytes;
-        if (cmdparse_from_string(&pool, cmd, &recv_len) == CMDPARSE_OK)
+        int8_t status = cmdparse_from_string(&pool, cmd, &recv_len);
+        if (status == CMDPARSE_OK)
         {
             printf("[INFO]: cmdparse from string ok.\r\n");
             comm->write(comm->handle, recv_bytes, recv_len);
@@ -95,7 +96,7 @@ int8_t command_proc(comm_t* comm)
         }
         else
         {
-            printf("[ERROR]: cmdparse from string err.\r\n");
+            printf("[ERROR]: cmdparse from string err, error code = %d.\r\n", status);
             //comm->write(comm->handle, recv_bytes, recv_len);
             return -127;
         }
