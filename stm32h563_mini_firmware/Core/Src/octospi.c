@@ -43,17 +43,17 @@ void MX_OCTOSPI1_Init(void)
   hospi1.Init.FifoThresholdByte = 1;
   hospi1.Init.MemoryMode = HAL_XSPI_DUAL_MEM;
   hospi1.Init.MemoryType = HAL_XSPI_MEMTYPE_APMEM;
-  hospi1.Init.MemorySize = HAL_XSPI_SIZE_512MB;
-  hospi1.Init.ChipSelectHighTimeCycle = 1;
+  hospi1.Init.MemorySize = HAL_XSPI_SIZE_64MB;
+  hospi1.Init.ChipSelectHighTimeCycle = 2;
   hospi1.Init.FreeRunningClock = HAL_XSPI_FREERUNCLK_DISABLE;
   hospi1.Init.ClockMode = HAL_XSPI_CLOCK_MODE_0;
-  hospi1.Init.WrapSize = HAL_XSPI_WRAP_128_BYTES;
-  hospi1.Init.ClockPrescaler = 0;
+  hospi1.Init.WrapSize = HAL_XSPI_WRAP_32_BYTES;
+  hospi1.Init.ClockPrescaler = 3;
   hospi1.Init.SampleShifting = HAL_XSPI_SAMPLE_SHIFT_NONE;
   hospi1.Init.DelayHoldQuarterCycle = HAL_XSPI_DHQC_DISABLE;
-  hospi1.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_NONE;
+  hospi1.Init.ChipSelectBoundary = HAL_XSPI_BONDARYOF_1KB;
   hospi1.Init.DelayBlockBypass = HAL_XSPI_DELAY_BLOCK_BYPASS;
-  hospi1.Init.Refresh = 0;
+  hospi1.Init.Refresh = 500;
   if (HAL_XSPI_Init(&hospi1) != HAL_OK)
   {
     Error_Handler();

@@ -147,7 +147,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>216</LineNumber>
+          <LineNumber>255</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -163,23 +163,23 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>351</LineNumber>
+          <LineNumber>95</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>134261128</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>../Core/Src/main.c</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>../Core/Src/stm32h5xx_it.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\controller_firmware\../Core/Src/stm32h5xx_it.c\95</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>217</LineNumber>
+          <LineNumber>258</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -193,23 +193,6 @@
           <Expression></Expression>
         </Bp>
       </Breakpoint>
-      <WatchWindow1>
-        <Ww>
-          <count>0</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>uart4_ringbuf</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>rb</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>psram_test</ItemText>
-        </Ww>
-      </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -254,16 +237,8 @@
       <pMultCmdsp></pMultCmdsp>
       <SystemViewers>
         <Entry>
-          <Name>System Viewer\GPIOE</Name>
+          <Name>System Viewer\OCTOSPI</Name>
           <WinId>35905</WinId>
-        </Entry>
-        <Entry>
-          <Name>System Viewer\GPIOF</Name>
-          <WinId>35904</WinId>
-        </Entry>
-        <Entry>
-          <Name>System Viewer\SPI4</Name>
-          <WinId>35903</WinId>
         </Entry>
       </SystemViewers>
       <DebugDescription>
