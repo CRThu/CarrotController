@@ -1,7 +1,7 @@
 /****************************
  * UART RINGBUF
  * CARROT HU
- * 2025.08.17
+ * 2025.09.28
  *****************************/
 #pragma once
 #ifndef _UART_RINGBUF_H_
@@ -12,7 +12,7 @@ extern "C"
 {
     #endif
 
-    #define UART_RINGBUF_VERSION "2.2.0"
+    #define UART_RINGBUF_VERSION "2.3.0"
 
     #include <stdint.h>
     #include <stdlib.h>
@@ -54,8 +54,9 @@ extern "C"
         }
      */
 
-    #define UART_RINGBUF_NO_ERR        (0)
-    #define UART_RINGBUF_READ_BUF_OVF  (-1)
+    #define UART_RINGBUF_NO_ERR             (0)
+    #define UART_RINGBUF_READ_BUF_OVF       (-1)
+    #define UART_RINGBUF_IS_NOT_CIRCULAR    (-2)
 
      // PRINTF IMPL
     #define PRINTF                  printf
@@ -76,12 +77,13 @@ extern "C"
 
     // STM32 IMPL
     typedef UART_HandleTypeDef uart_t;
-    #define UART_TXDMA_START(__HANDLE__)    (HAL_UART_Transmit_DMA((__HANDLE__)->instance, &((__HANDLE__)->txdma_buf)[(__HANDLE__)->txdma_cmd_head], (__HANDLE__)->txdma_cmd_len) == HAL_OK)
-    #define UART_RXDMA_START(__HANDLE__)    (HAL_UART_Receive_DMA((__HANDLE__)->instance, (__HANDLE__)->rxdma_buf, (__HANDLE__)->dmabuf_len) == HAL_OK)
-    #define UART_STOP(__HANDLE__)           (HAL_UART_DMAStop((__HANDLE__)->instance) == HAL_OK)
-    #define UART_IS_TX_BUSY(__HANDLE__)     ((__HANDLE__)->instance->gState != HAL_UART_STATE_READY)
-    #define UART_IS_RX_BUSY(__HANDLE__)     ((__HANDLE__)->instance->RxState != HAL_UART_STATE_READY)
-    #define UART_GET_RXDMA_POS(__HANDLE__)  ((__HANDLE__)->dmabuf_len - __HAL_DMA_GET_COUNTER((__HANDLE__)->instance->hdmarx))
+    #define UART_TXDMA_START(__HANDLE__)        (HAL_UART_Transmit_DMA((__HANDLE__)->instance, &((__HANDLE__)->txdma_buf)[(__HANDLE__)->txdma_cmd_head], (__HANDLE__)->txdma_cmd_len) == HAL_OK)
+    #define UART_RXDMA_START(__HANDLE__)        (HAL_UART_Receive_DMA((__HANDLE__)->instance, (__HANDLE__)->rxdma_buf, (__HANDLE__)->dmabuf_len) == HAL_OK)
+    #define UART_STOP(__HANDLE__)               (HAL_UART_DMAStop((__HANDLE__)->instance) == HAL_OK)
+    #define UART_IS_TX_BUSY(__HANDLE__)         ((__HANDLE__)->instance->gState != HAL_UART_STATE_READY)
+    #define UART_IS_RX_BUSY(__HANDLE__)         ((__HANDLE__)->instance->RxState != HAL_UART_STATE_READY)
+    #define UART_GET_RXDMA_POS(__HANDLE__)      ((__HANDLE__)->dmabuf_len - __HAL_DMA_GET_COUNTER((__HANDLE__)->instance->hdmarx))
+    #define UART_RXDMA_CIR_CHECK(__HANDLE__)    (__HAL_DMA_GET_COUNTER((__HANDLE__)->instance->hdmarx) != 0)
 
     typedef uint8_t uart_comm_error_t;
     typedef struct uart_ringbuf_t {

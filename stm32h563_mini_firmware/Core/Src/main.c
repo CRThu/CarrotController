@@ -85,6 +85,18 @@ int8_t command_proc(comm_t* comm)
     recv_len = comm->read(comm->handle, recv_bytes, sizeof(recv_bytes));
     if (recv_len != 0)
     {
+        if (recv_len == (uint16_t)UART_RINGBUF_READ_BUF_OVF)
+        {
+            printf("[ERROR]: A command was dropped because it was too long, error code = %d.\r\n", recv_len);
+            return UART_RINGBUF_READ_BUF_OVF;
+        }
+        else if (recv_len == (uint16_t)UART_RINGBUF_IS_NOT_CIRCULAR)
+        {
+            printf("[ERROR]: DMA config is not circular mode, error code = %d.\r\n", recv_len);
+            return UART_RINGBUF_IS_NOT_CIRCULAR;
+        }
+
+        printf("[INFO]: recv_len=%d.\r\n", recv_len);
         char* cmd = (char*)recv_bytes;
         int8_t status = cmdparse_from_string(&pool, cmd, &recv_len);
         if (status == CMDPARSE_OK)

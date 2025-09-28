@@ -60,6 +60,8 @@ extern DMA_HandleTypeDef handle_GPDMA2_Channel6;
 extern XSPI_HandleTypeDef hospi1;
 extern TIM_HandleTypeDef htim6;
 extern DMA_HandleTypeDef handle_GPDMA2_Channel1;
+extern DMA_NodeTypeDef Node_GPDMA2_Channel0;
+extern DMA_QListTypeDef List_GPDMA2_Channel0;
 extern DMA_HandleTypeDef handle_GPDMA2_Channel0;
 extern UART_HandleTypeDef huart4;
 /* USER CODE BEGIN EV */

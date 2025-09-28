@@ -83,10 +83,13 @@ uint16_t uart_ringbuf_read(uart_ringbuf_t* rb, uint8_t* buf, uint16_t size)
     // NDTR     87654321876
     // wr       01234567012
     rb->rxdma_pos_wr = UART_GET_RXDMA_POS(rb);
+    if(!UART_RXDMA_CIR_CHECK(rb))
+        return UART_RINGBUF_IS_NOT_CIRCULAR;
 
-    for (uint16_t i = 0; i < LEN_RINGBUF(rb->dmabuf_len, rb->rxdma_pos_wr, rb->rxdma_pos_parse); i++)
+    while (rb->rxdma_pos_parse != rb->rxdma_pos_wr)
     {
-        if ((rb->rxdma_buf[IDX_RINGBUF(rb->rxdma_pos_parse, rb->dmabuf_len)]) == '\n')
+        // printf("[INFO]: rd=%3d, wr=%3d, parse=%3d.\r\n", rb->rxdma_pos_rd, rb->rxdma_pos_wr, rb->rxdma_pos_parse);
+        if ((rb->rxdma_buf[rb->rxdma_pos_parse]) == '\n')
         {
             // ptr++
             rb->rxdma_pos_parse = IDX_RINGBUF(rb->rxdma_pos_parse + 1, rb->dmabuf_len);
@@ -95,7 +98,10 @@ uint16_t uart_ringbuf_read(uart_ringbuf_t* rb, uint8_t* buf, uint16_t size)
             uint16_t cmd_len = LEN_RINGBUF(rb->dmabuf_len, rb->rxdma_pos_parse, rb->rxdma_pos_rd);
 
             if (cmd_len > size)
+            {
+                rb->rxdma_pos_rd = rb->rxdma_pos_parse;
                 return UART_RINGBUF_READ_BUF_OVF;
+            }
 
             MEMCPY_RINGBUF(buf, rb->rxdma_buf, rb->dmabuf_len, rb->rxdma_pos_rd, cmd_len);
 
@@ -109,5 +115,6 @@ uint16_t uart_ringbuf_read(uart_ringbuf_t* rb, uint8_t* buf, uint16_t size)
         }
     }
 
+    // printf("[INFO]: no complete\\n command.\r\n");
     return 0;
 }
