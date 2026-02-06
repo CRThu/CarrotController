@@ -1,7 +1,7 @@
 /****************************
  * CARROT PROTOCOL
  * CARROT HU
- * 2025.08.08
+ * 2026.02.06
  *****************************/
 #pragma once
 
@@ -16,7 +16,7 @@
 extern "C"
 {
     #endif
-    #define CARROT_ASCII_PROTOCOL_VERSION "1.1.0"
+    #define CARROT_ASCII_PROTOCOL_VERSION "1.2.0"
 
     #include <stdint.h>
     #include <string.h>
@@ -45,7 +45,7 @@ extern "C"
 
     typedef struct {
         comm_t* comm;
-        carrot_binary_protocol_config_t data_protocol;
+        //carrot_binary_protocol_config_t data_protocol;
     } carrot_ascii_protocol_config_t;
 
     //void protocol_parse(uint8_t* buf, uint16_t len, uint16_t* comsumed, frame_t* p);
@@ -55,7 +55,9 @@ extern "C"
 
 
     void write_msg(const char* format, ...);
-    void write_data(uint8_t* data, uint16_t len);
+    void write_data(const char* path, const char* format, ...);
+    void reply_reg(uint32_t addr, uint32_t val);
+    void reply_bits(uint32_t addr, uint8_t start, uint8_t end, uint32_t val);
 
 
     #ifdef __cplusplus
