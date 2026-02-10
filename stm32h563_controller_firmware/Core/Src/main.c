@@ -103,7 +103,7 @@ int8_t command_proc(comm_t* comm)
         {
             printf("[INFO]: cmdparse from string ok.\r\n");
             comm->write(comm->handle, recv_bytes, recv_len);
-            dyncall_status_t status = invoke_by_cmd(&template_func_group, &pool);
+            dyncall_status_t status = invoke_by_cmd(&pool);
             return status;
         }
         else
@@ -156,6 +156,7 @@ int main(void)
     /* USER CODE BEGIN 2 */
 
     bsp_init();
+    register_rpc_group(&template_func_group);
 
     write_msg("helloworld\r\n");
 
