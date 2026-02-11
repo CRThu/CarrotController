@@ -92,7 +92,7 @@ void reply_reg(uint32_t addr, uint32_t val)
 {
     if (carrot_ascii_protocol_config.comm == NULL) return;
 
-    int len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X]:%u\r\n", addr, val);
+    int len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X]:0x%X\r\n", addr, val);
     
     carrot_ascii_protocol_config.comm->write(carrot_ascii_protocol_config.comm->handle, (uint8_t*)fmt_buf, len);
 }
@@ -104,7 +104,7 @@ void reply_reg(uint32_t addr, uint32_t val)
 void reply_bits(uint32_t addr, uint8_t start, uint8_t end, uint32_t val) {
     if (carrot_ascii_protocol_config.comm == NULL) return;
 
-    int len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X.b%d_%d]:%u\r\n", addr, end, start, val);
+    int len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X.b%d_%d]:0x%X\r\n", addr, end, start, val);
     
     carrot_ascii_protocol_config.comm->write(carrot_ascii_protocol_config.comm->handle, (uint8_t*)fmt_buf, len);
 }

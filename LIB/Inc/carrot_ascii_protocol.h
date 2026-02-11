@@ -16,7 +16,7 @@
 extern "C"
 {
     #endif
-    #define CARROT_ASCII_PROTOCOL_VERSION "1.2.0"
+    #define CARROT_ASCII_PROTOCOL_VERSION "1.2.1"
 
     #include <stdint.h>
     #include <string.h>
