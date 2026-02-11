@@ -43,6 +43,41 @@ void write_msg(const char* format, ...)
 }
 
 /**
+ * @brief 发送带级别的日志
+ * 格式: [<LEVEL>]: <MESSAGE> \r\n
+ * 示例: write_log("INFO", "System Start %d", 1); -> [INFO]: System Start 1
+ */
+void write_log(const char* level, const char* format, ...)
+{
+    if (carrot_ascii_protocol_config.comm == NULL) return;
+
+    int len = 0;
+
+    // 1. 拼装 Level 前缀 (默认 INFO)
+    if (level && level[0] != '\0') {
+        len = snprintf(fmt_buf, sizeof(fmt_buf), "[%s]: ", level);
+    } else {
+        len = snprintf(fmt_buf, sizeof(fmt_buf), "[INFO]: ");
+    }
+
+    // 2. 拼装内容
+    va_list args;
+    va_start(args, format);
+    len += vsnprintf(fmt_buf + len, sizeof(fmt_buf) - len, format, args);
+    va_end(args);
+
+    if (len <= 0) return;
+
+    // 3. 补齐换行符
+    if (len > sizeof(fmt_buf) - 3) len = sizeof(fmt_buf) - 3;
+    fmt_buf[len++] = '\r';
+    fmt_buf[len++] = '\n';
+    fmt_buf[len] = '\0';
+
+    carrot_ascii_protocol_config.comm->write(carrot_ascii_protocol_config.comm->handle, (uint8_t*)fmt_buf, len);
+}
+
+/**
  * @brief 发送通用数据
  * [ DATA [.PATH] ]: [KEY=] VALUE [,KEY=VALUE] \r\n
  * 示例: 
