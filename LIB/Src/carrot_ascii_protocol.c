@@ -121,25 +121,41 @@ void write_data(const char* path, const char* format, ...)
 
 /**
  * @brief 发送寄存器数据
- * 格式: [REG.0x10]:255
+ * 格式: [REG{.<FILE>}.0x<ADDR>]: 0x<HEX_VAL>
  */
-void reply_reg(uint32_t addr, uint32_t val)
+void reply_reg(const char* file, uint32_t addr, uint32_t val)
 {
     if (carrot_ascii_protocol_config.comm == NULL) return;
 
-    int len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X]:0x%X\r\n", addr, val);
+    int len = 0;
+    if (file && file[0] != '\0')
+    {
+        len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.%s.0x%X]:0x%X\r\n", file, addr, val);
+    }
+    else
+    {
+        len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X]:0x%X\r\n", addr, val);
+    }
     
     carrot_ascii_protocol_config.comm->write(carrot_ascii_protocol_config.comm->handle, (uint8_t*)fmt_buf, len);
 }
 
 /**
  * @brief 发送位域数据
- * 格式: [REG.0x10.b3_0]:2
+ * 格式: [REG{.<FILE>}.0x<ADDR>.b<END>_<START>]: 0x<HEX_VAL>
  */
-void reply_bits(uint32_t addr, uint8_t start, uint8_t end, uint32_t val) {
+void reply_bits(const char* file, uint32_t addr, uint8_t start, uint8_t end, uint32_t val) {
     if (carrot_ascii_protocol_config.comm == NULL) return;
 
-    int len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X.b%d_%d]:0x%X\r\n", addr, end, start, val);
+    int len = 0;
+    if (file && file[0] != '\0')
+    {
+        len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.%s.0x%X.b%d_%d]:0x%X\r\n", file, addr, end, start, val);
+    }
+    else
+    {
+        len = snprintf(fmt_buf, sizeof(fmt_buf), "[REG.0x%X.b%d_%d]:0x%X\r\n", addr, end, start, val);
+    }
     
     carrot_ascii_protocol_config.comm->write(carrot_ascii_protocol_config.comm->handle, (uint8_t*)fmt_buf, len);
 }

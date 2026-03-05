@@ -1,4 +1,4 @@
-# CARROT RPC 协议通信手册 (v1.2.2)
+# CARROT RPC 协议通信手册 (v1.2.3)
 
 本手册定义了下位机与上位机之间的远程过程调用（RPC）报文格式，包含 **ASCII 可视化 RPC** 与 **Binary 高速流 RPC**。
 
@@ -25,17 +25,22 @@
 
 
 ### 1.3 寄存器访问接口 (`REG`)
-用于返回寄存器当前值。
-*   **语法**: `[REG.0x<ADDR>]: 0x<HEX_VAL>`
+用于返回寄存器当前值。支持可选的命名空间以区分不同的寄存器组（RegFile）。
+*   **语法**: `[REG{.<FILE>}.0x<ADDR>]: 0x<HEX_VAL>`
+*   **参数**: `.<FILE>` 为可选路径，用于区分不同的寄存器文件或外设基址。
 *   **数据约定**: `<ADDR>` 和 `<HEX_VAL>` 均采用 **16 进制** 格式。
-*   **示例**: `[REG.0x4001]: 0x00FF`
+*   **示例**: 
+    *   `[REG.0x4001]: 0x00FF` (默认组)
+    *   `[REG.file0.0xAA]: 0x0012` (指定寄存器组)
 
 ### 1.4 位域访问接口 (`BITS`)
 用于返回寄存器中特定位范围的值。
-*   **语法**: `[REG.0x<ADDR>.b<END>_<START>]: 0x<HEX_VAL>`
+*   **语法**: `[REG{.<FILE>}.0x<ADDR>.b<END>_<START>]: 0x<HEX_VAL>`
 *   **参数**: `<END>` 和 `<START>` 为位序号（10进制，如 7 和 0）。
 *   **数据约定**: `<HEX_VAL>` 采用 **16 进制** 格式。
-*   **示例**: `[REG.0x10.b7_4]: 0xA`
+*   **示例**: 
+    *   `[REG.0x10.b7_4]: 0xA`
+    *   `[REG.file1.0x10.b7_4]: 0xB`
 
 ---
 
@@ -65,9 +70,10 @@ write_log("INFO", "Battery Level %d%%", 85);
 // 2. 推送 Double 类型数据
 write_data("ENV", "temp=%.2f,humi=%.2f", 25.4, 60.1);
 
-// 3. 返回 16 进制寄存器值
-reply_reg(0x40, 0x1F); 
+// 3. 返回 16 进制寄存器值 (支持可选的 file 参数)
+reply_reg(NULL, 0x40, 0x1F);      // [REG.0x40]: 0x1F
+reply_reg("file0", 0xAA, 0x12);   // [REG.file0.0xAA]: 0x12
 
 // 4. 返回 16 进制位域值
-reply_bits(0x40, 0, 3, 0xA);
+reply_bits("file1", 0x40, 0, 3, 0xA); // [REG.file1.0x40.b3_0]: 0xA
 ```

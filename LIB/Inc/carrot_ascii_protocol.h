@@ -16,7 +16,7 @@
 extern "C"
 {
     #endif
-    #define CARROT_ASCII_PROTOCOL_VERSION "1.2.2"
+    #define CARROT_ASCII_PROTOCOL_VERSION "1.2.3"
 
     #include <stdint.h>
     #include <string.h>
@@ -57,8 +57,8 @@ extern "C"
     void write_msg(const char* format, ...);
     void write_log(const char* level, const char* format, ...);
     void write_data(const char* path, const char* format, ...);
-    void reply_reg(uint32_t addr, uint32_t val);
-    void reply_bits(uint32_t addr, uint8_t start, uint8_t end, uint32_t val);
+    void reply_reg(const char* file, uint32_t addr, uint32_t val);
+    void reply_bits(const char* file, uint32_t addr, uint8_t start, uint8_t end, uint32_t val);
 
 
     #ifdef __cplusplus
