@@ -1,7 +1,7 @@
 /****************************
  * BSP PSRAM DRIVER
  * CRTHu
- * 2025.09.11
+ * 2026.03.11
  *****************************/
 #pragma once
 #ifndef _BSP_PSRAM_H_
@@ -11,7 +11,7 @@
 extern "C"
 {
     #endif
-    #define BSP_PSRAM_VERSION "1.1.0"
+    #define BSP_PSRAM_VERSION "1.2.0"
 
     #include <stdint.h>
     #include <stdlib.h>
@@ -26,166 +26,26 @@ extern "C"
 
     #define BSP_PSRAM_TIMEOUT   100
 
-    static inline void bsp_psram_reset()
-    {
-        #ifdef BSP_PSRAM_SPI
-        uint8_t cmd = 0x66;
-        HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_RESET);
-        HAL_SPI_Transmit(&BSP_PSRAM_SPI, &cmd, 1, 0xFFFF);
-        HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_SET);
-        cmd = 0x99;
-        HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_RESET);
-        HAL_SPI_Transmit(&BSP_PSRAM_SPI, &cmd, 1, 0xFFFF);
-        HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_SET);
+
+    #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
+
+        #ifdef BSP_PSRAM_U7_EN
+        #define BSP_PSRAM_SPI       hspi4
+        #define BSP_PSRAM_NSS_PORT  SPI4_NSS1_GPIO_Port
+        #define BSP_PSRAM_NSS_PIN   SPI4_NSS1_Pin
         #endif
-    }
-
-    static inline uint8_t bsp_psram_ping()
-    {
-        #ifdef BSP_PSRAM_SPI
-        /* RX: 07 00 00 00 0D 5D 53 15 3C 6D 71 AA 0D 5D */
-        uint8_t eid[14] = { 0 };
-        eid[0] = 0x9F;
-        HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_RESET);
-        HAL_SPI_TransmitReceive(&BSP_PSRAM_SPI, eid, eid, sizeof(eid), 0xFFFF);
-        HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_SET);
-        return (eid[5] == 0x5D);
-        #else
-        return 0x00;
+        #ifdef BSP_PSRAM_U8_EN
+        #define BSP_PSRAM_SPI       hspi4
+        #define BSP_PSRAM_NSS_PORT  SPI4_NSS2_GPIO_Port
+        #define BSP_PSRAM_NSS_PIN   SPI4_NSS2_Pin
         #endif
-    }
+    #elif(CARROT_CONTROLLER_HW == STM32H563_MINI)
+        // OCTOSPI
+        #define BSP_PSRAM_OCTOSPI   hospi1
+    #endif
 
 
-    static inline int8_t bsp_psram_read(uint32_t addr, uint8_t* data, uint32_t size)
-    {
-        #ifdef BSP_PSRAM_SPI
-        uint8_t prefix[5] = { 0 };
 
-        uint32_t curr_addr = addr;
-        uint32_t curr_size = 0;
-        uint32_t remain_size = size;
-
-        while (remain_size > 0)
-        {
-            if (curr_addr % 1024 == 0)
-            {
-                // aligned
-                curr_size = remain_size >= 1024 ? 1024 : remain_size;
-            }
-            else
-            {
-                // unaligned
-                curr_size = (remain_size >= (1024 - curr_addr % 1024)) ? (1024 - curr_addr % 1024) : remain_size;
-            }
-
-            prefix[0] = 0x0B;
-            prefix[1] = curr_addr >> 16;
-            prefix[2] = curr_addr >> 8;
-            prefix[3] = curr_addr;
-            prefix[4] = 0x00;
-
-            HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_RESET);
-            HAL_SPI_Transmit(&BSP_PSRAM_SPI, prefix, sizeof(prefix), 0xFFFF);
-            //HAL_SPI_Receive(&BSP_PSRAM_SPI, data, curr_size, 0xFFFF);
-            HAL_SPI_Receive_DMA(&BSP_PSRAM_SPI, data, curr_size);
-
-            // wait for transfer
-            uint32_t tickstart = HAL_GetTick();
-            while (HAL_SPI_GetState(&BSP_PSRAM_SPI) != HAL_SPI_STATE_READY)
-            {
-                if ((HAL_GetTick() - tickstart) >= BSP_PSRAM_TIMEOUT)
-                {
-                    return -2;
-                }
-            }
-
-            HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_SET);
-
-            remain_size -= curr_size;
-            curr_addr += curr_size;
-            data += curr_size;
-        }
-        return 0;
-        #else
-        return -1;
-        #endif
-    }
-
-    static inline int8_t bsp_psram_write(uint32_t addr, uint8_t* data, uint32_t size)
-    {
-        #ifdef BSP_PSRAM_SPI
-        uint8_t prefix[4] = { 0 };
-
-        uint32_t curr_addr = addr;
-        uint32_t curr_size = 0;
-        uint32_t remain_size = size;
-
-        while (remain_size > 0)
-        {
-            if (curr_addr % 1024 == 0)
-            {
-                // aligned
-                curr_size = remain_size >= 1024 ? 1024 : remain_size;
-            }
-            else
-            {
-                // unaligned
-                curr_size = (remain_size >= (1024 - curr_addr % 1024)) ? (1024 - curr_addr % 1024) : remain_size;
-            }
-
-            prefix[0] = 0x02;
-            prefix[1] = curr_addr >> 16;
-            prefix[2] = curr_addr >> 8;
-            prefix[3] = curr_addr;
-
-            HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_RESET);
-            HAL_SPI_Transmit(&BSP_PSRAM_SPI, prefix, sizeof(prefix), 0xFFFF);
-            //HAL_SPI_Transmit(&BSP_PSRAM_SPI, data, curr_size, 0xFFFF);
-            HAL_SPI_Transmit_DMA(&BSP_PSRAM_SPI, data, curr_size);
-
-            // wait for transfer
-            uint32_t tickstart = HAL_GetTick();
-            while (HAL_SPI_GetState(&BSP_PSRAM_SPI) != HAL_SPI_STATE_READY)
-            {
-                if ((HAL_GetTick() - tickstart) >= BSP_PSRAM_TIMEOUT)
-                {
-                    return -2;
-                }
-            }
-
-            HAL_GPIO_WritePin(BSP_PSRAM_NSS_PORT, BSP_PSRAM_NSS_PIN, GPIO_PIN_SET);
-
-            remain_size -= curr_size;
-            curr_addr += curr_size;
-            data += curr_size;
-        }
-        return 0;
-        #else
-        return -1;
-        #endif
-    }
-
-    // void psram_test()
-    // {
-    //     uint32_t psram_test[2000] = { 0 };
-
-    //     uint8_t psram_status = bsp_psram_ping();
-    //     write_msg("psram status: %d\r\n", psram_status);
-        
-    //     for (int i = 0; i < sizeof(psram_test) / sizeof(uint32_t); i++)
-    //     psram_test[i] = i;
-    //     psram_status = bsp_psram_write(100, (uint8_t*)psram_test, sizeof(psram_test));
-    //     if (psram_status != 0) write_msg("bsp_psram_write error code: %d\r\n", psram_status);
-    //     memset(psram_test, 0, sizeof(psram_test));
-    //     psram_status = bsp_psram_read(100, (uint8_t*)psram_test, sizeof(psram_test));
-    //     if (psram_status != 0) write_msg("bsp_psram_write error code: %d\r\n", psram_status);
-        
-    //     uint32_t err = 0;
-    //     for (int i = 0; i < sizeof(psram_test) / sizeof(uint32_t); i++)
-    //     if (psram_test[i] != i)
-    //         err++;
-    //     write_msg("psram test error num: %d\r\n", err);
-    // }
 
     #ifdef __cplusplus
     }
