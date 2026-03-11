@@ -44,7 +44,7 @@ void bsp_psram_reset()
     if (HAL_XSPI_Command(&hospi1, &sCommand, 1000) != HAL_OK)
     {
         //return HAL_ERROR;
-        write_msg("RESET ENABLE CMD ERR\r\n");
+        printf("RESET ENABLE CMD ERR\r\n");
     }
 
     delay_ns(100);
@@ -73,7 +73,7 @@ void bsp_psram_reset()
     if (HAL_XSPI_Command(&hospi1, &sCommand, 1000) != HAL_OK)
     {
         //return HAL_ERROR;
-        write_msg("RESET CMD ERR\r\n");
+        printf("RESET CMD ERR\r\n");
     }
 
     delay_ns(100);
@@ -219,19 +219,19 @@ void psram_test()
 {
     uint32_t psram_test[2000] = { 0 };
     uint8_t psram_status = bsp_psram_ping();
-    write_msg("psram status: %d\r\n", psram_status);
+    printf("psram status: %d\r\n", psram_status);
     for (int i = 0; i < sizeof(psram_test) / sizeof(uint32_t); i++)
         psram_test[i] = i;
     psram_status = bsp_psram_write(100, (uint8_t*)psram_test, sizeof(psram_test));
-    if (psram_status != 0) write_msg("bsp_psram_write error code: %d\r\n", psram_status);
+    if (psram_status != 0) printf("bsp_psram_write error code: %d\r\n", psram_status);
     memset(psram_test, 0, sizeof(psram_test));
     psram_status = bsp_psram_read(100, (uint8_t*)psram_test, sizeof(psram_test));
-    if (psram_status != 0) write_msg("bsp_psram_write error code: %d\r\n", psram_status);
+    if (psram_status != 0) printf("bsp_psram_write error code: %d\r\n", psram_status);
     uint32_t err = 0;
     for (int i = 0; i < sizeof(psram_test) / sizeof(uint32_t); i++)
         if (psram_test[i] != i)
             err++;
-    write_msg("psram test error num: %d\r\n", err);
+    printf("psram test error num: %d\r\n", err);
 }
 
 #else
@@ -267,7 +267,7 @@ void psram_test()
     if (HAL_XSPI_Command(&hospi1, &sCommand, 1000) != HAL_OK)
     {
         //return HAL_ERROR;
-        write_msg("RESET ENABLE CMD ERR\r\n");
+        printf("RESET ENABLE CMD ERR\r\n");
     }
 
     delay_ns(100);
@@ -296,7 +296,7 @@ void psram_test()
     if (HAL_XSPI_Command(&hospi1, &sCommand, 1000) != HAL_OK)
     {
         //return HAL_ERROR;
-        write_msg("RESET CMD ERR\r\n");
+        printf("RESET CMD ERR\r\n");
     }
 
     delay_ns(100);
@@ -324,25 +324,25 @@ void psram_test()
     if (HAL_XSPI_Command(&hospi1, &sCommand, 1000) != HAL_OK)
     {
         //return HAL_ERROR;
-        write_msg("READ ID CMD ERR\r\n");
+        printf("READ ID CMD ERR\r\n");
     }
 
     /* Reception of the data */
     if (HAL_XSPI_Receive(&hospi1, (uint8_t*)buffer, 1000) != HAL_OK)
     {
         //return HAL_ERROR;
-        write_msg("READ ID RECV ERR\r\n");
+        printf("READ ID RECV ERR\r\n");
     }
 
-    write_msg("PSRAM0\r\n");
-    write_msg("MFID=%02X\r\n", buffer[0]);
-    write_msg("KGD =%02X\r\n", buffer[2]);
-    write_msg("EID =%02X%02X%02X%02X%02X%02X\r\n", buffer[4], buffer[6], buffer[8], buffer[10], buffer[12], buffer[14]);
+    printf("PSRAM0\r\n");
+    printf("MFID=%02X\r\n", buffer[0]);
+    printf("KGD =%02X\r\n", buffer[2]);
+    printf("EID =%02X%02X%02X%02X%02X%02X\r\n", buffer[4], buffer[6], buffer[8], buffer[10], buffer[12], buffer[14]);
 
-    write_msg("PSRAM1\r\n");
-    write_msg("MFID=%02X\r\n", buffer[1]);
-    write_msg("KGD =%02X\r\n", buffer[3]);
-    write_msg("EID =%02X%02X%02X%02X%02X%02X\r\n", buffer[5], buffer[7], buffer[9], buffer[11], buffer[13], buffer[15]);
+    printf("PSRAM1\r\n");
+    printf("MFID=%02X\r\n", buffer[1]);
+    printf("KGD =%02X\r\n", buffer[3]);
+    printf("EID =%02X%02X%02X%02X%02X%02X\r\n", buffer[5], buffer[7], buffer[9], buffer[11], buffer[13], buffer[15]);
 }
 
 

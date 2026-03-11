@@ -11,12 +11,15 @@
 extern "C"
 {
     #endif
-    #define BSP_PSRAM_VERSION "1.2.0"
+    #define BSP_PSRAM_VERSION "1.2.1"
 
     #include <stdint.h>
     #include <stdlib.h>
+    #include <stdio.h>
+    #include <string.h>
     #include "main.h"
     #include "bsp_def.h"
+    #include "common.h"
     #include "gpio.h"
     #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
     #include "spi.h"

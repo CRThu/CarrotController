@@ -25,9 +25,6 @@ void bsp_init()
 
     default_comm = uart4_ringbuf;
 
-    // initial psram
-    bsp_psram_reset();
-
     // set protocol comm
     carrot_ascii_protocol_config.comm = default_comm;
     //carrot_ascii_protocol_config.comm = uart4_ringbuf;
@@ -43,4 +40,7 @@ void bsp_init()
     // use this when has multichannels data
     // carrot_ascii_protocol_config.data_protocol.data_interleaved = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_USED;
     // carrot_ascii_protocol_config.data_protocol.data_interleaved_channel_mask = CARROT_BINARY_PROTOCOL_DATA_INTERLEAVED_CHANNEL_MASK_16CH;
+
+    // initial psram
+    bsp_psram_reset();
 }
