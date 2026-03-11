@@ -1124,6 +1124,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\BSP\Src\bsp_init.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_psram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\BSP\Src\bsp_psram.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

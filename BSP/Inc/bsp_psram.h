@@ -19,9 +19,9 @@ extern "C"
     #include "bsp_def.h"
     #include "gpio.h"
     #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
-        #include "spi.h"
+    #include "spi.h"
     #elif(CARROT_CONTROLLER_HW == STM32H563_MINI)
-        #include "octospi.h"
+    #include "octospi.h"
     #endif
 
     #define BSP_PSRAM_TIMEOUT   100
@@ -29,26 +29,29 @@ extern "C"
 
     #if(CARROT_CONTROLLER_HW == STM32H563_CONTROLLER)
 
-        #ifdef BSP_PSRAM_U7_EN
-        #define BSP_PSRAM_SPI       hspi4
-        #define BSP_PSRAM_NSS_PORT  SPI4_NSS1_GPIO_Port
-        #define BSP_PSRAM_NSS_PIN   SPI4_NSS1_Pin
-        #endif
-        #ifdef BSP_PSRAM_U8_EN
-        #define BSP_PSRAM_SPI       hspi4
-        #define BSP_PSRAM_NSS_PORT  SPI4_NSS2_GPIO_Port
-        #define BSP_PSRAM_NSS_PIN   SPI4_NSS2_Pin
-        #endif
+    #ifdef BSP_PSRAM_U7_EN
+    #define BSP_PSRAM_SPI       hspi4
+    #define BSP_PSRAM_NSS_PORT  SPI4_NSS1_GPIO_Port
+    #define BSP_PSRAM_NSS_PIN   SPI4_NSS1_Pin
+    #endif
+    #ifdef BSP_PSRAM_U8_EN
+    #define BSP_PSRAM_SPI       hspi4
+    #define BSP_PSRAM_NSS_PORT  SPI4_NSS2_GPIO_Port
+    #define BSP_PSRAM_NSS_PIN   SPI4_NSS2_Pin
+    #endif
     #elif(CARROT_CONTROLLER_HW == STM32H563_MINI)
-        // OCTOSPI
-        #define BSP_PSRAM_OCTOSPI   hospi1
+    // OCTOSPI
+    #define BSP_PSRAM_OCTOSPI   hospi1
     #endif
 
-
-
+    void bsp_psram_reset();
+    uint8_t bsp_psram_ping();
+    int8_t bsp_psram_read(uint32_t addr, uint8_t* data, uint32_t size);
+    int8_t bsp_psram_write(uint32_t addr, uint8_t* data, uint32_t size);
+    void psram_test();
 
     #ifdef __cplusplus
-    }
+}
 #endif
 
 #endif // _BSP_PSRAM_H_
